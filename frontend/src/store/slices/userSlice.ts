@@ -13,12 +13,22 @@ interface UserState {
   users: User[]
   loading: boolean
   error: string | null
+  pagination: {
+    current: number
+    pages: number
+    total: number
+  }
 }
 
 const initialState: UserState = {
   users: [],
   loading: false,
   error: null,
+  pagination: {
+    current: 1,
+    pages: 1,
+    total: 0,
+  },
 }
 
 export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
@@ -49,6 +59,7 @@ export const updateUserRole = createAsyncThunk(
   },
 )
 
+// Reducer to handle fetched users
 const userSlice = createSlice({
   name: "users",
   initialState,
@@ -60,11 +71,12 @@ const userSlice = createSlice({
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
         state.loading = false
-        state.users = action.payload
+        state.users = action.payload.data
+        state.pagination = action.payload.pagination || initialState.pagination // Ensure pagination is always defined
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.loading = false
-        state.error = action.error.message || "Failed to fetch users"
+        state.error = action.error.message
       })
       .addCase(updateUserRole.fulfilled, (state, action) => {
         const index = state.users.findIndex((u) => u._id === action.payload._id)

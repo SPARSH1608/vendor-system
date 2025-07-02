@@ -1,4 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
+import axios from "axios"
+import { productsAPI } from "../../services/api"
 
 interface Product {
   _id: string
@@ -35,18 +37,13 @@ export const fetchProducts = createAsyncThunk("products/fetchProducts", async ()
 
 export const createProduct = createAsyncThunk(
   "products/createProduct",
-  async (productData: Omit<Product, "_id" | "created_by" | "createdAt" | "updatedAt">) => {
-    const response = await fetch("/api/products", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-      body: JSON.stringify(productData),
-    })
-    const data = await response.json()
-    if (!response.ok) throw new Error(data.message)
-    return data
+  async (productData: FormData, { rejectWithValue }) => {
+    try {
+      const response = await productsAPI.createProduct(productData)
+      return response
+    } catch (error: any) {
+      return rejectWithValue(error.message)
+    }
   },
 )
 

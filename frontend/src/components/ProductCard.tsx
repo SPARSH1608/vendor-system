@@ -46,10 +46,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-      <div className="aspect-square bg-gray-100 flex items-center justify-center">
+    <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-200 text-center">
+      <div className="aspect-square bg-gray-100 flex items-center justify-center mb-4">
         {product.image ? (
-          <img src={product.image || "/placeholder.svg"} alt={product.name} className="w-full h-full object-cover" />
+          <img src={product.image} alt={product.name} className="w-full h-full object-cover rounded-md" />
         ) : (
           <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
             <span className="text-gray-400 text-2xl">📦</span>
@@ -57,41 +57,36 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         )}
       </div>
 
-      <div className="p-4">
-        <div className="flex items-start justify-between mb-2">
-          <h3 className="font-semibold text-gray-900">{product.name}</h3>
-          <span className={`text-xs px-2 py-1 rounded ${getCategoryColor(product.category)}`}>{product.category}</span>
+      <h3 className="text-sm font-bold text-gray-900 truncate">{product.name}</h3>
+      <p className="text-xs text-gray-600 truncate">{product.description}</p>
+      <p className="text-sm font-medium text-gray-800 mt-1">₹{product.price}</p>
+
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <span className="text-lg font-bold text-gray-900">₹{product.price}</span>
+          <span className="text-sm text-gray-600 ml-1">per {product.stock_unit}</span>
         </div>
-
-        {product.description && <p className="text-sm text-gray-600 mb-3 line-clamp-2">{product.description}</p>}
-
-        <div className="flex items-center justify-between mb-4">
-          <div>
-            <span className="text-lg font-bold text-gray-900">₹{product.price}</span>
-            <span className="text-sm text-gray-600 ml-1">per {product.stock_unit}</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <button onClick={toggleProductStatus} className="flex items-center space-x-1">
-              {product.isActive ? (
-                <ToggleRight className="w-5 h-5 text-green-500" />
-              ) : (
-                <ToggleLeft className="w-5 h-5 text-gray-400" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className={`w-2 h-2 rounded-full ${product.isActive ? "bg-green-500" : "bg-red-500"}`}></div>
-            <span className={`text-sm ${product.isActive ? "text-green-600" : "text-red-600"}`}>
-              {product.isActive ? "Active" : "Inactive"}
-            </span>
-          </div>
-          <button className="text-gray-400 hover:text-gray-600 transition-colors">
-            <Edit className="w-4 h-4" />
+        <div className="flex items-center space-x-2">
+          <button onClick={toggleProductStatus} className="flex items-center space-x-1">
+            {product.isActive ? (
+              <ToggleRight className="w-5 h-5 text-green-500" />
+            ) : (
+              <ToggleLeft className="w-5 h-5 text-gray-400" />
+            )}
           </button>
         </div>
+      </div>
+
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          <div className={`w-2 h-2 rounded-full ${product.isActive ? "bg-green-500" : "bg-red-500"}`}></div>
+          <span className={`text-sm ${product.isActive ? "text-green-600" : "text-red-600"}`}>
+            {product.isActive ? "Active" : "Inactive"}
+          </span>
+        </div>
+        <button className="text-gray-400 hover:text-gray-600 transition-colors">
+          <Edit className="w-4 h-4" />
+        </button>
       </div>
     </div>
   )

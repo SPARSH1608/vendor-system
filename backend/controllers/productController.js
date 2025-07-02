@@ -1,5 +1,28 @@
+const multer = require("multer")
+const path = require("path")
 const Product = require("../models/Product")
 const { validationResult } = require("express-validator")
+
+// Configure multer for file uploads
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, "../uploads"))
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${Date.now()}-${file.originalname}`)
+  },
+})
+
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    const allowedTypes = ["image/jpeg", "image/png", "image/jpg"]
+    if (!allowedTypes.includes(file.mimetype)) {
+      return cb(new Error("Only JPEG, PNG, and JPG files are allowed"))
+    }
+    cb(null, true)
+  },
+})
 
 // @desc    Get all products
 // @route   GET /api/products
@@ -99,6 +122,11 @@ const createProduct = async (req, res) => {
       created_by: req.user.userId,
     }
 
+    // If an image file is uploaded, save its path
+    if (req.file) {
+      productData.image = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}` // Full URL
+    }
+
     const product = await Product.create(productData)
     await product.populate("created_by", "email")
 
@@ -138,8 +166,14 @@ const updateProduct = async (req, res) => {
       })
     }
 
-    // Update product
+    // Update product data
     Object.assign(product, req.body)
+
+    // If an image file is uploaded, update its path
+    if (req.file) {
+      product.image = `/uploads/${req.file.filename}`
+    }
+
     await product.save()
     await product.populate("created_by", "email")
 
@@ -265,6 +299,7 @@ const getProductStats = async (req, res) => {
 }
 
 module.exports = {
+  upload, // Export multer upload middleware
   getProducts,
   getProductById,
   createProduct,

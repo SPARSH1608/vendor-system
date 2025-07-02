@@ -8,6 +8,7 @@ const {
   deleteProduct,
   toggleProductStatus,
   getProductStats,
+  upload, // Import multer upload middleware
 } = require("../controllers/productController")
 const auth = require("../middleware/auth")
 const adminAuth = require("../middleware/adminAuth")
@@ -23,15 +24,17 @@ const productValidation = [
     .withMessage("Please select a valid category"),
   body("stock_unit").isIn(["kg", "litre", "piece", "gram"]).withMessage("Please select a valid stock unit"),
   body("description").optional().trim().isLength({ max: 500 }).withMessage("Description cannot exceed 500 characters"),
-  body("image").optional().isURL().withMessage("Image must be a valid URL"),
+  body("image")
+    .optional()
+  
 ]
 
 // Routes
 router.get("/", getProducts)
 router.get("/stats", auth, adminAuth, getProductStats)
 router.get("/:id", getProductById)
-router.post("/", auth, adminAuth, productValidation, createProduct)
-router.put("/:id", auth, adminAuth, productValidation, updateProduct)
+router.post("/", auth, adminAuth, upload.single("image"), productValidation, createProduct) // Add upload middleware
+router.put("/:id", auth, adminAuth, upload.single("image"), productValidation, updateProduct) // Add upload middleware
 router.put("/:id/status", auth, adminAuth, toggleProductStatus)
 router.delete("/:id", auth, adminAuth, deleteProduct)
 

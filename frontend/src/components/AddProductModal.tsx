@@ -3,6 +3,8 @@
 import type React from "react"
 import { useState } from "react"
 import { X } from "lucide-react"
+import { useDispatch } from "react-redux"
+import { createProduct } from "../store/slices/productSlice"
 
 interface AddProductModalProps {
   onClose: () => void
@@ -10,6 +12,7 @@ interface AddProductModalProps {
 }
 
 const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onSubmit }) => {
+  const dispatch = useDispatch()
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -18,6 +21,8 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onSubmit }) 
     stock_unit: "kg",
     image: "",
   })
+  const [imageOption, setImageOption] = useState<"url" | "upload">("url")
+  const [uploadedImage, setUploadedImage] = useState<File | null>(null)
 
   const categories = ["vegetables", "fruits", "dairy", "masala", "dry fruits", "pulses"]
   const units = ["kg", "litre", "piece", "gram"]
@@ -29,13 +34,30 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onSubmit }) 
     })
   }
 
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setUploadedImage(e.target.files[0])
+    }
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    onSubmit({
-      ...formData,
-      price: Number.parseFloat(formData.price),
-      isActive: true,
-    })
+
+    const productData = new FormData()
+    productData.append("name", formData.name)
+    productData.append("description", formData.description)
+    productData.append("price", formData.price)
+    productData.append("category", formData.category)
+    productData.append("stock_unit", formData.stock_unit)
+    productData.append("isActive", "true")
+
+    if (imageOption === "upload" && uploadedImage) {
+      productData.append("image", uploadedImage)
+    } else if (imageOption === "url") {
+      productData.append("image", formData.image)
+    }
+
+    onSubmit(productData) // Pass the data to the parent component
   }
 
   return (
@@ -127,15 +149,49 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onSubmit }) 
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Image URL</label>
-            <input
-              type="url"
-              name="image"
-              value={formData.image}
-              onChange={handleChange}
-              placeholder="Enter image URL (optional)"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
+            <label className="block text-sm font-medium text-gray-700 mb-2">Image</label>
+            <div className="flex items-center space-x-4">
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="imageOption"
+                  value="url"
+                  checked={imageOption === "url"}
+                  onChange={() => setImageOption("url")}
+                />
+                <span>From URL</span>
+              </label>
+              <label className="flex items-center space-x-2">
+                <input
+                  type="radio"
+                  name="imageOption"
+                  value="upload"
+                  checked={imageOption === "upload"}
+                  onChange={() => setImageOption("upload")}
+                />
+                <span>Upload</span>
+              </label>
+            </div>
+
+            {imageOption === "url" && (
+              <input
+                type="url"
+                name="image"
+                value={formData.image}
+                onChange={handleChange}
+                placeholder="Enter image URL"
+                className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            )}
+
+            {imageOption === "upload" && (
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            )}
           </div>
 
           <div className="flex space-x-3 pt-4">

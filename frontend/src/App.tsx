@@ -1,7 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
-import { Provider } from "react-redux"
-import { store } from "./store/store"
-import { useSelector } from "react-redux"
+import { PersistGate } from "redux-persist/integration/react"
+import { Provider, useSelector } from "react-redux"
+import store, { persistor } from "./store/store" // Import store and persistor
+
 import type { RootState } from "./store/store"
 
 // Pages
@@ -155,11 +156,13 @@ function AppRoutes() {
 function App() {
   return (
     <Provider store={store}>
-      <Router>
-        <div className="App">
-          <AppRoutes />
-        </div>
-      </Router>
+      <PersistGate loading={null} persistor={persistor}>
+        <Router>
+          <div className="App">
+            <AppRoutes />
+          </div>
+        </Router>
+      </PersistGate>
     </Provider>
   )
 }

@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'http://localhost:5000/api';
 // Helper function to make API calls
 const apiCall = async (endpoint, options = {}) => {
   const url = `${API_BASE_URL}${endpoint}`
@@ -11,11 +11,11 @@ const apiCall = async (endpoint, options = {}) => {
   }
 
   // Add auth token if available
-  const token = localStorage.getItem('token')
+  const token = localStorage.getItem('token') // Ensure the token is stored in localStorage
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`
+    config.headers.Authorization = `Bearer ${token}` // Add the token in the correct format
   }
-
+console.log(`Making API call to: ${url}`, config)
   const response = await fetch(url, config)
   const data = await response.json()
 
@@ -61,7 +61,10 @@ export const productsAPI = {
   createProduct: (productData) =>
     apiCall('/products', {
       method: 'POST',
-      body: JSON.stringify(productData),
+      body: productData, // Pass FormData directly
+      headers: {
+        // Do not set 'Content-Type' here; fetch will automatically set it for FormData
+      },
     }),
 
   updateProduct: (id, productData) =>

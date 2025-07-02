@@ -19,6 +19,7 @@ const locationRoutes = require("./routes/locationRoutes")
 // Import middleware
 const errorHandler = require("./middleware/errorHandler")
 const { connectDB } = require("./config/db")
+const path = require("path")
 
 const app = express()
 
@@ -50,13 +51,16 @@ app.use(
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 
+// Serve static files from the uploads directory
+app.use("/uploads", express.static(path.join(__dirname, "uploads")))
+
 // Database connection
 connectDB()
 
 // Routes
 app.use("/api/auth", authRoutes)
-// app.use("/api/users", userRoutes)
-// app.use("/api/products", productRoutes)
+app.use("/api/users", userRoutes)
+app.use("/api/products", productRoutes)
 // app.use("/api/vendors", vendorRoutes)
 // app.use("/api/invoices", invoiceRoutes)
 // app.use("/api/qr", qrRoutes)
