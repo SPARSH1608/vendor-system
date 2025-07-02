@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { usersAPI } from "../../services/api"
 
 interface User {
   _id: string
@@ -8,7 +7,6 @@ interface User {
   role: "admin" | "vendor" | "user"
   isActive: boolean
   createdAt: string
-  updatedAt: string
 }
 
 interface UserState {
@@ -24,34 +22,37 @@ const initialState: UserState = {
 }
 
 export const fetchUsers = createAsyncThunk("users/fetchUsers", async () => {
-  const data = await usersAPI.getUsers()
-  return data.data || data
+  const response = await fetch("/api/users", {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  })
+  const data = await response.json()
+  if (!response.ok) throw new Error(data.message)
+  return data
 })
 
 export const updateUserRole = createAsyncThunk(
   "users/updateUserRole",
   async ({ userId, role }: { userId: string; role: string }) => {
-    const data = await usersAPI.updateUserRole(userId, { role })
-    return data.data || data
-  },
-)
-
-export const toggleUserStatus = createAsyncThunk(
-  "users/toggleUserStatus",
-  async (userId: string) => {
-    const data = await usersAPI.toggleUserStatus(userId)
-    return data.data || data
+    const response = await fetch(`/api/users/${userId}/role`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify({ role }),
+    })
+    const data = await response.json()
+    if (!response.ok) throw new Error(data.message)
+    return data
   },
 )
 
 const userSlice = createSlice({
   name: "users",
   initialState,
-  reducers: {
-    clearError: (state) => {
-      state.error = null
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchUsers.pending, (state) => {
@@ -71,14 +72,7 @@ const userSlice = createSlice({
           state.users[index] = action.payload
         }
       })
-      .addCase(toggleUserStatus.fulfilled, (state, action) => {
-        const index = state.users.findIndex((u) => u._id === action.payload._id)
-        if (index !== -1) {
-          state.users[index] = action.payload
-        }
-      })
   },
 })
 
-export const { clearError } = userSlice.actions
 export default userSlice.reducer

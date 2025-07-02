@@ -14,12 +14,9 @@ const generateToken = (userId) => {
 // @access  Public
 const register = async (req, res) => {
   try {
-    console.log("Registration request received:", req.body)
-    
     // Check for validation errors
     const errors = validationResult(req)
     if (!errors.isEmpty()) {
-      console.log("Validation errors:", errors.array())
       return res.status(400).json({
         success: false,
         message: "Validation failed",
@@ -32,7 +29,6 @@ const register = async (req, res) => {
     // Check if user already exists
     const existingUser = await User.findOne({ email })
     if (existingUser) {
-      console.log("User already exists:", email)
       return res.status(400).json({
         success: false,
         message: "User already exists with this email",
@@ -40,13 +36,11 @@ const register = async (req, res) => {
     }
 
     // Create user
-    console.log("Creating new user...")
     const user = await User.create({
       email,
       password,
       phone,
     })
-    console.log("User created successfully:", user._id)
 
     // Generate token
     const token = generateToken(user._id)
@@ -68,7 +62,6 @@ const register = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Server error during registration",
-      error: error.message,
     })
   }
 }
@@ -77,6 +70,7 @@ const register = async (req, res) => {
 // @route   POST /api/auth/login
 // @access  Public
 const login = async (req, res) => {
+  console.log("Login request body:", req.body) // Debugging line
   try {
     // Check for validation errors
     const errors = validationResult(req)

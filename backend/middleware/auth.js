@@ -8,7 +8,7 @@ const auth = async (req, res, next) => {
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: "No token provided",
+        message: "No token provided, authorization denied",
       })
     }
 
@@ -18,14 +18,14 @@ const auth = async (req, res, next) => {
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: "Invalid token",
+        message: "Token is not valid",
       })
     }
 
     if (!user.isActive) {
       return res.status(401).json({
         success: false,
-        message: "Account deactivated",
+        message: "Account is deactivated",
       })
     }
 
@@ -40,7 +40,7 @@ const auth = async (req, res, next) => {
     console.error("Auth middleware error:", error)
     res.status(401).json({
       success: false,
-      message: "Invalid token",
+      message: "Token is not valid",
     })
   }
 }

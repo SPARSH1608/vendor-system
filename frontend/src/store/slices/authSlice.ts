@@ -27,6 +27,7 @@ const initialState: AuthState = {
 export const loginUser = createAsyncThunk(
   "auth/login",
   async ({ email, password }: { email: string; password: string }) => {
+    console.log("Logging in with:", { email, password }) // Debugging line
     const response = await fetch("/api/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },

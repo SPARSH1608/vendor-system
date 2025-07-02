@@ -13,7 +13,11 @@ import ProductManagement from "./pages/ProductManagement"
 import UserManagement from "./pages/UserManagement"
 import VendorActivities from "./pages/VendorActivities"
 import InvoiceGenerator from "./pages/InvoiceGenerator"
-import VendorDashboard from "./pages/VendorDashbaord"
+import VendorDashboard from "./pages/VendorDashboard"
+import VendorProducts from "./pages/VendorProducts"
+import VendorDailyActivity from "./pages/VendorDailyActivities"
+import VendorTransactionHistory from "./pages/VendorTransactionHistory"
+import VendorLocations from "./pages/VendorLocations"
 import PendingApprovalPage from "./pages/PendingApprovalPage"
 
 // Layout
@@ -39,7 +43,9 @@ function AppRoutes() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/pending-approval" element={<PendingApprovalPage />} />
 
+      {/* Admin Routes */}
       <Route
         path="/admin"
         element={
@@ -50,7 +56,6 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/admin/products"
         element={
@@ -61,7 +66,6 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/admin/users"
         element={
@@ -72,7 +76,6 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/admin/activities"
         element={
@@ -83,7 +86,6 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
       <Route
         path="/admin/invoices"
         element={
@@ -95,6 +97,7 @@ function AppRoutes() {
         }
       />
 
+      {/* Vendor Routes */}
       <Route
         path="/vendor"
         element={
@@ -105,8 +108,46 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-
-      <Route path="/pending-approval" element={<PendingApprovalPage />} />
+      <Route
+        path="/vendor/products"
+        element={
+          <ProtectedRoute allowedRoles={["vendor"]}>
+            <Layout>
+              <VendorProducts />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/vendor/activity"
+        element={
+          <ProtectedRoute allowedRoles={["vendor"]}>
+            <Layout>
+              <VendorDailyActivity />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/vendor/history"
+        element={
+          <ProtectedRoute allowedRoles={["vendor"]}>
+            <Layout>
+              <VendorTransactionHistory />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/vendor/locations"
+        element={
+          <ProtectedRoute allowedRoles={["vendor"]}>
+            <Layout>
+              <VendorLocations />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
     </Routes>
   )
 }

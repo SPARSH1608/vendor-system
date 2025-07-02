@@ -74,4 +74,5 @@ vendorActivitySchema.index({ vendor_id: 1, date: -1 })
 vendorActivitySchema.index({ date: -1 })
 vendorActivitySchema.index({ location: 1 })
 
-module.exports = mongoose.model("VendorActivity", vendorActivitySchema)
+// Check if the model already exists before defining it
+module.exports = mongoose.models.VendorActivity || mongoose.model("VendorActivity", vendorActivitySchema)

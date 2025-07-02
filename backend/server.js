@@ -5,6 +5,8 @@ const helmet = require("helmet")
 const morgan = require("morgan")
 const rateLimit = require("express-rate-limit")
 require("dotenv").config()
+const events = require('events');
+events.defaultMaxListeners = 20; // Set the limit to 20 (or any desired number)
 
 // Import routes
 const authRoutes = require("./routes/authRoutes")
@@ -13,7 +15,7 @@ const productRoutes = require("./routes/productRoutes")
 const vendorRoutes = require("./routes/vendorRoutes")
 const invoiceRoutes = require("./routes/invoiceRoutes")
 const qrRoutes = require("./routes/qrRoutes")
-
+const locationRoutes = require("./routes/locationRoutes")
 // Import middleware
 const errorHandler = require("./middleware/errorHandler")
 const { connectDB } = require("./config/db")
@@ -58,7 +60,7 @@ app.use("/api/auth", authRoutes)
 // app.use("/api/vendors", vendorRoutes)
 // app.use("/api/invoices", invoiceRoutes)
 // app.use("/api/qr", qrRoutes)
-
+// app.use("/api/locations", locationRoutes)
 // Health check endpoint
 app.get("/api/health", (req, res) => {
   res.status(200).json({

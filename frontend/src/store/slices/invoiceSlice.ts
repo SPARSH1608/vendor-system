@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { invoicesAPI } from "../../services/api"
 
 interface Invoice {
   _id: string
@@ -39,15 +38,19 @@ const initialState: InvoiceState = {
 export const generateInvoice = createAsyncThunk(
   "invoices/generate",
   async (invoiceData: { vendorId?: string; startDate: string; endDate: string }) => {
-    const data = await invoicesAPI.generateInvoice(invoiceData)
-    return data.data || data
+    const response = await fetch("/api/invoices/generate", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      body: JSON.stringify(invoiceData),
+    })
+    const data = await response.json()
+    if (!response.ok) throw new Error(data.message)
+    return data
   },
 )
-
-export const fetchInvoices = createAsyncThunk("invoices/fetchInvoices", async () => {
-  const data = await invoicesAPI.getInvoices()
-  return data.data || data
-})
 
 const invoiceSlice = createSlice({
   name: "invoices",

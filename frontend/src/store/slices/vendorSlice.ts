@@ -1,5 +1,4 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { vendorsAPI } from "../../services/api"
 
 interface VendorActivity {
   _id: string
@@ -15,7 +14,6 @@ interface VendorActivity {
     total: number
   }>
   totalAmount: number
-  createdAt: string
 }
 
 interface VendorState {
@@ -31,26 +29,20 @@ const initialState: VendorState = {
 }
 
 export const fetchVendorActivities = createAsyncThunk("vendors/fetchActivities", async () => {
-  const data = await vendorsAPI.getVendorActivities()
-  return data.data || data
+  const response = await fetch("/api/vendors/activities", {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  })
+  const data = await response.json()
+  if (!response.ok) throw new Error(data.message)
+  return data
 })
-
-export const createVendorActivity = createAsyncThunk(
-  "vendors/createActivity",
-  async (activityData: any) => {
-    const data = await vendorsAPI.createVendorActivity(activityData)
-    return data.data || data
-  },
-)
 
 const vendorSlice = createSlice({
   name: "vendors",
   initialState,
-  reducers: {
-    clearError: (state) => {
-      state.error = null
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchVendorActivities.pending, (state) => {
@@ -64,11 +56,7 @@ const vendorSlice = createSlice({
         state.loading = false
         state.error = action.error.message || "Failed to fetch vendor activities"
       })
-      .addCase(createVendorActivity.fulfilled, (state, action) => {
-        state.activities.push(action.payload)
-      })
   },
 })
 
-export const { clearError } = vendorSlice.actions
 export default vendorSlice.reducer
