@@ -1,0 +1,626 @@
+const Bill = require("../models/Bill")
+const VendorProduct = require("../models/VendorProduct")
+const Product = require("../models/Product")
+const { validationResult } = require("express-validator")
+const mongoose = require("mongoose") // Import mongoose
+const moment = require("moment") // already imported
+const VendorActivity = require("../models/VendorActivity")
+const nodemailer = require("nodemailer")
+const twilio = require("twilio")
+
+// Setup Email Transporter
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+})
+
+// Setup Twilio Client
+const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN)
+
+// Helper function to send bill
+const sendBillToCustomer = async (bill) => {
+  const customerEmail = bill.customer?.email
+  const customerPhone = bill.customer?.phone
+  const amount = bill.totalAmount
+  const billId = bill.billNumber || bill._id
+
+  const message = `Hello! Your payment of ₹${amount} for bill ID ${billId} has been received. Thank you!`
+
+  // Send Email
+  if (customerEmail) {
+    try {
+      await transporter.sendMail({
+        from: process.env.EMAIL_USER,
+        to: customerEmail,
+        subject: "Payment Confirmation - Bill Paid",
+        text: message,
+      })
+      console.log(`Email sent to ${customerEmail}`)
+    } catch (error) {
+      console.error("Error sending email:", error.message)
+    }
+  }
+
+  // Send WhatsApp (or SMS)
+  if (customerPhone) {
+    try {
+      await twilioClient.messages.create({
+        body: message,
+        from: process.env.TWILIO_PHONE, // e.g. 'whatsapp:+14155238886'
+        to: `whatsapp:${customerPhone.startsWith('+') ? customerPhone : '+91' + customerPhone}`,
+      })
+      console.log(`WhatsApp message sent to ${customerPhone}`)
+    } catch (error) {
+      console.error("Error sending WhatsApp:", error.message)
+    }
+  }
+}
+
+// @desc    Get vendor's bills
+// @route   GET /api/vendors/bills
+// @access  Private (Vendor only)
+const getVendorBills = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, status, search } = req.query
+
+    // Build query
+    const query = { vendor_id: req.user.userId }
+
+    if (status && status !== "all") {
+      query.status = status
+    }
+
+    if (search) {
+      query.$or = [
+        { "customer.name": { $regex: search, $options: "i" } },
+        { "customer.email": { $regex: search, $options: "i" } },
+        { billNumber: { $regex: search, $options: "i" } },
+      ]
+    }
+
+    const bills = await Bill.find(query)
+      .populate("items.product_id", "name category")
+      .sort({ createdAt: -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+
+    const total = await Bill.countDocuments(query)
+
+    res.json({
+      success: true,
+      data: bills,
+      pagination: {
+        current: Number.parseInt(page),
+        pages: Math.ceil(total / limit),
+        total,
+      },
+    })
+  } catch (error) {
+    console.error("Get vendor bills error:", error)
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    })
+  }
+}
+
+// @desc    Get all bills for admin (excluding drafts)
+// @route   GET /api/bills
+// @access  Private (Admin only)
+const getAllBills = async (req, res) => {
+  try {
+    const { page = 1, limit = 10, vendor_id, status } = req.query
+
+    // Build query - exclude drafts for admin
+    const query = { status: { $ne: "draft" } }
+
+    if (vendor_id) {
+      query.vendor_id = vendor_id
+    }
+
+    if (status && status !== "all") {
+      query.status = status
+    }
+
+    const bills = await Bill.find(query)
+      .populate("vendor_id", "email phone")
+      .populate("items.product_id", "name category")
+      .sort({ createdAt: -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit)
+
+    const total = await Bill.countDocuments(query)
+
+    res.json({
+      success: true,
+      data: bills,
+      pagination: {
+        current: Number.parseInt(page),
+        pages: Math.ceil(total / limit),
+        total,
+      },
+    })
+  } catch (error) {
+    console.error("Get all bills error:", error)
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    })
+  }
+}
+
+// @desc    Get bill by ID
+// @route   GET /api/bills/:id
+// @access  Private
+const getBillById = async (req, res) => {
+  try {
+    const bill = await Bill.findById(req.params.id)
+      .populate("vendor_id", "email phone")
+      .populate("items.product_id", "name category")
+
+    if (!bill) {
+      return res.status(404).json({
+        success: false,
+        message: "Bill not found",
+      })
+    }
+
+    // Check permissions
+    if (req.user.role === "vendor" && bill.vendor_id._id.toString() !== req.user.userId) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to view this bill",
+      })
+    }
+
+    // Admin cannot see draft bills
+    if (req.user.role === "admin" && bill.status === "draft") {
+      return res.status(403).json({
+        success: false,
+        message: "Draft bills are not accessible to admin",
+      })
+    }
+
+    res.json({
+      success: true,
+      data: bill,
+    })
+  } catch (error) {
+    console.error("Get bill by ID error:", error)
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    })
+  }
+}
+
+// @desc    Create bill
+// @route   POST /api/vendors/bills
+// @access  Private (Vendor only)
+const createBill = async (req, res) => {
+  try {
+    const errors = validationResult(req)
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        message: "Validation failed",
+        errors: errors.array(),
+      })
+    }
+
+    const { customer, items, location, notes, status = "draft", taxRate = 0 } = req.body
+
+    // Validate and enrich items
+    const enrichedItems = []
+    for (const item of items) {
+      // Check if vendor has this product
+      const vendorProduct = await VendorProduct.findOne({
+        vendor_id: req.user.userId,
+        product_id: item.product_id,
+        isActive: true,
+      }).populate("product_id")
+
+      if (!vendorProduct || !vendorProduct.product_id.isActive) {
+        return res.status(400).json({
+          success: false,
+          message: `Product ${item.product_id} not found in your selection or inactive`,
+        })
+      }
+
+      enrichedItems.push({
+        product_id: vendorProduct.product_id._id,
+        productName: vendorProduct.product_id.name,
+        quantity: item.quantity,
+        price: vendorProduct.product_id.price,
+        stock_unit: vendorProduct.product_id.stock_unit,
+        total: item.quantity * vendorProduct.product_id.price,
+      })
+    }
+
+    // Calculate subtotal and totalAmount
+    const subtotal = enrichedItems.reduce((sum, item) => sum + item.total, 0)
+    const tax = (taxRate || 0) / 100 * subtotal
+    const totalAmount = subtotal + tax
+
+    // Generate a bill number (simple example, you can improve this)
+    const billNumber = `BILL-${Date.now()}`
+
+    const billData = {
+      vendor_id: req.user.userId,
+      customer,
+      items: enrichedItems,
+      location,
+      notes,
+      status,
+      taxRate,
+      subtotal,
+      totalAmount,
+      billNumber,
+    }
+
+    const bill = await Bill.create(billData)
+    await bill.populate("items.product_id", "name category")
+
+    // Track vendor activity
+    const billDate = moment(bill.createdAt).startOf("day").toDate();
+
+    let activity = await VendorActivity.findOne({
+      vendor_id: req.user.userId,
+      date: {
+        $gte: billDate,
+        $lte: moment(billDate).endOf("day").toDate(),
+      },
+    });
+
+    if (!activity) {
+      // Calculate totalAmount for the activity
+      const items = bill.items.map(item => ({
+        product_id: item.product_id,
+        productName: item.productName,
+        quantity: item.quantity,
+        price: item.price,
+        total: item.total,
+      }));
+      const totalAmount = items.reduce((sum, item) => sum + item.total, 0);
+
+      // Create new activity for the day
+      await VendorActivity.create({
+        vendor_id: req.user.userId,
+        date: billDate,
+        location: bill.location,
+        items,
+        totalAmount, // <-- This is required!
+      });
+    } else {
+      // Update existing activity: add/update items and totals
+      for (const billItem of bill.items) {
+        const existingItem = activity.items.find(
+          item => item.product_id.toString() === billItem.product_id.toString()
+        );
+        if (existingItem) {
+          existingItem.quantity += billItem.quantity;
+          existingItem.total += billItem.total;
+        } else {
+          activity.items.push({
+            product_id: billItem.product_id,
+            productName: billItem.productName,
+            quantity: billItem.quantity,
+            price: billItem.price,
+            total: billItem.total,
+          });
+        }
+      }
+      // Always update totalAmount after modifying items
+      activity.totalAmount = activity.items.reduce((sum, item) => sum + item.total, 0);
+      await activity.save();
+    }
+
+    // Send bill notification to customer
+    sendBillToCustomer(bill)
+
+    res.status(201).json({
+      success: true,
+      message: "Bill created successfully",
+      data: bill,
+    })
+  } catch (error) {
+    console.error("Create bill error:", error)
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    })
+  }
+}
+
+// @desc    Update bill
+// @route   PUT /api/vendors/bills/:id
+// @access  Private (Vendor only)
+const updateBill = async (req, res) => {
+  try {
+    const bill = await Bill.findById(req.params.id)
+    if (!bill) {
+      return res.status(404).json({
+        success: false,
+        message: "Bill not found",
+      })
+    }
+
+    // Check if bill belongs to vendor
+    if (bill.vendor_id.toString() !== req.user.userId) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to update this bill",
+      })
+    }
+
+    const { customer, items, location, notes, status, taxRate } = req.body
+
+    // If items are being updated, validate them
+    if (items && items.length > 0) {
+      const enrichedItems = []
+      for (const item of items) {
+        const vendorProduct = await VendorProduct.findOne({
+          vendor_id: req.user.userId,
+          product_id: item.product_id,
+          isActive: true,
+        }).populate("product_id")
+
+        if (!vendorProduct || !vendorProduct.product_id.isActive) {
+          return res.status(400).json({
+            success: false,
+            message: `Product ${item.product_id} not found in your selection or inactive`,
+          })
+        }
+
+        enrichedItems.push({
+          product_id: vendorProduct.product_id._id,
+          productName: vendorProduct.product_id.name,
+          quantity: item.quantity,
+          price: vendorProduct.product_id.price,
+          stock_unit: vendorProduct.product_id.stock_unit,
+          total: item.quantity * vendorProduct.product_id.price,
+        })
+      }
+      bill.items = enrichedItems
+    }
+
+    // Update other fields
+    if (customer) bill.customer = customer
+    if (location) bill.location = location
+    if (notes !== undefined) bill.notes = notes
+    if (status) bill.status = status
+    if (taxRate !== undefined) bill.taxRate = taxRate
+
+    await bill.save()
+    await bill.populate("items.product_id", "name category")
+
+    res.json({
+      success: true,
+      message: "Bill updated successfully",
+      data: bill,
+    })
+  } catch (error) {
+    console.error("Update bill error:", error)
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    })
+  }
+}
+
+// @desc    Update bill status
+// @route   PUT /api/vendors/bills/:id/status
+// @access  Private (Vendor only)
+const updateBillStatus = async (req, res) => {
+  try {
+    const { status } = req.body
+
+    const bill = await Bill.findById(req.params.id)
+    if (!bill) {
+      return res.status(404).json({
+        success: false,
+        message: "Bill not found",
+      })
+    }
+
+    // Check if bill belongs to vendor
+    if (bill.vendor_id.toString() !== req.user.userId) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to update this bill",
+      })
+    }
+
+    const prevStatus = bill.status
+    bill.status = status
+    await bill.save()
+
+    // --- VendorActivity update logic ---
+    const billDate = moment(bill.createdAt).startOf("day").toDate()
+    let activity = await VendorActivity.findOne({
+      vendor_id: req.user.userId,
+      date: {
+        $gte: billDate,
+        $lte: moment(billDate).endOf("day").toDate(),
+      },
+    })
+
+    const items = bill.items.map(item => ({
+      product_id: item.product_id,
+      productName: item.productName,
+      quantity: item.quantity,
+      price: item.price,
+      total: item.total,
+    }));
+    const totalAmount = items.reduce((sum, item) => sum + item.total, 0);
+
+    // If bill is now paid and was not paid before, add items to activity
+    if (status === "paid" && prevStatus !== "paid") {
+      if (!activity) {
+        // Calculate totalAmount for the activity
+        const items = bill.items.map(item => ({
+          product_id: item.product_id,
+          productName: item.productName,
+          quantity: item.quantity,
+          price: item.price,
+          total: item.total,
+        }));
+        const totalAmount = items.reduce((sum, item) => sum + item.total, 0);
+
+        // Create new activity for the day
+        await VendorActivity.create({
+          vendor_id: req.user.userId,
+          date: billDate,
+          location: bill.location,
+          items,
+          totalAmount, // <-- This is required!
+        })
+      } else {
+        // Add/update items in activity
+        for (const billItem of bill.items) {
+          const existingItem = activity.items.find(
+            item => item.product_id.toString() === billItem.product_id.toString()
+          )
+          if (existingItem) {
+            existingItem.quantity += billItem.quantity
+            existingItem.total += billItem.total
+          } else {
+            activity.items.push({
+              product_id: billItem.product_id,
+              productName: billItem.productName,
+              quantity: billItem.quantity,
+              price: billItem.price,
+              total: billItem.total,
+            })
+          }
+        }
+        // Always update totalAmount after modifying items
+        activity.totalAmount = activity.items.reduce((sum, item) => sum + item.total, 0);
+        await activity.save()
+      }
+    }
+
+    // If bill was paid and is now not paid, remove items from activity
+    if (prevStatus === "paid" && status !== "paid" && activity) {
+      for (const billItem of bill.items) {
+        const existingItem = activity.items.find(
+          item => item.product_id.toString() === billItem.product_id.toString()
+        )
+        if (existingItem) {
+          existingItem.quantity -= billItem.quantity
+          existingItem.total -= billItem.total
+          // Remove item if quantity is zero or less
+          if (existingItem.quantity <= 0) {
+            activity.items = activity.items.filter(
+              item => item.product_id.toString() !== billItem.product_id.toString()
+            )
+          }
+        }
+      }
+      activity.totalAmount = activity.items.reduce((sum, item) => sum + item.total, 0);
+      await activity.save()
+    }
+    // --- End VendorActivity update logic ---
+
+    res.json({
+      success: true,
+      message: "Bill status updated successfully",
+      data: bill,
+    })
+  } catch (error) {
+    console.error("Update bill status error:", error)
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    })
+  }
+}
+
+// @desc    Delete bill
+// @route   DELETE /api/vendors/bills/:id
+// @access  Private (Vendor only)
+const deleteBill = async (req, res) => {
+  try {
+    const bill = await Bill.findById(req.params.id)
+    if (!bill) {
+      return res.status(404).json({
+        success: false,
+        message: "Bill not found",
+      })
+    }
+
+    // Check if bill belongs to vendor
+    if (bill.vendor_id.toString() !== req.user.userId) {
+      return res.status(403).json({
+        success: false,
+        message: "Not authorized to delete this bill",
+      })
+    }
+
+    await Bill.findByIdAndDelete(req.params.id)
+
+    res.json({
+      success: true,
+      message: "Bill deleted successfully",
+    })
+  } catch (error) {
+    console.error("Delete bill error:", error)
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    })
+  }
+}
+
+// @desc    Get bill statistics
+// @route   GET /api/vendors/bills/stats
+// @access  Private (Vendor only)
+const getBillStats = async (req, res) => {
+  try {
+    const vendorId = req.user.userId
+
+    const totalBills = await Bill.countDocuments({ vendor_id: vendorId })
+    const paidBills = await Bill.countDocuments({ vendor_id: vendorId, status: "paid" })
+    const unpaidBills = await Bill.countDocuments({ vendor_id: vendorId, status: "unpaid" })
+    const draftBills = await Bill.countDocuments({ vendor_id: vendorId, status: "draft" })
+
+    // Calculate revenue (only from paid bills)
+    const revenueData = await Bill.aggregate([
+      { $match: { vendor_id: new mongoose.Types.ObjectId(vendorId), status: "paid" } },
+      { $group: { _id: null, totalRevenue: { $sum: "$totalAmount" } } },
+    ])
+
+    const totalRevenue = revenueData[0]?.totalRevenue || 0
+
+    res.json({
+      success: true,
+      data: {
+        totalBills,
+        paidBills,
+        unpaidBills,
+        draftBills,
+        totalRevenue,
+      },
+    })
+  } catch (error) {
+    console.error("Get bill stats error:", error)
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    })
+  }
+}
+
+module.exports = {
+  getVendorBills,
+  getAllBills,
+  getBillById,
+  createBill,
+  updateBill,
+  updateBillStatus,
+  deleteBill,
+  getBillStats,
+}
