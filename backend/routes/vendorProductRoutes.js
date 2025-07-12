@@ -9,6 +9,7 @@ const {
 } = require("../controllers/vendorProductController")
 const auth = require("../middleware/auth")
 const vendorAuth = require("../middleware/vendorAuth")
+const VendorProduct = require("../models/VendorProduct")
 
 const router = express.Router()
 
@@ -29,4 +30,21 @@ router.post("/products", auth, vendorAuth, addProductValidation, addVendorProduc
 router.put("/products/:productId", auth, vendorAuth, updateProductValidation, updateVendorProduct)
 router.delete("/products/:productId", auth, vendorAuth, removeVendorProduct)
 
+// POST /api/vendors/products-by-vendors
+router.post("/products-by-vendors", async (req, res) => {
+  try {
+    const { vendorIds } = req.body
+    if (!Array.isArray(vendorIds) || vendorIds.length === 0) {
+      return res.status(400).json({ success: false, message: "No vendorIds provided" })
+    }
+    const products = await VendorProduct.find({ vendor_id: { $in: vendorIds } })
+      .populate("product_id")
+      .populate("vendor_id", "email")
+    res.json({ success: true, data: products })
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server error" })
+  }
+})
+
 module.exports = router
+

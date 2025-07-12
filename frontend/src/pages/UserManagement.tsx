@@ -6,6 +6,9 @@ import { Search, UserCheck, UserX, Shield } from "lucide-react"
 import { fetchUsers, updateUserRole, toggleUserStatus } from "../store/slices/userSlice"
 import type { AppDispatch, RootState } from "../store/store"
 import ConfirmationModal from "../components/ConfirmationModal"
+import * as XLSX from "xlsx"
+import jsPDF from "jspdf"
+import autoTable from "jspdf-autotable"
 
 const UserManagement = () => {
   const dispatch = useDispatch<AppDispatch>()
@@ -13,6 +16,8 @@ const UserManagement = () => {
   const [showRoleModal, setShowRoleModal] = useState(false)
   const [roleModalUser, setRoleModalUser] = useState<{ id: string; newRole: string; email: string } | null>(null)
   const [search, setSearch] = useState("")
+  const [selectedVendors, setSelectedVendors] = useState<string[]>([])
+  const [downloading, setDownloading] = useState(false)
 
   useEffect(() => {
     dispatch(fetchUsers())
@@ -57,6 +62,105 @@ const UserManagement = () => {
       (u.phone && u.phone.toLowerCase().includes(search.toLowerCase()))
   )
 
+  // Only vendors for selection
+  const vendorUsers = filteredUsers.filter(u => u.role === "vendor")
+
+  // Handle vendor selection
+  const handleVendorSelect = (vendorId: string) => {
+    setSelectedVendors(prev =>
+      prev.includes(vendorId)
+        ? prev.filter(id => id !== vendorId)
+        : [...prev, vendorId]
+    )
+  }
+
+  // Download selected vendors' products as Excel
+  const handleDownloadProductsExcel = async () => {
+    setDownloading(true)
+    try {
+      const res = await fetch("/api/vendors/products-by-vendors", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ vendorIds: selectedVendors }),
+      })
+      const data = await res.json()
+      if (!data.success) throw new Error("Failed to fetch products")
+
+      // Group products by vendor email
+      const vendorMap: Record<string, string[]> = {}
+      data.data.forEach((prod: any) => {
+        const email = prod.vendor_id?.email || ""
+        const name = prod.product_id?.name || ""
+        if (!vendorMap[email]) vendorMap[email] = []
+        vendorMap[email].push(name)
+      })
+
+      // Prepare rows: one row per vendor, products comma-separated
+      const allProducts = Object.entries(vendorMap).map(([email, products]) => ({
+        Vendor: email,
+        Products: products.join(", "),
+      }))
+
+      const ws = XLSX.utils.json_to_sheet(allProducts, { header: ["Vendor", "Products"] })
+      const wb = XLSX.utils.book_new()
+      XLSX.utils.book_append_sheet(wb, ws, "Vendor Products")
+      XLSX.writeFile(wb, "vendor_products.xlsx")
+    } catch (err) {
+      alert("Failed to download products.")
+    }
+    setDownloading(false)
+  }
+
+  // Download selected vendors' products as PDF
+  const handleDownloadProductsPDF = async () => {
+    setDownloading(true)
+    try {
+      const res = await fetch("/api/vendors/products-by-vendors", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({ vendorIds: selectedVendors }),
+      })
+      const data = await res.json()
+      if (!data.success) throw new Error("Failed to fetch products")
+
+      // Group products by vendor email
+      const vendorMap: Record<string, string[]> = {}
+      data.data.forEach((prod: any) => {
+        const email = prod.vendor_id?.email || ""
+        const name = prod.product_id?.name || ""
+        if (!vendorMap[email]) vendorMap[email] = []
+        vendorMap[email].push(name)
+      })
+
+      // Prepare rows: one row per vendor, products comma-separated
+      const rows = Object.entries(vendorMap).map(([email, products]) => [
+        email,
+        products.join(", "),
+      ])
+      const head = [["Vendor", "Products"]]
+
+      const doc = new jsPDF()
+      doc.text("Vendor Products", 14, 16)
+      autoTable(doc, {
+        startY: 22,
+        head,
+        body: rows,
+        styles: { fontSize: 12 },
+        headStyles: { fillColor: [22, 163, 74] },
+      })
+      doc.save("vendor_products.pdf")
+    } catch (err) {
+      alert("Failed to download products PDF.")
+    }
+    setDownloading(false)
+  }
+
   return (
     <div className="space-y-6 px-2 sm:px-4 md:px-8 max-w-5xl mx-auto">
       <div>
@@ -97,6 +201,7 @@ const UserManagement = () => {
               <table className="w-full text-xs sm:text-sm">
                 <thead className="bg-gray-50">
                   <tr>
+                    <th className="px-4 py-3"></th> {/* Checkbox column */}
                     <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase">Email</th>
                     <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase">Phone</th>
                     <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase">Role</th>
@@ -107,6 +212,16 @@ const UserManagement = () => {
                 <tbody className="bg-white divide-y divide-gray-200">
                   {filteredUsers.map((user) => (
                     <tr key={user._id} className="hover:bg-gray-50">
+                      <td className="px-4 py-3">
+                        {user.role === "vendor" && (
+                          <input
+                            type="checkbox"
+                            checked={selectedVendors.includes(user._id)}
+                            onChange={() => handleVendorSelect(user._id)}
+                            className="accent-blue-600"
+                          />
+                        )}
+                      </td>
                       <td className="px-4 py-3">{user.email}</td>
                       <td className="px-4 py-3">{user.phone}</td>
                       <td className="px-4 py-3">
@@ -203,6 +318,24 @@ const UserManagement = () => {
             </div>
           </>
         )}
+      </div>
+
+      {/* Download Button */}
+      <div className="flex justify-end mt-4 space-x-2">
+        <button
+          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-60"
+          disabled={selectedVendors.length === 0 || downloading}
+          onClick={handleDownloadProductsExcel}
+        >
+          {downloading ? "Downloading..." : "Download Products Excel"}
+        </button>
+        <button
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-60"
+          disabled={selectedVendors.length === 0 || downloading}
+          onClick={handleDownloadProductsPDF}
+        >
+          {downloading ? "Downloading..." : "Download Products PDF"}
+        </button>
       </div>
 
       {/* Confirmation Modal for role change */}
