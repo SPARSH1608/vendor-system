@@ -98,7 +98,9 @@ const getMyActivities = async (req, res) => {
       }
     }
 
+    // Populate vendor_id with email only
     const activities = await VendorActivity.find(query)
+      .populate({ path: "vendor_id", select: "email" })
       .populate("items.product_id", "name category")
       .sort({ date: -1 })
       .limit(limit * 1)
@@ -106,19 +108,20 @@ const getMyActivities = async (req, res) => {
 
     const total = await VendorActivity.countDocuments(query)
 
-    // Calculate totalAmount for each activity
+    // Calculate totalAmount for each activity and flatten vendor email
     const activitiesWithTotal = activities.map((activity) => {
       const totalAmount = activity.items.reduce(
         (sum, item) => sum + (item.total || (item.quantity * (item.price || 0)) || 0),
         0
       )
-      // Also flatten productName if needed
       const items = activity.items.map(item => ({
         ...item._doc,
         productName: item.productName || item.product_id?.name || "",
       }))
       return {
         ...activity.toObject(),
+        vendorEmail: activity.vendor_id?.email || "",
+        vendor_id: undefined, // Remove vendor_id from response
         totalAmount,
         items,
       }
