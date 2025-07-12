@@ -21,13 +21,79 @@ const transporter = nodemailer.createTransport({
 const twilioClient = twilio(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN)
 
 // Helper function to send bill
+const generateInvoiceHtml = (bill) => {
+  // You can further improve this HTML and add inline CSS as needed
+  return `
+  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border:1px solid #eee; border-radius:8px; overflow:hidden;">
+    <div style="background:#222; color:#fff; padding:16px 24px; display:flex; justify-content:space-between;">
+      <div style="text-align:right; font-size:13px;">
+        <div><b>Bill No:</b> ${bill.billNumber}</div>
+        <div><b>Date:</b> ${new Date(bill.createdAt).toLocaleDateString("en-IN")}</div>
+      </div>
+    </div>
+    <div style="padding:24px;">
+      <h2 style="margin:0 0 8px 0;">Billing to</h2>
+      <div style="margin-bottom:16px;">
+        <div><b>${bill.customer?.name || ""}</b></div>
+        <div>${bill.customer?.email || ""}</div>
+        <div>${bill.customer?.phone || ""}</div>
+      </div>
+      <h3 style="margin:24px 0 8px 0; border-bottom:1px solid #eee; padding-bottom:4px;">Products</h3>
+      <table style="width:100%; border-collapse:collapse; margin-bottom:16px;">
+        <thead>
+          <tr>
+            <th align="left" style="border-bottom:1px solid #eee; padding:8px 0;">Product</th>
+            <th align="center" style="border-bottom:1px solid #eee; padding:8px 0;">Qty</th>
+            <th align="right" style="border-bottom:1px solid #eee; padding:8px 0;">Unit Price</th>
+            <th align="right" style="border-bottom:1px solid #eee; padding:8px 0;">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${bill.items.map(item => `
+            <tr>
+              <td style="padding:6px 0;">${item.productName}</td>
+              <td align="center">${item.quantity}</td>
+              <td align="right">₹${item.price}</td>
+              <td align="right">₹${item.total}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+      <div style="margin-bottom:8px;">
+        <b>Location:</b> ${bill.location || "-"}
+      </div>
+    
+      <table style="width:100%; margin-top:24px;">
+        <tr>
+          <td align="right" style="padding:4px 0;">Subtotal:</td>
+          <td align="right" style="padding:4px 0;">₹${bill.subtotal}</td>
+        </tr>
+        <tr>
+          <td align="right" style="padding:4px 0;">Tax (${bill.taxRate || 0}%):</td>
+          <td align="right" style="padding:4px 0;">₹${((bill.taxRate || 0) / 100 * bill.subtotal).toFixed(2)}</td>
+        </tr>
+        <tr>
+          <td align="right" style="padding:8px 0; font-weight:bold; border-top:1px solid #eee;">Total:</td>
+          <td align="right" style="padding:8px 0; font-weight:bold; border-top:1px solid #eee;">₹${bill.totalAmount}</td>
+        </tr>
+      </table>
+      <div style="margin-top:32px; font-size:12px; color:#888;">
+        This is an electronically generated invoice and does not require a signature.<br/>
+        Thank you for your business!
+      </div>
+    </div>
+  </div>
+  `
+}
+
 const sendBillToCustomer = async (bill) => {
   const customerEmail = bill.customer?.email
   const customerPhone = bill.customer?.phone
   const amount = bill.totalAmount
   const billId = bill.billNumber || bill._id
 
-  const message = `Hello! Your payment of ₹${amount} for bill ID ${billId} has been received. Thank you!`
+  // Generate HTML invoice
+  const html = generateInvoiceHtml(bill)
 
   // Send Email
   if (customerEmail) {
@@ -35,8 +101,8 @@ const sendBillToCustomer = async (bill) => {
       await transporter.sendMail({
         from: process.env.EMAIL_USER,
         to: customerEmail,
-        subject: "Payment Confirmation - Bill Paid",
-        text: message,
+        subject: "Your Invoice - Bill Paid",
+        html, // <-- send as HTML
       })
       console.log(`Email sent to ${customerEmail}`)
     } catch (error) {

@@ -33,7 +33,7 @@ const LoginPage = () => {
       if (result.user.role === "admin") {
         navigate("/admin")
       } else if (result.user.role === "vendor") {
-        navigate("/vendor")
+        navigate("/vendor/bills/create")
       } else {
         navigate("/")
       }
