@@ -3,6 +3,8 @@
 import { useState, useEffect } from "react"
 import { FileText, Download } from "lucide-react"
 import { invoicesAPI, usersAPI } from "../services/api"
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 const InvoiceGenerator = () => {
   const [invoiceOptions, setInvoiceOptions] = useState({
@@ -43,33 +45,73 @@ const InvoiceGenerator = () => {
       setLoading(false)
     }
   }
+console.log(invoice)
+  const handleDownloadPDF = () => {
+    if (!invoice) return;
 
-  const handleDownloadPDF = async () => {
-    if (!invoice?._id) return
     try {
-      const response = await fetch(
-        `/api/invoices/${invoice._id}/pdf`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      )
-      if (!response.ok) throw new Error("Failed to download PDF")
-      const blob = await response.blob()
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement("a")
-      a.href = url
-      a.download = `invoice-${invoice._id}.pdf`
-      document.body.appendChild(a)
-      a.click()
-      a.remove()
-      window.URL.revokeObjectURL(url)
+      const doc = new jsPDF();
+
+      // Add Invoice Header
+      doc.setFontSize(22);
+      doc.setFont("helvetica", "bold");
+      doc.text("INVOICE", 105, 20, { align: "center" });
+
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Invoice Number: ${invoice.invoiceNumber || invoice._id}`, 14, 40);
+      doc.text(`Vendor: ${invoice.vendorEmail || "Multiple Vendors"}`, 14, 50);
+      doc.text(
+        `Date Range: ${invoice.dateRange?.start?.slice(0, 10)} to ${invoice.dateRange?.end?.slice(0, 10)}`,
+        14,
+        60
+      );
+      doc.text(`Status: ${invoice.status || "Draft"}`, 14, 70);
+
+      // Add Table for Items
+      const tableData = invoice.items.map((item: any) => [
+        item.productName,
+        item.quantity.toFixed(2),
+        `INR ${item.price.toFixed(2)}`,
+        `INR ${item.total.toFixed(2)}`,
+      ]);
+
+      autoTable(doc, {
+        head: [["Product", "Quantity", "Price", "Total"]],
+        body: tableData,
+        startY: 80,
+        theme: "grid",
+        styles: {
+          fontSize: 10,
+          cellPadding: 4,
+        },
+        headStyles: {
+          fillColor: [41, 128, 185],
+          textColor: 255,
+          fontStyle: "bold",
+        },
+        bodyStyles: {
+          fillColor: [245, 245, 245],
+        },
+        alternateRowStyles: {
+          fillColor: [255, 255, 255],
+        },
+      });
+
+      // Add Invoice Totals
+      const finalY = (doc as any).lastAutoTable?.finalY || 80;
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(14);
+      doc.text(`Total: INR ${invoice.totalAmount.toFixed(2)}`, 14, finalY + 20);
+
+      // Save the PDF
+      doc.save(`invoice-${invoice.invoiceNumber || invoice._id}.pdf`);
     } catch (err) {
-      alert("Failed to download PDF")
+      console.error("Error generating PDF:", err);
+      alert("Failed to generate PDF. Please try again.");
     }
-  }
+  };
 
   const displayInvoice = invoice
 
@@ -100,7 +142,7 @@ const InvoiceGenerator = () => {
                 <option value="All Vendors">All Vendors</option>
                 {vendors.map((v) => (
                   <option key={v._id} value={v._id}>
-                    {v.email}
+                    {v.name} {/* Display vendor name instead of email */}
                   </option>
                 ))}
               </select>
@@ -190,10 +232,6 @@ const InvoiceGenerator = () => {
                   <span className="text-gray-600">Subtotal:</span>
                   <span className="font-medium">₹{displayInvoice.subtotal}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Tax (10%):</span>
-                  <span className="font-medium">₹{displayInvoice.tax}</span>
-                </div>
                 <div className="flex justify-between text-lg font-bold border-t pt-2">
                   <span>Total:</span>
                   <span>₹{displayInvoice.totalAmount}</span>
@@ -205,15 +243,15 @@ const InvoiceGenerator = () => {
                 <button
                   className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center space-x-2"
                   onClick={handleDownloadPDF}
-                  disabled={!displayInvoice._id}
+                  disabled={!invoice}
                 >
                   <Download className="w-4 h-4" />
                   <span>Download PDF</span>
                 </button>
-                {displayInvoice.qrCode && (
+                {invoice.qrCode && (
                   <div className="flex-1 flex flex-col items-center justify-center">
                     <span className="mb-1 text-xs text-gray-500">QR Code</span>
-                    <img src={displayInvoice.qrCode} alt="QR Code" className="w-20 h-20" />
+                    <img src={invoice.qrCode} alt="QR Code" className="w-20 h-20" />
                   </div>
                 )}
               </div>

@@ -1,4 +1,5 @@
 const Product = require("../models/Product")
+const VendorProduct = require("../models/VendorProduct")
 const { validationResult } = require("express-validator")
 
 // @desc    Get all products
@@ -248,6 +249,31 @@ const getProductStats = async (req, res) => {
   }
 }
 
+// @desc    Get vendors for a specific product
+// @route   GET /api/products/:id/vendors
+// @access  Private (Admin only)
+const getVendorsByProduct = async (req, res) => {
+  try {
+    const productId = req.params.id
+
+    // Find vendors who have selected this product
+    const vendors = await VendorProduct.find({ product_id: productId })
+      .populate("vendor_id", "name email phone") // Populate vendor details
+      .select("vendor_id")
+
+    res.json({
+      success: true,
+      data: vendors.map((vp) => vp.vendor_id),
+    })
+  } catch (error) {
+    console.error("Get vendors by product error:", error)
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    })
+  }
+}
+
 module.exports = {
   getProducts,
   getProductById,
@@ -256,4 +282,5 @@ module.exports = {
   deleteProduct,
   toggleProductStatus,
   getProductStats,
+  getVendorsByProduct,
 }

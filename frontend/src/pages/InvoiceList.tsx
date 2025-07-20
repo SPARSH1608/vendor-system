@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react"
 import { invoicesAPI } from "../services/api"
 import { Eye } from "lucide-react"
+import jsPDF from "jspdf"
+import autoTable from "jspdf-autotable"; 
 
 const InvoiceList = () => {
   const [invoices, setInvoices] = useState<any[]>([])
@@ -57,6 +59,73 @@ const InvoiceList = () => {
     }
   }
 
+  const handleDownloadPDF = () => {
+    if (!selectedInvoice) return;
+
+    try {
+      const doc = new jsPDF();
+
+      // Add Invoice Header
+      doc.setFontSize(22);
+      doc.setFont("helvetica", "bold");
+      doc.text("INVOICE", 105, 20, { align: "center" });
+
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Invoice Number: ${selectedInvoice.invoiceNumber || selectedInvoice._id}`, 14, 40);
+      doc.text(`Vendor: ${selectedInvoice.vendor_id?.name || "N/A"}`, 14, 50);
+      doc.text(
+        `Date Range: ${selectedInvoice.dateRange?.start?.slice(0, 10)} to ${selectedInvoice.dateRange?.end?.slice(0, 10)}`,
+        14,
+        60
+      );
+      doc.text(`Status: ${selectedInvoice.status || "Draft"}`, 14, 70);
+
+      // Add Table for Items
+      const tableData = selectedInvoice.items.map((item: any) => [
+        item.productName,
+        item.quantity.toFixed(2), // Ensure numbers are formatted correctly
+        `INR ${item.price.toFixed(2)}`, // Replace ₹ with INR
+        `INR ${item.total.toFixed(2)}`, // Replace ₹ with INR
+      ]);
+
+      autoTable(doc, {
+        head: [["Product", "Quantity", "Price", "Total"]],
+        body: tableData,
+        startY: 80,
+        theme: "grid",
+        styles: {
+          fontSize: 10,
+          cellPadding: 4,
+        },
+        headStyles: {
+          fillColor: [41, 128, 185],
+          textColor: 255,
+          fontStyle: "bold",
+        },
+        bodyStyles: {
+          fillColor: [245, 245, 245],
+        },
+        alternateRowStyles: {
+          fillColor: [255, 255, 255],
+        },
+      });
+
+      // Add Invoice Totals
+      const finalY = (doc as any).lastAutoTable?.finalY || 80;
+      doc.setFontSize(12);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(14);
+      doc.text(`Total: INR ${selectedInvoice.totalAmount.toFixed(2)}`, 14, finalY + 20); // Replace ₹ with INR
+
+      // Save the PDF
+      doc.save(`invoice-${selectedInvoice.invoiceNumber || selectedInvoice._id}.pdf`);
+    } catch (err) {
+      console.error("Error generating PDF:", err);
+      alert("Failed to generate PDF. Please try again.");
+    }
+  }
+
   return (
     <div className="space-y-6 px-2 sm:px-4 md:px-8 max-w-5xl mx-auto">
       <div>
@@ -91,7 +160,7 @@ const InvoiceList = () => {
                   <tr key={invoice._id} className="hover:bg-blue-50 transition-colors">
                     <td className="px-2 sm:px-4 py-3 text-gray-900 font-mono">{invoice.invoiceNumber}</td>
                     <td className="px-2 sm:px-4 py-3 text-gray-900">
-                      {invoice.vendor_id?.email || "Multiple Vendors"}
+                      {invoice.vendor_id?.name || "-"}
                     </td>
                     <td className="px-2 sm:px-4 py-3 text-gray-900">
                       {invoice.dateRange?.start?.slice(0, 10)} to {invoice.dateRange?.end?.slice(0, 10)}
@@ -156,7 +225,7 @@ const InvoiceList = () => {
                 <div>
                   <div className="mb-2">
                     <span className="font-medium text-gray-700">Vendor:</span>{" "}
-                    <span className="text-gray-900">{selectedInvoice.vendor_id?.email || "Multiple Vendors"}</span>
+                    <span className="text-gray-900">{selectedInvoice.vendor_id?.email || "-"}</span>
                   </div>
                   <div className="mb-2">
                     <span className="font-medium text-gray-700">Date Range:</span>{" "}
@@ -245,14 +314,12 @@ const InvoiceList = () => {
                     <img src={selectedInvoice.qrCode} alt="QR Code" className="w-20 h-20 border rounded" />
                   </div>
                 )}
-                <a
-                  href={`/api/invoices/${selectedInvoice._id}/pdf`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center font-medium mt-4 sm:mt-0"
+                <button
+                  onClick={handleDownloadPDF}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   Download PDF
-                </a>
+                </button>
               </div>
             </div>
           </div>

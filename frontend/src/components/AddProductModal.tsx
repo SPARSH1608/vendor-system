@@ -81,9 +81,9 @@ console.log("Submitting product data:", productData);
 
   return (
     <div
-      className="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm"
+      className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm"
     >
-      <div className="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
+      <div className="bg-white rounded-2xl p-6 w-full max-w-md mx-4 border border-gray-300">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-bold text-gray-900">Add New Product</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">

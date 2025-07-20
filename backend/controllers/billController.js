@@ -7,6 +7,7 @@ const moment = require("moment") // already imported
 const VendorActivity = require("../models/VendorActivity")
 const nodemailer = require("nodemailer")
 const twilio = require("twilio")
+const axios = require("axios")
 
 // Setup Email Transporter
 const transporter = nodemailer.createTransport({
@@ -69,10 +70,6 @@ const generateInvoiceHtml = (bill) => {
           <td align="right" style="padding:4px 0;">₹${bill.subtotal}</td>
         </tr>
         <tr>
-          <td align="right" style="padding:4px 0;">Tax (${bill.taxRate || 0}%):</td>
-          <td align="right" style="padding:4px 0;">₹${((bill.taxRate || 0) / 100 * bill.subtotal).toFixed(2)}</td>
-        </tr>
-        <tr>
           <td align="right" style="padding:8px 0; font-weight:bold; border-top:1px solid #eee;">Total:</td>
           <td align="right" style="padding:8px 0; font-weight:bold; border-top:1px solid #eee;">₹${bill.totalAmount}</td>
         </tr>
@@ -87,13 +84,13 @@ const generateInvoiceHtml = (bill) => {
 }
 
 const sendBillToCustomer = async (bill) => {
-  const customerEmail = bill.customer?.email
-  const customerPhone = bill.customer?.phone
-  const amount = bill.totalAmount
-  const billId = bill.billNumber || bill._id
+  const customerEmail = bill.customer?.email;
+  const customerPhone = bill.customer?.phone;
+  const amount = bill.totalAmount;
+  const billId = bill.billNumber || bill._id;
 
   // Generate HTML invoice
-  const html = generateInvoiceHtml(bill)
+  const html = generateInvoiceHtml(bill);
 
   // Send Email
   if (customerEmail) {
@@ -103,27 +100,35 @@ const sendBillToCustomer = async (bill) => {
         to: customerEmail,
         subject: "Your Invoice - Bill Paid",
         html, // <-- send as HTML
-      })
-      console.log(`Email sent to ${customerEmail}`)
+      });
+      console.log(`Email sent to ${customerEmail}`);
     } catch (error) {
-      console.error("Error sending email:", error.message)
+      console.error("Error sending email:", error.message);
     }
   }
 
-  // Send WhatsApp (or SMS)
+  // Send SMS via Fast2SMS
   if (customerPhone) {
-    console.log(`Sending WhatsApp message to whatsapp:${customerPhone.startsWith('+') ? customerPhone : '+91' + customerPhone}`)
-    console.log(`from: ${process.env.TWILIO_PHONE}`)
-    console.log(`to: whatsapp:${customerPhone.startsWith('+') ? customerPhone : '+91' + customerPhone}`)
+    const mobile = customerPhone.replace('+', '').startsWith('91')
+      ? customerPhone.replace('+', '')
+      : '91' + customerPhone;
+    const message = `Your invoice ${bill.billNumber} for ₹${bill.totalAmount} is ready. Thank you!`;
+
     try {
-      await twilioClient.messages.create({
-        body: message,
-        from: process.env.TWILIO_PHONE, // e.g. 'whatsapp:+14155238886'
-        to: `whatsapp:${customerPhone.startsWith('+') ? customerPhone : '+91' + customerPhone}`,
-      })
-      console.log(`WhatsApp message sent to ${customerPhone}`)
-    } catch (error) {
-      console.error("Error sending WhatsApp:", error.message)
+      const res = await axios.post(
+        'https://www.fast2sms.com/dev/bulkV2',
+        {
+          authorization: process.env.FAST2SMS_KEY,
+          sender_id: process.env.FAST2SMS_SENDER || 'FSTSMS',
+          message,
+          route: 't', // for 24×7 transactional
+          numbers: mobile,
+        },
+        { headers: { 'Content-Type': 'application/json' } }
+      );
+      console.log('SMS sent via Fast2SMS:', res.data);
+    } catch (err) {
+      console.error('Fast2SMS error:', err.response?.data || err.message);
     }
   }
 }
@@ -280,7 +285,7 @@ const createBill = async (req, res) => {
       })
     }
 
-    const { customer, items, location, notes, status = "draft", taxRate = 0 } = req.body
+    const { customer, items, location, notes, status = "draft" } = req.body
 
     // Validate and enrich items
     const enrichedItems = []
@@ -311,8 +316,7 @@ const createBill = async (req, res) => {
 
     // Calculate subtotal and totalAmount
     const subtotal = enrichedItems.reduce((sum, item) => sum + item.total, 0)
-    const tax = (taxRate || 0) / 100 * subtotal
-    const totalAmount = subtotal + tax
+    const totalAmount = subtotal; // No tax calculation
 
     // Generate a bill number (simple example, you can improve this)
     const billNumber = `BILL-${Date.now()}`
@@ -324,7 +328,6 @@ const createBill = async (req, res) => {
       location,
       notes,
       status,
-      taxRate,
       subtotal,
       totalAmount,
       billNumber,
@@ -426,7 +429,7 @@ const updateBill = async (req, res) => {
       })
     }
 
-    const { customer, items, location, notes, status, taxRate } = req.body
+    const { customer, items, location, notes, status } = req.body
 
     // If items are being updated, validate them
     if (items && items.length > 0) {
@@ -462,7 +465,6 @@ const updateBill = async (req, res) => {
     if (location) bill.location = location
     if (notes !== undefined) bill.notes = notes
     if (status) bill.status = status
-    if (taxRate !== undefined) bill.taxRate = taxRate
 
     await bill.save()
     await bill.populate("items.product_id", "name category")

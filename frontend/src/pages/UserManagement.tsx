@@ -4,8 +4,10 @@ import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Search, UserCheck, UserX, Shield } from "lucide-react"
 import { fetchUsers, updateUserRole, toggleUserStatus } from "../store/slices/userSlice"
+import { vendorsAPI } from "../services/api";
 import type { AppDispatch, RootState } from "../store/store"
 import ConfirmationModal from "../components/ConfirmationModal"
+import VendorProductsModal from "../components/VendorProductsModal" // Import the new modal component
 import * as XLSX from "xlsx"
 import jsPDF from "jspdf"
 import autoTable from "jspdf-autotable"
@@ -18,6 +20,9 @@ const UserManagement = () => {
   const [search, setSearch] = useState("")
   const [selectedVendors, setSelectedVendors] = useState<string[]>([])
   const [downloading, setDownloading] = useState(false)
+  const [showVendorProductsModal, setShowVendorProductsModal] = useState(false);
+  const [selectedVendorProducts, setSelectedVendorProducts] = useState([]);
+  const [selectedVendorName, setSelectedVendorName] = useState("");
 
   useEffect(() => {
     dispatch(fetchUsers())
@@ -116,53 +121,75 @@ const UserManagement = () => {
 
   // Download selected vendors' products as PDF
   const handleDownloadProductsPDF = async () => {
-    setDownloading(true)
+    setDownloading(true);
     try {
+      // Prepare vendor data (IDs and names)
+      const selectedVendorData = vendorUsers
+        .filter((vendor) => selectedVendors.includes(vendor._id))
+        .map((vendor) => ({ id: vendor._id, name: vendor.name }));
+
       const res = await fetch("/api/vendors/products-by-vendors", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-        body: JSON.stringify({ vendorIds: selectedVendors }),
-      })
-      const data = await res.json()
-      if (!data.success) throw new Error("Failed to fetch products")
+        body: JSON.stringify({ vendors: selectedVendorData }),
+      });
 
-      // Group products by vendor email
-      const vendorMap: Record<string, string[]> = {}
+      const data = await res.json();
+      console.log("Fetched products data:", data); // Debugging
+      if (!data.success) throw new Error("Failed to fetch products");
+
+      // Group products by vendor name
+      const vendorMap: Record<string, string[]> = {};
       data.data.forEach((prod: any) => {
-        const email = prod.vendor_id?.email || ""
-        const name = prod.product_id?.name || ""
-        if (!vendorMap[email]) vendorMap[email] = []
-        vendorMap[email].push(name)
-      })
+        const name = prod.vendor_id?.name || "Unknown Vendor";
+        const productName = prod.product_id?.name || "";
+        if (!vendorMap[name]) vendorMap[name] = [];
+        vendorMap[name].push(productName);
+      });
 
       // Prepare rows: one row per vendor, products comma-separated
-      const rows = Object.entries(vendorMap).map(([email, products]) => [
-        email,
+      const rows = Object.entries(vendorMap).map(([name, products]) => [
+        name,
         products.join(", "),
-      ])
-      const head = [["Vendor", "Products"]]
+      ]);
+      const head = [["Vendor Name", "Products"]];
 
-      const doc = new jsPDF()
-      doc.text("Vendor Products", 14, 16)
+      const doc = new jsPDF();
+      doc.text("Vendor Products", 14, 16);
       autoTable(doc, {
         startY: 22,
         head,
         body: rows,
         styles: { fontSize: 12 },
         headStyles: { fillColor: [22, 163, 74] },
-      })
-      doc.save("vendor_products.pdf")
+      });
+      doc.save("vendor_products.pdf");
     } catch (err) {
-      alert("Failed to download products PDF.")
+      alert("Failed to download products PDF.");
     }
-    setDownloading(false)
+    setDownloading(false);
   }
 
+  const handleViewVendorProducts = async (vendor) => {
+    setSelectedVendorName(vendor.name);
+    try {
+      const data = await vendorsAPI.getVendorProductsById(vendor._id);
+      if (data.success) {
+        setSelectedVendorProducts(data.data);
+        setShowVendorProductsModal(true);
+      } else {
+        alert("Failed to fetch products for this vendor.");
+      }
+    } catch (err) {
+      alert("Error fetching vendor products.");
+    }
+  };
+
   return (
-    <div className="space-y-6 px-2 sm:px-4 md:px-8 max-w-5xl mx-auto">
+    <div className="space-y-6 px-2 sm:px-4 md:px-8 w-full"> {/* Adjusted to take full width */}
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">User Management</h1>
         <p className="text-gray-600 mt-1 text-sm sm:text-base">Manage user roles and permissions</p>
@@ -175,7 +202,7 @@ const UserManagement = () => {
           type="text"
           placeholder="Search users..."
           value={search}
-          onChange={e => setSearch(e.target.value)}
+          onChange={(e) => setSearch(e.target.value)}
           className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
         />
       </div>
@@ -202,8 +229,8 @@ const UserManagement = () => {
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-4 py-3"></th> {/* Checkbox column */}
-                    <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase">Email</th>
                     <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase">Phone</th>
+                    <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase">Name</th>
                     <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase">Role</th>
                     <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase">Status</th>
                     <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase">Actions</th>
@@ -222,8 +249,8 @@ const UserManagement = () => {
                           />
                         )}
                       </td>
-                      <td className="px-4 py-3">{user.email}</td>
                       <td className="px-4 py-3">{user.phone}</td>
+                      <td className="px-4 py-3">{user.name}</td>
                       <td className="px-4 py-3">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(user.role)}`}>
                           {user.role}
@@ -263,6 +290,14 @@ const UserManagement = () => {
                         >
                           {user.isActive ? "Deactivate" : "Activate"}
                         </button>
+                        {user.role === "vendor" && (
+                          <button
+                            onClick={() => handleViewVendorProducts(user)}
+                            className="inline-flex items-center space-x-1 text-blue-600 hover:text-blue-900"
+                          >
+                            <span>View Products</span>
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -274,7 +309,7 @@ const UserManagement = () => {
               {filteredUsers.map((user) => (
                 <div key={user._id} className="py-4 px-2 flex flex-col gap-2">
                   <div className="flex items-center justify-between">
-                    <span className="font-semibold text-gray-900">{user.email}</span>
+                    <span className="font-semibold text-gray-900">{user.name}</span>
                     <span className={`px-2 py-1 text-xs rounded-full ${getRoleColor(user.role)}`}>{user.role}</span>
                   </div>
                   <div className="flex items-center justify-between text-xs text-gray-600">
@@ -353,6 +388,16 @@ const UserManagement = () => {
         }
         isProcessing={loading}
       />
+
+      {/* Vendor Products Modal */}
+      {showVendorProductsModal && (
+        <VendorProductsModal
+          isOpen={showVendorProductsModal}
+          onClose={() => setShowVendorProductsModal(false)}
+          products={selectedVendorProducts}
+          vendorName={selectedVendorName}
+        />
+      )}
     </div>
   )
 }

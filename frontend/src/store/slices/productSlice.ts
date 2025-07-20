@@ -20,6 +20,9 @@ interface ProductState {
     total: number;
     pages: number;
   };
+  vendors: any[]; // Add this to store vendors for a product
+  vendorsLoading: boolean; // Add this to track loading state for vendors
+  vendorsError: string | null; // Add this to track errors for vendors
 }
 
 const initialState: ProductState = {
@@ -30,6 +33,9 @@ const initialState: ProductState = {
     total: 0,
     pages: 1,
   },
+  vendors: [], // Add this to store vendors for a product
+  vendorsLoading: false, // Add this to track loading state for vendors
+  vendorsError: null, // Add this to track errors for vendors
 };
 
 // Fetch products
@@ -88,6 +94,19 @@ export const toggleProductStatus = createAsyncThunk(
   }
 );
 
+// Fetch vendors for a specific product
+export const fetchVendorsByProduct = createAsyncThunk(
+  "products/fetchVendorsByProduct",
+  async (productId: string, { rejectWithValue }) => {
+    try {
+      const response = await productsAPI.getVendorsByProduct(productId);
+      return response.data; // Assuming the API returns a `data` field with the vendors
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Failed to fetch vendors for the product");
+    }
+  }
+);
+
 const productSlice = createSlice({
   name: "products",
   initialState,
@@ -98,6 +117,7 @@ const productSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Fetch Products
       .addCase(fetchProducts.pending, (state) => {
         state.loading = true;
       })
@@ -110,6 +130,23 @@ const productSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
+
+      // Fetch Vendors by Product
+      .addCase(fetchVendorsByProduct.pending, (state) => {
+        state.vendorsLoading = true;
+        state.vendorsError = null;
+      })
+      .addCase(fetchVendorsByProduct.fulfilled, (state, action) => {
+        console.log("Fetched vendors:", action.payload); // Debugging
+        state.vendorsLoading = false;
+        state.vendors = action.payload; // Ensure this updates the state
+      })
+      .addCase(fetchVendorsByProduct.rejected, (state, action) => {
+        state.vendorsLoading = false;
+        state.vendorsError = action.payload as string;
+      })
+
+      // Other cases...
       .addCase(createProduct.fulfilled, (state, action) => {
         state.products.push(action.payload);
       })

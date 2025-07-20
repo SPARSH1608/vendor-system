@@ -1,6 +1,7 @@
 const VendorActivity = require("../models/VendorActivity")
 const Product = require("../models/Product")
 const User = require("../models/User")
+const VendorProduct = require("../models/VendorProduct")
 const { validationResult } = require("express-validator")
 const moment = require("moment")
 
@@ -46,7 +47,7 @@ const getVendorActivities = async (req, res) => {
     sort[sortBy] = sortOrder === "desc" ? -1 : 1
 
     const activities = await VendorActivity.find(query)
-      .populate("vendor_id", "email phone")
+      .populate("vendor_id", "name email phone") // Include vendor name, email, and phone
       .populate("items.product_id", "name category")
       .sort(sort)
       .limit(limit * 1)
@@ -54,15 +55,16 @@ const getVendorActivities = async (req, res) => {
 
     const total = await VendorActivity.countDocuments(query)
 
-    // Add vendor email to response for easier frontend handling
-    const activitiesWithVendorEmail = activities.map((activity) => ({
+    // Add vendor name and email to response for easier frontend handling
+    const activitiesWithVendorDetails = activities.map((activity) => ({
       ...activity.toObject(),
+      vendorName: activity.vendor_id?.name || "Unknown",
       vendorEmail: activity.vendor_id?.email || "Unknown",
     }))
 
     res.json({
       success: true,
-      data: activitiesWithVendorEmail,
+      data: activitiesWithVendorDetails,
       pagination: {
         current: Number.parseInt(page),
         pages: Math.ceil(total / limit),
@@ -446,6 +448,60 @@ const getVendorStats = async (req, res) => {
   }
 }
 
+// @desc    Get selected products for a vendor
+// @route   GET /api/vendors/:id/products
+// @access  Private (Admin only)
+const getProductsByVendor = async (req, res) => {
+  try {
+    const vendorId = req.params.id;
+
+    // Find products selected by this vendor
+    const products = await VendorProduct.find({ vendor_id: vendorId })
+      .populate('product_id', 'name category price') // Populate product details
+      .select('product_id');
+
+    res.json({
+      success: true,
+      data: products.map(vp => vp.product_id),
+    });
+  } catch (error) {
+    console.error("Get products by vendor error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+// @desc    Get products by multiple vendors
+// @route   POST /api/vendors/products
+// @access  Private (Admin only)
+const getProductsByVendors = async (req, res) => {
+  try {
+    const { vendors } = req.body; // Array of { id, name }
+    if (!vendors || vendors.length === 0) {
+      return res.status(400).json({ success: false, message: "No vendors provided" });
+    }
+
+    const products = await Promise.all(
+      vendors.map(async (vendor) => {
+        const vendorProducts = await VendorProduct.find({ vendor_id: vendor.id })
+          .populate("product_id", "name category price")
+          .populate("vendor_id", "name");
+        return vendorProducts.map((vp) => ({
+          vendor_id: { name: vendor.name },
+          product_id: vp.product_id,
+        }));
+      })
+    );
+
+    res.json({ success: true, data: products.flat() });
+  } catch (error) {
+    console.error("Error fetching products by vendors:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
 module.exports = {
   getVendorActivities,
   getMyActivities,
@@ -453,4 +509,6 @@ module.exports = {
   updateVendorActivity,
   deleteVendorActivity,
   getVendorStats,
+  getProductsByVendor,
+  getProductsByVendors,
 }

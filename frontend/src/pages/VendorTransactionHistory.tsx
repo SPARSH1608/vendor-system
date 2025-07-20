@@ -31,7 +31,15 @@ const VendorTransactionHistory = () => {
   })
   const [resetKey, setResetKey] = useState(0) // For resetting inputs
 
-  const locations = ["All Locations", "Delhi", "Mumbai", "Bangalore", "Chennai", "Kolkata"]
+const locations = [
+  "Dr. Babasaheb Ambedkar Open University Campus",
+  "Shri Bhagwat Vidyapeeth Temple",
+  "Atma vikasa parisara",
+  "Navjeevan Trust Campus",
+  "Gayatri Temple Trust Campus",
+  "Sristi Campus",
+  "Vallabh Vidyanagar",
+]
 
   useEffect(() => {
     const fetchActivities = async () => {

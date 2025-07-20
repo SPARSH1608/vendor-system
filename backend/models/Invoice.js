@@ -64,7 +64,7 @@ const invoiceSchema = new mongoose.Schema(
     },
     taxRate: {
       type: Number,
-      default: 10, // 10% tax
+      default: 0, // 10% tax
       min: 0,
       max: 100,
     },

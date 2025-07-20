@@ -22,7 +22,15 @@ const VendorDailyActivity = () => {
   const dispatch = useDispatch<AppDispatch>()
   const { products } = useSelector((state: RootState) => state.products)
 
-  const locations = ["Delhi", "Mumbai", "Bangalore", "Chennai", "Kolkata"]
+const locations = [
+  "Dr. Babasaheb Ambedkar Open University Campus",
+  "Shri Bhagwat Vidyapeeth Temple",
+  "Atma vikasa parisara",
+  "Navjeevan Trust Campus",
+  "Gayatri Temple Trust Campus",
+  "Sristi Campus",
+  "Vallabh Vidyanagar",
+]
 
   useEffect(() => {
     dispatch(fetchProducts())

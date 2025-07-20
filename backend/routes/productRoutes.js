@@ -8,6 +8,7 @@ const {
   deleteProduct,
   toggleProductStatus,
   getProductStats,
+   getVendorsByProduct 
 } = require("../controllers/productController")
 const auth = require("../middleware/auth")
 const adminAuth = require("../middleware/adminAuth")
@@ -60,5 +61,5 @@ router.put(
 ) // Update product
 router.delete("/:id", auth, adminAuth, deleteProduct) // Delete product
 router.put("/:id/status", auth, adminAuth, toggleProductStatus) // Toggle product status
-
+router.get("/:id/vendors", getVendorsByProduct);
 module.exports = router

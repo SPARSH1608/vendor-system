@@ -44,7 +44,15 @@ const CreateBill = () => {
   const [notes, setNotes] = useState("")
   const [loading, setLoading] = useState(false)
 
-  const locations = ["Delhi", "Mumbai", "Bangalore", "Chennai", "Kolkata"]
+  const locations = [
+    "Dr. Babasaheb Ambedkar Open University Campus",
+    "Shri Bhagwat Vidyapeeth Temple",
+    "Atma vikasa parisara",
+    "Navjeevan Trust Campus",
+    "Gayatri Temple Trust Campus",
+    "Sristi Campus",
+    "Vallabh Vidyanagar",
+  ]
 
   useEffect(() => {
     fetchVendorProducts()
@@ -112,7 +120,7 @@ const CreateBill = () => {
   }
 
   const getTotal = () => {
-    return getSubtotal() + getTax()
+    return getSubtotal(); // No tax calculation
   }
 
   const saveBill = async (status: "draft" | "unpaid" | "paid") => {
@@ -126,7 +134,6 @@ const CreateBill = () => {
     try {
       const token = localStorage.getItem("token")
       const subtotal = getSubtotal()
-      const tax = getTax()
       const totalAmount = getTotal()
 
       const billData = {
@@ -138,7 +145,6 @@ const CreateBill = () => {
         location,
         notes,
         status,
-        taxRate: 10,
         subtotal,
         totalAmount,
       }

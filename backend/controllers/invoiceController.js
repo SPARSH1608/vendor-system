@@ -85,9 +85,7 @@ const generateInvoice = async (req, res) => {
 
       const items = Object.values(itemsMap)
       const subtotal = items.reduce((sum, item) => sum + item.total, 0)
-      const taxRate = 10 // 10% tax
-      const tax = (subtotal * taxRate) / 100
-      const totalAmount = subtotal + tax
+      const totalAmount = subtotal // No tax calculation
 
       // Generate invoiceNumber manually
       const today = new Date()
@@ -114,8 +112,6 @@ const generateInvoice = async (req, res) => {
         },
         items,
         subtotal,
-        tax,
-        taxRate,
         totalAmount,
         generated_by: req.user.userId,
         invoiceNumber, // <-- add here
@@ -186,7 +182,7 @@ const getInvoices = async (req, res) => {
     }
 
     const invoices = await Invoice.find(query)
-      .populate("vendor_id", "email phone")
+      .populate("vendor_id", "name email phone") // Include the vendor's name
       .populate("generated_by", "email")
       .sort({ createdAt: -1 })
       .limit(limit * 1)
@@ -287,43 +283,19 @@ const updateInvoiceStatus = async (req, res) => {
 // @access  Private
 const downloadInvoicePDF = async (req, res) => {
   try {
-    const invoice = await Invoice.findById(req.params.id)
-      .populate("vendor_id", "email phone")
-      .populate("generated_by", "email")
-
+    const invoice = await Invoice.findById(req.params.id);
     if (!invoice) {
-      return res.status(404).json({
-        success: false,
-        message: "Invoice not found",
-      })
+      return res.status(404).json({ message: "Invoice not found" });
     }
 
-    // Check if user has permission to download this invoice
-    if (req.user.role === "vendor" && invoice.vendor_id._id.toString() !== req.user.userId) {
-      return res.status(403).json({
-        success: false,
-        message: "Not authorized to download this invoice",
-      })
-    }
-
-    // Generate PDF
-    const pdfBuffer = await generatePDF(invoice)
-
-    res.set({
-      "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="invoice-${invoice.invoiceNumber}.pdf"`,
-      "Content-Length": pdfBuffer.length,
-    })
-
-    res.send(pdfBuffer)
-  } catch (error) {
-    console.error("Download invoice PDF error:", error)
-    res.status(500).json({
-      success: false,
-      message: "Server error",
-    })
+    const pdfPath = `path/to/generated/pdf/${invoice._id}.pdf`; // Adjust the path as needed
+    res.setHeader("Content-Type", "application/pdf");
+    res.download(pdfPath, `invoice-${invoice._id}.pdf`);
+  } catch (err) {
+    console.error("Error downloading PDF:", err);
+    res.status(500).json({ message: "Failed to download PDF" });
   }
-}
+};
 
 // @desc    Get invoice statistics
 // @route   GET /api/invoices/stats

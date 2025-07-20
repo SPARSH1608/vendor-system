@@ -46,12 +46,12 @@ export const loginUser = createAsyncThunk(
 // Async thunk to register a user
 export const registerUser = createAsyncThunk(
   "auth/register",
-  async ({ email, password, phone }: { email: string; password: string; phone: string }, { rejectWithValue }) => {
+  async ({ name, email, password, phone }: { name: string; email: string; password: string; phone: string }, { rejectWithValue }) => {
     try {
       const response = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, phone }),
+        body: JSON.stringify({ name, email, password, phone }),
       })
       const data = await response.json()
       if (!response.ok) throw new Error(data.message)

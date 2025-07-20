@@ -7,6 +7,8 @@ const {
   updateVendorActivity,
   deleteVendorActivity,
   getVendorStats,
+  getProductsByVendor,
+  getProductsByVendors,
 } = require("../controllers/vendorController")
 const auth = require("../middleware/auth")
 const adminAuth = require("../middleware/adminAuth")
@@ -30,5 +32,7 @@ router.get("/stats", auth, adminAuth, getVendorStats)
 router.post("/activities", auth, vendorAuth, activityValidation, createVendorActivity)
 router.put("/activities/:id", auth, vendorAuth, activityValidation, updateVendorActivity)
 router.delete("/activities/:id", auth, vendorAuth, deleteVendorActivity)
+router.get("/:id/products", auth, adminAuth, getProductsByVendor)
+router.post("/products-by-vendors", auth, adminAuth, getProductsByVendors)
 
 module.exports = router

@@ -14,18 +14,8 @@ const generateToken = (userId) => {
 // @access  Public
 const register = async (req, res) => {
   try {
-    // Check for validation errors
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        success: false,
-        message: "Validation failed",
-        errors: errors.array(),
-      })
-    }
-
-    const { email, password, phone } = req.body
-
+    const { name, email, password, phone } = req.body
+console.log("Registering user:", { name, email, phone })
     // Check if user already exists
     const existingUser = await User.findOne({ email })
     if (existingUser) {
@@ -37,6 +27,7 @@ const register = async (req, res) => {
 
     // Create user
     const user = await User.create({
+      name,
       email,
       password,
       phone,
@@ -51,6 +42,7 @@ const register = async (req, res) => {
       token,
       user: {
         _id: user._id,
+        name: user.name,
         email: user.email,
         phone: user.phone,
         role: user.role,

@@ -3,24 +3,29 @@
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Plus, Search, Filter } from "lucide-react"
-import { fetchProducts, createProduct, deleteProduct, updateProduct, toggleProductStatus } from "../store/slices/productSlice"
+import { fetchProducts, createProduct, deleteProduct, updateProduct, toggleProductStatus, fetchVendorsByProduct } from "../store/slices/productSlice"
+import { productsAPI } from "../services/api";
 import type { AppDispatch, RootState } from "../store/store"
 import ProductCard from "../components/ProductCard"
 import AddProductModal from "../components/AddProductModal"
 import EditProductModal from "../components/EditProductModal"
 import ConfirmationModal from "../components/ConfirmationModal"
+import VendorModal from "../components/VendorModal"
 
 const ProductManagement = () => {
   const [showAddModal, setShowAddModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showVendorModal, setShowVendorModal] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
   const [selectedCategory, setSelectedCategory] = useState("All Categories")
   const [selectedProduct, setSelectedProduct] = useState(null)
+  const [selectedProductVendors, setSelectedProductVendors] = useState([])
+  const [selectedProductName, setSelectedProductName] = useState("")
   const [deleteError, setDeleteError] = useState("")
 
   const dispatch = useDispatch<AppDispatch>()
-  const { products, loading } = useSelector((state: RootState) => state.products)
+  const { products, loading, vendors, vendorsLoading, vendorsError } = useSelector((state: RootState) => state.products)
 
   useEffect(() => {
     dispatch(fetchProducts())
@@ -58,8 +63,20 @@ const ProductManagement = () => {
     await dispatch(fetchProducts());
   };
 
+  const handleViewVendors = async (product) => {
+    console.log("Product clicked:", product); // Debugging
+    setSelectedProductName(product.name);
+    try {
+      await dispatch(fetchVendorsByProduct(product._id));
+      setShowVendorModal(true);
+    } catch (err) {
+      console.error("Error fetching vendors:", err); // Debugging
+      alert("Error fetching vendors.");
+    }
+  };
+
   return (
-    <div className="space-y-6 px-2 sm:px-4 md:px-8 max-w-7xl mx-auto">
+    <div className="space-y-6 px-2 sm:px-4 md:px-8 w-screen">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
@@ -77,20 +94,26 @@ const ProductManagement = () => {
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
-        <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-between">
-          <p className="text-xs sm:text-sm font-medium text-gray-600">Total Products</p>
-          <p className="text-xl sm:text-2xl font-bold text-gray-900">{products.length}</p>
-          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded mt-2">{products.length} Items</span>
+        <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center">
+          <p className="text-xs font-medium text-gray-600">Total Products</p>
+          <p className="text-lg font-bold text-gray-900">{products.length}</p>
+          <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded mt-1">
+            {products.length} Items
+          </span>
         </div>
-        <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-between">
-          <p className="text-xs sm:text-sm font-medium text-gray-600">Active Products</p>
-          <p className="text-xl sm:text-2xl font-bold text-gray-900">{activeProducts.length}</p>
-          <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded mt-2">Active</span>
+        <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center">
+          <p className="text-xs font-medium text-gray-600">Active Products</p>
+          <p className="text-lg font-bold text-gray-900">{activeProducts.length}</p>
+          <span className="text-xs bg-green-100 text-green-600 px-2 py-0.5 rounded mt-1">
+            Active
+          </span>
         </div>
-        <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center justify-between">
-          <p className="text-xs sm:text-sm font-medium text-gray-600">Inactive Products</p>
-          <p className="text-xl sm:text-2xl font-bold text-gray-900">{inactiveProducts.length}</p>
-          <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded mt-2">Inactive</span>
+        <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center">
+          <p className="text-xs font-medium text-gray-600">Inactive Products</p>
+          <p className="text-lg font-bold text-gray-900">{inactiveProducts.length}</p>
+          <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded mt-1">
+            Inactive
+          </span>
         </div>
       </div>
 
@@ -128,18 +151,19 @@ const ProductManagement = () => {
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-6">
           {filteredProducts.map((product) => (
             <ProductCard
               key={product._id}
               product={product}
               onEdit={handleEditProduct}
               onDelete={() => {
-                setSelectedProduct(product)
-                setShowDeleteModal(true)
+                setSelectedProduct(product);
+                setShowDeleteModal(true);
               }}
               onToggleStatus={handleToggleStatus}
-              imageClassName="h-24 w-24 object-cover mx-auto"
+              onViewVendors={() => handleViewVendors(product)}
+              imageClassName="h-20 w-20 object-cover mx-auto"
             />
           ))}
         </div>
@@ -183,6 +207,17 @@ const ProductManagement = () => {
           message={`Are you sure you want to delete "${selectedProduct.name}"?`}
           isProcessing={loading}
           error={deleteError}
+        />
+      )}
+
+      {showVendorModal && (
+        <VendorModal
+          isOpen={showVendorModal}
+          onClose={() => setShowVendorModal(false)}
+          vendors={vendors} // Pass vendors from Redux state
+          productName={selectedProductName}
+          vendorsLoading={vendorsLoading}
+          vendorsError={vendorsError}
         />
       )}
     </div>

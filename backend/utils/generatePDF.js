@@ -202,4 +202,20 @@ const generatePDF = async (invoice) => {
   }
 }
 
-module.exports = generatePDF
+const generateUserManagementPDF = async (vendors) => {
+  const doc = new PDFDocument();
+
+  // Example: Fix UI and include vendor name
+  vendors.forEach((vendor) => {
+    doc.text(`Vendor Name: ${vendor.name}`, { align: 'left' });
+    doc.text(`Phone: ${vendor.phone}`, { align: 'left' });
+    doc.moveDown();
+  });
+
+  // ...existing PDF generation logic...
+};
+
+module.exports = {
+  generatePDF,
+  generateUserManagementPDF,
+};

@@ -14,8 +14,8 @@ interface ActivityItem {
 
 interface Activity {
   _id: string
-  vendor_id: string
-  vendorEmail: string
+  vendor_id: { _id: string; name: string }
+  vendorName: string
   date: string
   location: string
   items: ActivityItem[]
@@ -23,44 +23,74 @@ interface Activity {
 }
 
 const VendorActivities = () => {
-  const [activities, setActivities] = useState<Activity[]>([])
+  const [allActivities, setAllActivities] = useState<Activity[]>([]) // Store all activities
+  const [activities, setActivities] = useState<Activity[]>([]) // Filtered activities
   const [loading, setLoading] = useState(true)
   const [selectedVendor, setSelectedVendor] = useState("")
   const [selectedDate, setSelectedDate] = useState("")
-  const [vendors, setVendors] = useState<{ id: string; email: string }[]>([])
+  const [vendors, setVendors] = useState<{ id: string; name: string }[]>([])
 
-  // Fetch vendor list for filter dropdown (optional, if you want dynamic vendor list)
-  useEffect(() => {
-    if (activities.length > 0) {
-      const uniqueVendors = Array.from(
-        new Map(
-          activities.map((a) => [a.vendor_id, { id: a.vendor_id, email: a.vendorEmail }])
-        ).values()
-      )
-      setVendors(uniqueVendors)
-    }
-  }, [activities])
-
+  // Fetch all activities once
   useEffect(() => {
     const fetchActivities = async () => {
       setLoading(true)
       try {
-        const params: any = {}
-        if (selectedVendor) params.vendor = selectedVendor
-        if (selectedDate) params.date = selectedDate
-        const res = await vendorsAPI.getVendorActivities(params)
-        setActivities(res.data)
+        const res = await vendorsAPI.getVendorActivities({})
+        setAllActivities(res.data) // Store all activities
+        setActivities(res.data) // Initially, show all activities
       } catch (err) {
+        console.error("Error fetching activities:", err)
+        setAllActivities([])
         setActivities([])
       } finally {
         setLoading(false)
       }
     }
     fetchActivities()
-  }, [selectedVendor, selectedDate])
+  }, [])
+
+  // Generate unique vendors for the dropdown
+  useEffect(() => {
+    if (allActivities.length > 0) {
+      const uniqueVendors = Array.from(
+        new Map(
+          allActivities.map((a) => [a.vendor_id._id, { id: a.vendor_id._id, name: a.vendor_id.name }])
+        ).values()
+      )
+      setVendors(uniqueVendors)
+    }
+  }, [allActivities])
+
+  // Apply filters on the frontend
+  useEffect(() => {
+    let filtered = allActivities
+
+    if (selectedVendor) {
+      filtered = filtered.filter((activity) => activity.vendor_id._id === selectedVendor)
+    }
+
+    if (selectedDate) {
+      filtered = filtered.filter((activity) => activity.date.startsWith(selectedDate))
+    }
+
+    setActivities(filtered)
+  }, [selectedVendor, selectedDate, allActivities])
+
+  // Format date and time
+  const formatDateTime = (dateString: string) => {
+    const options: Intl.DateTimeFormatOptions = {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    }
+    return new Intl.DateTimeFormat("en-US", options).format(new Date(dateString))
+  }
 
   return (
-    <div className="space-y-6 px-2 sm:px-4 md:px-8 max-w-4xl mx-auto">
+ <div className="space-y-6 px-4 sm:px-6 lg:px-8 w-full">
       <div>
         <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Vendor Activities</h1>
         <p className="text-gray-600 mt-1 text-sm sm:text-base">Track vendor daily activities and transactions</p>
@@ -80,7 +110,7 @@ const VendorActivities = () => {
               <option value="">All Vendors</option>
               {vendors.map((vendor) => (
                 <option key={vendor.id} value={vendor.id}>
-                  {vendor.email}
+                  {vendor.name}
                 </option>
               ))}
             </select>
@@ -120,15 +150,15 @@ const VendorActivities = () => {
                     <div className="flex items-center space-x-2">
                       <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
                         <span className="text-blue-600 font-semibold text-sm">
-                          {activity.vendorEmail?.charAt(0).toUpperCase() || "V"}
+                          {activity.vendorName?.charAt(0).toUpperCase() || "V"}
                         </span>
                       </div>
-                      <span className="font-medium text-gray-900 break-all">{activity.vendorEmail}</span>
+                      <span className="font-medium text-gray-900 break-all">{activity.vendorName}</span>
                     </div>
                     <div className="flex flex-wrap items-center gap-2 text-xs sm:text-sm text-gray-600">
                       <div className="flex items-center space-x-1">
                         <Calendar className="w-4 h-4" />
-                        <span>{activity.date}</span>
+                        <span>{formatDateTime(activity.date)}</span>
                       </div>
                       <div className="flex items-center space-x-1">
                         <MapPin className="w-4 h-4" />
@@ -142,8 +172,8 @@ const VendorActivities = () => {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {activity.items.map((item, index) => (
-                    <div key={index} className="bg-gray-50 p-3 sm:p-4 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between">
+                  {activity.items.map((item) => (
+                    <div key={item.product_id} className="bg-gray-50 p-3 sm:p-4 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between">
                       <div>
                         <h4 className="font-medium text-gray-900">{item.productName}</h4>
                         <p className="text-xs sm:text-sm text-gray-600">

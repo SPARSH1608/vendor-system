@@ -97,6 +97,11 @@ export const productsAPI = {
     }),
 
   getProductStats: () => apiCall("/products/stats"),
+
+  getVendorsByProduct: (productId) =>
+    apiCall(`/products/${productId}/vendors`, {
+      method: "GET",
+    }),
 };
 
 // Vendors API functions
@@ -135,6 +140,11 @@ export const vendorsAPI = {
     const queryString = new URLSearchParams(params).toString();
     return apiCall(`/vendors/my-activities${queryString ? `?${queryString}` : ""}`);
   },
+
+  getVendorProductsById: (vendorId) =>
+    apiCall(`/vendors/${vendorId}/products`, {
+      method: "GET",
+    }),
 };
 
 // Users API functions
@@ -167,12 +177,17 @@ export const invoicesAPI = {
     const queryString = new URLSearchParams(params).toString();
     return apiCall(`/invoices${queryString ? `?${queryString}` : ""}`);
   },
-
   updateInvoiceStatus: (id, status) =>
     apiCall(`/invoices/${id}/status`, {
       method: "PUT",
       data: { status },
     }),
+  downloadInvoicePDF: async (invoiceId) => {
+    const response = await axiosInstance.get(`/invoices/${invoiceId}/pdf`, {
+      responseType: "blob", // Ensure the response is treated as a file
+    });
+    return response;
+  },
 };
 
 // Admin API functions
