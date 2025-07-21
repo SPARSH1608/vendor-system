@@ -194,4 +194,11 @@ export const invoicesAPI = {
 export const adminAPI = {
   getDashboardStats: () => apiCall("/vendors/stats"),
   // Add more admin endpoints as needed
-}
+};
+
+export const customersAPI = {
+  getCustomerByPhone: (phone) =>
+    apiCall(`/customers/${phone}`, {
+      method: "GET",
+    }),
+};

@@ -8,6 +8,7 @@ const VendorActivity = require("../models/VendorActivity")
 const nodemailer = require("nodemailer")
 const twilio = require("twilio")
 const axios = require("axios")
+const Customer = require("../models/Customer")
 
 // Setup Email Transporter
 const transporter = nodemailer.createTransport({
@@ -276,32 +277,34 @@ const getBillById = async (req, res) => {
 // @access  Private (Vendor only)
 const createBill = async (req, res) => {
   try {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        success: false,
-        message: "Validation failed",
-        errors: errors.array(),
-      })
+    const { customer, items, location, notes, status = "draft" } = req.body;
+
+    // Check if customer exists by phone number
+    let existingCustomer = await Customer.findOne({ phone: customer.phone });
+
+    if (!existingCustomer) {
+      // Create a new customer if not found
+      existingCustomer = await Customer.create({
+        name: customer.name,
+        email: customer.email,
+        phone: customer.phone,
+      });
     }
 
-    const { customer, items, location, notes, status = "draft" } = req.body
-
-    // Validate and enrich items
-    const enrichedItems = []
+    // Prepare bill items
+    const enrichedItems = [];
     for (const item of items) {
-      // Check if vendor has this product
       const vendorProduct = await VendorProduct.findOne({
         vendor_id: req.user.userId,
         product_id: item.product_id,
         isActive: true,
-      }).populate("product_id")
+      }).populate("product_id");
 
       if (!vendorProduct || !vendorProduct.product_id.isActive) {
         return res.status(400).json({
           success: false,
           message: `Product ${item.product_id} not found in your selection or inactive`,
-        })
+        });
       }
 
       enrichedItems.push({
@@ -311,19 +314,24 @@ const createBill = async (req, res) => {
         price: vendorProduct.product_id.price,
         stock_unit: vendorProduct.product_id.stock_unit,
         total: item.quantity * vendorProduct.product_id.price,
-      })
+      });
     }
 
     // Calculate subtotal and totalAmount
-    const subtotal = enrichedItems.reduce((sum, item) => sum + item.total, 0)
-    const totalAmount = subtotal; // No tax calculation
+    const subtotal = enrichedItems.reduce((sum, item) => sum + item.total, 0);
+    const totalAmount = subtotal;
 
-    // Generate a bill number (simple example, you can improve this)
-    const billNumber = `BILL-${Date.now()}`
+    // Generate a bill number
+    const billNumber = `BILL-${Date.now()}`;
 
+    // Create bill data
     const billData = {
       vendor_id: req.user.userId,
-      customer,
+      customer: {
+        name: existingCustomer.name,
+        email: existingCustomer.email,
+        phone: existingCustomer.phone,
+      }, // Populate customer fields
       items: enrichedItems,
       location,
       notes,
@@ -331,80 +339,29 @@ const createBill = async (req, res) => {
       subtotal,
       totalAmount,
       billNumber,
-    }
+    };
 
-    const bill = await Bill.create(billData)
-    await bill.populate("items.product_id", "name category")
+    const bill = await Bill.create(billData);
 
-    // Track vendor activity ONLY if bill is paid
-    if (status === "paid") {
-      const billDate = moment(bill.createdAt).startOf("day").toDate();
-
-      let activity = await VendorActivity.findOne({
-        vendor_id: req.user.userId,
-        date: {
-          $gte: billDate,
-          $lte: moment(billDate).endOf("day").toDate(),
-        },
-      });
-
-      if (!activity) {
-        // Calculate totalAmount for the activity
-        const items = bill.items.map(item => ({
-          product_id: item.product_id,
-          productName: item.productName,
-          quantity: item.quantity,
-          price: item.price,
-          total: item.total,
-        }));
-        const totalAmount = items.reduce((sum, item) => sum + item.total, 0);
-
-        // Create new activity for the day
-        await VendorActivity.create({
-          vendor_id: req.user.userId,
-          date: billDate,
-          location: bill.location,
-          items,
-          totalAmount,
-        });
-      } else {
-        // Update existing activity: add/update items and totals
-        for (const billItem of bill.items) {
-          const existingItem = activity.items.find(
-            item => item.product_id.toString() === billItem.product_id.toString()
-          );
-          if (existingItem) {
-            existingItem.quantity += billItem.quantity;
-            existingItem.total += billItem.total;
-          } else {
-            activity.items.push({
-              product_id: billItem.product_id,
-              productName: billItem.productName,
-              quantity: billItem.quantity,
-              price: billItem.price,
-              total: billItem.total,
-            });
-          }
-        }
-        activity.totalAmount = activity.items.reduce((sum, item) => sum + item.total, 0);
-        await activity.save();
-      }
-    }
-
-    // Send bill notification to customer
-    sendBillToCustomer(bill)
+    // Update customer's purchase history
+    existingCustomer.purchaseHistory.push({
+      bill_id: bill._id,
+      date: bill.createdAt,
+      totalAmount: bill.totalAmount,
+    });
+    await existingCustomer.save();
 
     res.status(201).json({
       success: true,
       message: "Bill created successfully",
       data: bill,
-    })
+    });
   } catch (error) {
-    console.error("Create bill error:", error)
+    console.error("Error creating bill:", error);
     res.status(500).json({
       success: false,
       message: "Server error",
-    })
+    });
   }
 }
 

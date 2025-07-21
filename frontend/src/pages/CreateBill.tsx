@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Plus, Minus, Trash2, Save, FileText, CreditCard } from "lucide-react"
+import { customersAPI } from "../services/api";
 
 interface Product {
   _id: string
@@ -57,6 +58,14 @@ const CreateBill = () => {
   useEffect(() => {
     fetchVendorProducts()
   }, [])
+
+  useEffect(() => {
+    // Retrieve the last selected location from localStorage
+    const savedLocation = localStorage.getItem("lastSelectedLocation");
+    if (savedLocation) {
+      setLocation(savedLocation);
+    }
+  }, []);
 
   const fetchVendorProducts = async () => {
     try {
@@ -174,6 +183,26 @@ const CreateBill = () => {
     }
   }
 
+  const fetchCustomerByPhone = async (phone: string) => {
+    try {
+      const data = await customersAPI.getCustomerByPhone(phone);
+      setCustomer({
+        name: data.data.name,
+        email: data.data.email,
+        phone: data.data.phone,
+      });
+      alert("Customer found! Details auto-filled.");
+    } catch (error) {
+      alert(error.message || "No customer found with this phone number.");
+    }
+  };
+
+  const handleLocationChange = (newLocation: string) => {
+    setLocation(newLocation);
+    // Save the selected location to localStorage
+    localStorage.setItem("lastSelectedLocation", newLocation);
+  };
+
   // Responsive full width for large screens, mobile friendly
   return (
     <div className="space-y-6 px-0 sm:px-2 md:px-4 lg:px-8 w-full max-w-none mx-0">
@@ -254,10 +283,7 @@ const CreateBill = () => {
               <span className="text-gray-600">Subtotal:</span>
               <span className="font-medium">₹{getSubtotal()}</span>
             </div>
-            <div className="flex justify-between text-sm">
-              <span className="text-gray-600">Tax (10%):</span>
-              <span className="font-medium">₹{getTax()}</span>
-            </div>
+        
             <div className="flex justify-between text-base sm:text-lg font-bold border-t pt-3">
               <span>Total:</span>
               <span className="text-green-600">₹{getTotal()}</span>
@@ -271,6 +297,33 @@ const CreateBill = () => {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
           <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">Customer Details</h2>
           <div className="space-y-4">
+            {/* Phone Number Field */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="tel"
+                  value={customer.phone}
+                  onChange={(e) => setCustomer({ ...customer, phone: e.target.value })}
+                  placeholder="Enter phone number"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+                />
+                <button
+                  onClick={() => {
+                    if (customer.phone.length === 10) {
+                      fetchCustomerByPhone(customer.phone);
+                    } else {
+                      alert("Please enter a valid 10-digit phone number.");
+                    }
+                  }}
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
+                >
+                  Check
+                </button>
+              </div>
+            </div>
+
+            {/* Customer Name Field */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Customer Name *</label>
               <input
@@ -281,6 +334,8 @@ const CreateBill = () => {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               />
             </div>
+
+            {/* Email Field */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
               <input
@@ -291,21 +346,13 @@ const CreateBill = () => {
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
-              <input
-                type="tel"
-                value={customer.phone}
-                onChange={(e) => setCustomer({ ...customer, phone: e.target.value })}
-                placeholder="Enter phone number"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-              />
-            </div>
+
+            {/* Location Field */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Location *</label>
               <select
                 value={location}
-                onChange={(e) => setLocation(e.target.value)}
+                onChange={(e) => handleLocationChange(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               >
                 <option value="">Select location</option>
@@ -316,6 +363,8 @@ const CreateBill = () => {
                 ))}
               </select>
             </div>
+
+            {/* Notes Field */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
               <textarea
