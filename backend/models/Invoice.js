@@ -5,7 +5,7 @@ const invoiceSchema = new mongoose.Schema(
     invoiceNumber: {
       type: String,
       unique: true,
-      required: true,
+      required: false,
     },
     vendor_id: {
       type: mongoose.Schema.Types.ObjectId,
@@ -102,24 +102,60 @@ invoiceSchema.pre("save", async function (next) {
   if (!this.invoiceNumber) {
     const today = new Date()
     const datePart = today.toISOString().slice(0, 10).replace(/-/g, "")
-    // Use two separate objects for start and end of day
-    const startOfDay = new Date(today)
-    startOfDay.setHours(0, 0, 0, 0)
-    const endOfDay = new Date(today)
-    endOfDay.setHours(23, 59, 59, 999)
-    const count = await mongoose.model("Invoice").countDocuments({
-      createdAt: {
-        $gte: startOfDay,
-        $lte: endOfDay,
-      },
-    })
-    this.invoiceNumber = `INV-${datePart}-${String(count + 1).padStart(4, "0")}`
+    
+    let invoiceNumber
+    let attempts = 0
+    const maxAttempts = 20
+    
+    while (attempts < maxAttempts) {
+      try {
+        const startOfDay = new Date(today)
+        startOfDay.setHours(0, 0, 0, 0)
+        const endOfDay = new Date(today)
+        endOfDay.setHours(23, 59, 59, 999)
+        
+        // Use atomic operation to get the next sequence number
+        const count = await mongoose.model("Invoice").countDocuments({
+          createdAt: {
+            $gte: startOfDay,
+            $lte: endOfDay,
+          },
+        })
+        
+        // Add some randomness to avoid collisions
+        const sequenceNumber = count + 1 + attempts + Math.floor(Math.random() * 10)
+        invoiceNumber = `INV-${datePart}-${String(sequenceNumber).padStart(4, "0")}`
+        
+        // Check if this number already exists
+        const existingInvoice = await mongoose.model("Invoice").findOne({
+          invoiceNumber: invoiceNumber
+        })
+        
+        if (!existingInvoice) {
+          this.invoiceNumber = invoiceNumber
+          break
+        }
+        
+        attempts++
+      } catch (error) {
+        attempts++
+        if (attempts >= maxAttempts) {
+          throw new Error("Failed to generate unique invoice number after multiple attempts")
+        }
+      }
+    }
+    
+    if (attempts >= maxAttempts) {
+      throw new Error("Failed to generate unique invoice number after multiple attempts")
+    }
   }
 
-  // Calculate totals
-  this.subtotal = this.items.reduce((sum, item) => sum + item.total, 0)
-  this.tax = (this.subtotal * this.taxRate) / 100
-  this.totalAmount = this.subtotal + this.tax
+  // Calculate totals if not already set
+  if (this.items && this.items.length > 0) {
+    this.subtotal = this.items.reduce((sum, item) => sum + item.total, 0)
+    this.tax = (this.subtotal * this.taxRate) / 100
+    this.totalAmount = this.subtotal + this.tax
+  }
 
   next()
 })

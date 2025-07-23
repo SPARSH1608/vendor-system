@@ -63,7 +63,7 @@ const generateInvoice = async (req, res) => {
 
     const invoices = []
 
-    // Generate invoice for each vendor
+    // Generate invoice for each vendor sequentially to avoid race conditions
     for (const [vendorId, vendorData] of Object.entries(vendorGroups)) {
       // Aggregate items
       const itemsMap = {}
@@ -87,24 +87,10 @@ const generateInvoice = async (req, res) => {
       const subtotal = items.reduce((sum, item) => sum + item.total, 0)
       const totalAmount = subtotal // No tax calculation
 
-      // Generate invoiceNumber manually
-      const today = new Date()
-      const datePart = today.toISOString().slice(0, 10).replace(/-/g, "")
-      const startOfDay = new Date(today)
-      startOfDay.setHours(0, 0, 0, 0)
-      const endOfDay = new Date(today)
-      endOfDay.setHours(23, 59, 59, 999)
-      const count = await Invoice.countDocuments({
-        createdAt: {
-          $gte: startOfDay,
-          $lte: endOfDay,
-        },
-      })
-      const invoiceNumber = `INV-${datePart}-${String(count + 1).padStart(4, "0")}`
-
-      // Create invoice
+      // Create invoice data WITHOUT invoiceNumber - let pre-save hook handle it
       const invoiceData = {
         vendor_id: type === "single" ? vendorId : null,
+        // Remove invoiceNumber from here - let the pre-save hook generate it
         type,
         dateRange: {
           start: new Date(startDate),
@@ -114,11 +100,10 @@ const generateInvoice = async (req, res) => {
         subtotal,
         totalAmount,
         generated_by: req.user.userId,
-        invoiceNumber, // <-- add here
       }
 
       const invoice = new Invoice(invoiceData)
-      await invoice.save()
+      await invoice.save() // Pre-save hook will generate unique invoiceNumber
       await invoice.populate("vendor_id", "email phone")
 
       // Generate QR code for payment

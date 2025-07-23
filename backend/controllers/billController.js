@@ -289,6 +289,25 @@ const createBill = async (req, res) => {
         email: customer.email,
         phone: customer.phone,
       });
+    } else {
+      // Update existing customer with new info (except phone number)
+      // Only update if the values have actually changed
+      let customerUpdated = false;
+      
+      if (existingCustomer.name !== customer.name) {
+        existingCustomer.name = customer.name;
+        customerUpdated = true;
+      }
+      
+      if (existingCustomer.email !== customer.email) {
+        existingCustomer.email = customer.email;
+        customerUpdated = true;
+      }
+      
+      // Save the customer if any changes were made
+      if (customerUpdated) {
+        await existingCustomer.save();
+      }
     }
 
     // Prepare bill items
@@ -324,14 +343,14 @@ const createBill = async (req, res) => {
     // Generate a bill number
     const billNumber = `BILL-${Date.now()}`;
 
-    // Create bill data
+    // Create bill data using the UPDATED customer info from the form
     const billData = {
       vendor_id: req.user.userId,
       customer: {
-        name: existingCustomer.name,
-        email: existingCustomer.email,
-        phone: existingCustomer.phone,
-      }, // Populate customer fields
+        name: customer.name, // Use form data, not existingCustomer data
+        email: customer.email, // Use form data, not existingCustomer data
+        phone: customer.phone,
+      },
       items: enrichedItems,
       location,
       notes,
@@ -350,6 +369,67 @@ const createBill = async (req, res) => {
       totalAmount: bill.totalAmount,
     });
     await existingCustomer.save();
+
+    // --- VendorActivity update logic (only for paid bills) ---
+    if (status === "paid") {
+      const billDate = moment(bill.createdAt).startOf("day").toDate();
+      let activity = await VendorActivity.findOne({
+        vendor_id: req.user.userId,
+        date: {
+          $gte: billDate,
+          $lte: moment(billDate).endOf("day").toDate(),
+        },
+      });
+
+      if (!activity) {
+        // Create new activity for the day
+        const activityItems = bill.items.map(item => ({
+          product_id: item.product_id,
+          productName: item.productName,
+          quantity: item.quantity,
+          price: item.price,
+          total: item.total,
+        }));
+
+        await VendorActivity.create({
+          vendor_id: req.user.userId,
+          date: billDate,
+          location: bill.location,
+          items: activityItems,
+          totalAmount: bill.totalAmount,
+        });
+      } else {
+        // Update existing activity - add/update items
+        for (const billItem of bill.items) {
+          const existingItem = activity.items.find(
+            item => item.product_id.toString() === billItem.product_id.toString()
+          );
+
+          if (existingItem) {
+            // Update existing item
+            existingItem.quantity += billItem.quantity;
+            existingItem.total += billItem.total;
+          } else {
+            // Add new item
+            activity.items.push({
+              product_id: billItem.product_id,
+              productName: billItem.productName,
+              quantity: billItem.quantity,
+              price: billItem.price,
+              total: billItem.total,
+            });
+          }
+        }
+
+        // Recalculate total amount
+        activity.totalAmount = activity.items.reduce((sum, item) => sum + item.total, 0);
+        await activity.save();
+      }
+
+      // Send bill to customer via email/SMS
+      await sendBillToCustomer(bill);
+    }
+    // --- End VendorActivity update logic ---
 
     res.status(201).json({
       success: true,

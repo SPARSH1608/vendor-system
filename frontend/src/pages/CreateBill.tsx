@@ -44,6 +44,7 @@ const CreateBill = () => {
   const [location, setLocation] = useState("")
   const [notes, setNotes] = useState("")
   const [loading, setLoading] = useState(false)
+  const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
 
   const locations = [
     "Dr. Babasaheb Ambedkar Open University Campus",
@@ -223,11 +224,17 @@ const CreateBill = () => {
                 className="bg-gray-50 rounded-lg p-2 sm:p-4 flex flex-col items-center gap-2 shadow-sm border border-gray-200"
               >
                 <img
-                  src={product?.product_id?.image || "/placeholder-product.png"}
+                  src={
+                    failedImages.has(item.product_id) 
+                      ? "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMiAyMkw0MiA0Mk0yMiA0Mkw0MiAyMiIgc3Ryb2tlPSIjOUI5QkExIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K"
+                      : (product?.product_id?.image || "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMiAyMkw0MiA0Mk0yMiA0Mkw0MiAyMiIgc3Ryb2tlPSIjOUI5QkExIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K")
+                  }
                   alt={item.productName}
                   className="h-12 w-12 sm:h-16 sm:w-16 object-cover rounded-md border border-gray-200 bg-white"
                   loading="lazy"
-                  onError={e => { e.currentTarget.src = "/placeholder-product.png" }}
+                  onError={() => {
+                    setFailedImages(prev => new Set(prev).add(item.product_id));
+                  }}
                 />
                 <h4 className="font-medium text-gray-900 truncate text-xs sm:text-base">{item.productName}</h4>
                 <p className="text-xs sm:text-sm text-gray-600 truncate">
