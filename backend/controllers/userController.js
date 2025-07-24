@@ -78,7 +78,7 @@ const getUserById = async (req, res) => {
 
 // @desc    Update user role
 // @route   PUT /api/users/:id/role
-// @access  Private (Admin only)
+// @access  Private (Admin or Super Admin)
 const updateUserRole = async (req, res) => {
   try {
     const errors = validationResult(req)
@@ -93,11 +93,32 @@ const updateUserRole = async (req, res) => {
     const { role } = req.body
     const userId = req.params.id
 
-    // Prevent admin from changing their own role
-    if (userId === req.user.userId) {
+    // Define allowed roles based on user's role
+    let allowedRoles = []
+    if (req.user.role === "super_admin") {
+      allowedRoles = ["user", "vendor", "admin"]
+    } else if (req.user.role === "admin") {
+      allowedRoles = ["user", "vendor"]
+    } else {
+      return res.status(403).json({
+        success: false,
+        message: "Insufficient permissions to change user roles",
+      })
+    }
+
+    // Validate role based on user's permissions
+    if (!allowedRoles.includes(role)) {
       return res.status(400).json({
         success: false,
-        message: "You cannot change your own role",
+        message: `You can only assign roles: ${allowedRoles.join(", ")}`,
+      })
+    }
+
+    // Prevent changing super admin role
+    if (role === "super_admin") {
+      return res.status(400).json({
+        success: false,
+        message: "Cannot assign super admin role",
       })
     }
 
@@ -106,6 +127,22 @@ const updateUserRole = async (req, res) => {
       return res.status(404).json({
         success: false,
         message: "User not found",
+      })
+    }
+
+    // Prevent changing super admin's role
+    if (user.role === "super_admin") {
+      return res.status(400).json({
+        success: false,
+        message: "Cannot change super admin role",
+      })
+    }
+
+    // Regular admin cannot change admin role
+    if (req.user.role === "admin" && user.role === "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "You cannot change admin user roles",
       })
     }
 
@@ -126,18 +163,27 @@ const updateUserRole = async (req, res) => {
   }
 }
 
-// @desc    Toggle user active status
+// @desc    Update user status
 // @route   PUT /api/users/:id/status
-// @access  Private (Admin only)
-const toggleUserStatus = async (req, res) => {
+// @access  Private (Super Admin only)
+const updateUserStatus = async (req, res) => {
   try {
+    const { status } = req.body
     const userId = req.params.id
 
-    // Prevent admin from deactivating themselves
-    if (userId === req.user.userId) {
+    // Only super admin can change status
+    if (req.user.role !== "super_admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Only super admin can change user status",
+      })
+    }
+
+    // Validate status
+    if (!["active", "inactive", "suspended"].includes(status)) {
       return res.status(400).json({
         success: false,
-        message: "You cannot change your own status",
+        message: "Invalid status",
       })
     }
 
@@ -149,16 +195,24 @@ const toggleUserStatus = async (req, res) => {
       })
     }
 
-    user.isActive = !user.isActive
+    // Prevent changing super admin's status
+    if (user.role === "super_admin") {
+      return res.status(400).json({
+        success: false,
+        message: "Cannot change super admin status",
+      })
+    }
+
+    user.status = status
     await user.save()
 
     res.json({
       success: true,
-      message: `User ${user.isActive ? "activated" : "deactivated"} successfully`,
+      message: "User status updated successfully",
       data: user,
     })
   } catch (error) {
-    console.error("Toggle user status error:", error)
+    console.error("Update user status error:", error)
     res.status(500).json({
       success: false,
       message: "Server error",
@@ -166,15 +220,23 @@ const toggleUserStatus = async (req, res) => {
   }
 }
 
-// @desc    Delete user
+// @desc    Delete user (Enhanced for super admin)
 // @route   DELETE /api/users/:id
-// @access  Private (Admin only)
+// @access  Private (Super Admin only)
 const deleteUser = async (req, res) => {
   try {
     const userId = req.params.id
 
-    // Prevent admin from deleting themselves
-    if (userId === req.user.userId) {
+    // Only super admin can delete users
+    if (req.user.role !== "super_admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Only super admin can delete users",
+      })
+    }
+
+    // Prevent super admin from deleting themselves
+    if (userId === req.user._id.toString()) {
       return res.status(400).json({
         success: false,
         message: "You cannot delete your own account",
@@ -189,6 +251,14 @@ const deleteUser = async (req, res) => {
       })
     }
 
+    // Prevent deleting super admin
+    if (user.role === "super_admin") {
+      return res.status(400).json({
+        success: false,
+        message: "Cannot delete super admin account",
+      })
+    }
+
     await User.findByIdAndDelete(userId)
 
     res.json({
@@ -196,7 +266,7 @@ const deleteUser = async (req, res) => {
       message: "User deleted successfully",
     })
   } catch (error) {
-    console.error("Delete user error:", error)
+    console.error("Delete user error error:", error)
     res.status(500).json({
       success: false,
       message: "Server error",
@@ -243,10 +313,43 @@ const getUserStats = async (req, res) => {
   }
 }
 
+// @desc    Toggle user status (for regular admin)
+// @route   PUT /api/users/:id/status
+// @access  Private (Admin only)
+const toggleUserStatus = async (req, res) => {
+  try {
+    const userId = req.params.id
+
+    const user = await User.findById(userId)
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      })
+    }
+
+    user.isActive = !user.isActive
+    await user.save()
+
+    res.json({
+      success: true,
+      message: "User status updated successfully",
+      data: user,
+    })
+  } catch (error) {
+    console.error("Toggle user status error:", error)
+    res.status(500).json({
+      success: false,
+      message: "Server error",
+    })
+  }
+}
+
 module.exports = {
   getUsers,
   getUserById,
   updateUserRole,
+  updateUserStatus,
   toggleUserStatus,
   deleteUser,
   getUserStats,

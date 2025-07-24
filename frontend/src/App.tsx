@@ -23,14 +23,14 @@ import VendorLocations from "./pages/VendorLocations"
 import InactiveAccountPage from "./pages/InactiveAccountPage"
 import PendingApprovalPage from "./pages/PendingApprovalPage"
 import InvoiceList from "./pages/InvoiceList"
+import SuperAdminUserManagement from "./pages/SuperAdminUserManagement"
 
 // Layout
 import Layout from "./components/Layout/Layout"
 
 function AppRoutes() {
   const { user, isAuthenticated } = useSelector((state: RootState) => state.auth)
-console.log("User:", user)
-  console.log("Is Authenticated:", isAuthenticated)
+  
   const ProtectedRoute = ({ children, allowedRoles }: { children: React.ReactNode; allowedRoles: string[] }) => {
     if (!isAuthenticated) {
       return <Navigate to="/login" />
@@ -66,6 +66,16 @@ console.log("User:", user)
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/pending" element={<PendingApprovalPage />} />
+
+      {/* Super Admin Routes */}
+      <Route
+        path="/super-admin"
+        element={
+          <ProtectedRoute allowedRoles={["super_admin"]}>
+            <SuperAdminUserManagement />
+          </ProtectedRoute>
+        }
+      />
 
       {/* Admin Routes */}
       <Route

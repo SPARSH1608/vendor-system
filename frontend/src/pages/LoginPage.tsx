@@ -30,7 +30,11 @@ const LoginPage = () => {
     e.preventDefault()
     try {
       const result = await dispatch(loginUser(formData)).unwrap()
-      if (result.user.role === "admin") {
+      
+      // Redirect based on role
+      if (result.user.role === "super_admin") {
+        navigate("/super-admin")
+      } else if (result.user.role === "admin") {
         navigate("/admin")
       } else if (result.user.role === "vendor") {
         navigate("/vendor/bills/create")

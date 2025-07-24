@@ -160,6 +160,12 @@ export const usersAPI = {
       data: roleData,
     }),
 
+  updateUserStatus: (userId, status) =>
+    apiCall(`/users/${userId}/status`, {
+      method: "PUT",
+      data: { status },
+    }),
+
   toggleUserStatus: (userId) =>
     apiCall(`/users/${userId}/status`, {
       method: "PUT",
@@ -199,6 +205,41 @@ export const adminAPI = {
 export const customersAPI = {
   getCustomerByPhone: (phone) =>
     apiCall(`/customers/${phone}`, {
+      method: "GET",
+    }),
+};
+
+// Super Admin API functions
+export const superAdminAPI = {
+  getAllUsers: (params = {}) => {
+    const queryString = new URLSearchParams(params).toString();
+    return apiCall(`/super-admin/users${queryString ? `?${queryString}` : ""}`);
+  },
+
+  getUserById: (userId) =>
+    apiCall(`/super-admin/users/${userId}`, {
+      method: "GET",
+    }),
+
+  updateUserRole: (userId, role) =>
+    apiCall(`/super-admin/users/${userId}/role`, {
+      method: "PUT",
+      data: { role },
+    }),
+
+  updateUserStatus: (userId, status) =>
+    apiCall(`/super-admin/users/${userId}/status`, {
+      method: "PUT",
+      data: { status },
+    }),
+
+  deleteUser: (userId) =>
+    apiCall(`/super-admin/users/${userId}`, {
+      method: "DELETE",
+    }),
+
+  getUserStats: () =>
+    apiCall("/super-admin/users/stats", {
       method: "GET",
     }),
 };

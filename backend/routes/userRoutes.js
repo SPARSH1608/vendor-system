@@ -15,15 +15,15 @@ const router = express.Router()
 
 // Validation rules
 const roleValidation = [
-  body("role").isIn(["admin", "vendor", "user"]).withMessage("Role must be admin, vendor, or user"),
+  body("role").isIn(["admin", "vendor", "user","super_admin"]).withMessage("Role must be admin, vendor, or user"),
 ]
 
 // Routes
-router.get("/", auth, adminAuth, getUsers)
-router.get("/stats", auth, adminAuth, getUserStats)
-router.get("/:id", auth, adminAuth, getUserById)
-router.put("/:id/role", auth, adminAuth, roleValidation, updateUserRole)
-router.put("/:id/status", auth, adminAuth, toggleUserStatus)
-router.delete("/:id", auth, adminAuth, deleteUser)
+router.get("/", auth, getUsers)
+router.get("/stats", auth, getUserStats)
+router.get("/:id", auth, getUserById)
+router.put("/:id/role", auth, roleValidation, updateUserRole)
+router.put("/:id/status", auth, toggleUserStatus)
+router.delete("/:id", auth, deleteUser)
 
 module.exports = router

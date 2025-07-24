@@ -31,8 +31,7 @@ const getProducts = async (req, res) => {
     const products = await Product.find(query)
       .populate("created_by", "email")
       .sort(sort)
-      .limit(limit * 1)
-      .skip((page - 1) * limit)
+  
 
     const total = await Product.countDocuments(query)
 
