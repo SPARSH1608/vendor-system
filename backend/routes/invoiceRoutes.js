@@ -26,11 +26,11 @@ const statusValidation = [
 ]
 
 // Routes
-router.get("/", auth, adminAuth, getInvoices)
-router.get("/stats", auth, adminAuth, getInvoiceStats)
+router.get("/", auth,  getInvoices)
+router.get("/stats", auth,  getInvoiceStats)
 router.get("/:id", auth, getInvoiceById)
 router.get("/:id/pdf", auth, downloadInvoicePDF)
-router.post("/generate", auth, adminAuth, invoiceValidation, generateInvoice)
-router.put("/:id/status", auth, adminAuth, statusValidation, updateInvoiceStatus)
+router.post("/generate", auth,  invoiceValidation, generateInvoice)
+router.put("/:id/status", auth, statusValidation, updateInvoiceStatus)
 
 module.exports = router

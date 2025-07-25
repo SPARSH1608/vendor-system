@@ -26,13 +26,13 @@ const activityValidation = [
 ]
 
 // Routes
-router.get("/activities", auth, adminAuth, getVendorActivities)
-router.get("/my-activities", auth, vendorAuth, getMyActivities)
-router.get("/stats", auth, adminAuth, getVendorStats)
-router.post("/activities", auth, vendorAuth, activityValidation, createVendorActivity)
-router.put("/activities/:id", auth, vendorAuth, activityValidation, updateVendorActivity)
+router.get("/activities", auth, getVendorActivities)
+router.get("/my-activities", auth, getMyActivities)
+router.get("/stats", auth, getVendorStats)
+router.post("/activities", auth, activityValidation, createVendorActivity)
+router.put("/activities/:id", auth, activityValidation, updateVendorActivity)
 router.delete("/activities/:id", auth, vendorAuth, deleteVendorActivity)
-router.get("/:id/products", auth, adminAuth, getProductsByVendor)
-router.post("/products-by-vendors", auth, adminAuth, getProductsByVendors)
+router.get("/:id/products", auth, getProductsByVendor)
+router.post("/products-by-vendors", auth, getProductsByVendors)
 
 module.exports = router
