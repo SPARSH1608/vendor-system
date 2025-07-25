@@ -49,17 +49,16 @@ const productValidation = [
 ]
 // Routes
 router.get("/", getProducts)
-router.get("/stats", auth, adminAuth, getProductStats)
+router.get("/stats", auth, getProductStats)
 router.get("/:id", getProductById)
-router.post("/", auth, adminAuth, upload.single("image"), productValidation, createProduct)
+router.post("/", auth, upload.single("image"), productValidation, createProduct)
 router.put(
   "/:id",
   auth,
-  adminAuth,
   upload.single("image"), // <-- add multer for file upload
   updateProduct
 ) // Update product
-router.delete("/:id", auth, adminAuth, deleteProduct) // Delete product
-router.put("/:id/status", auth, adminAuth, toggleProductStatus) // Toggle product status
+router.delete("/:id", auth, deleteProduct) // Delete product
+router.put("/:id/status", auth, toggleProductStatus) // Toggle product status
 router.get("/:id/vendors", getVendorsByProduct);
 module.exports = router

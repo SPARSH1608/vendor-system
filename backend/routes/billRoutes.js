@@ -42,7 +42,7 @@ router.put("/vendors/bills/:id/status", auth, vendorAuth, statusValidation, upda
 router.delete("/vendors/bills/:id", auth, vendorAuth, deleteBill)
 
 // Admin routes
-router.get("/bills", auth, adminAuth, getAllBills)
+router.get("/bills", auth, getAllBills)
 
 // Shared routes
 router.get("/bills/:id", auth, getBillById)
