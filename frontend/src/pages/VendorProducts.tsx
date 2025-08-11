@@ -34,12 +34,24 @@ const VendorProducts = () => {
 
   const categories = [
     t("allCategories"),
-    t("vegetables"),
-    t("fruits"),
-    t("dairy"),
-    t("masala"),
-    t("dryFruits"),
-    t("pulses"),
+    t("Dry Fruits"),
+    t("Masala"),
+    t("Uncultivated"),
+    t("Pulses"),
+    t("Aruvedic"),
+    t("Ghee"),
+    t("Mukhvas"),
+    t("Vegetable"),
+    t("Fruits"),
+    t("Flour"),
+    t("Jaggery"),
+    t("Others"),
+    t("Millets"),
+    t("Grains"),
+    t("Juice"),
+    t("Healthy Diets"),
+    t("Sugar"),
+    t("Honey"),
   ]
 
   const filteredProducts = products.filter((product) => {
