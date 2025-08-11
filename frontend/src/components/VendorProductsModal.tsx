@@ -1,27 +1,53 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 
-const VendorProductsModal = ({ isOpen, onClose, products, vendorName }) => {
+interface Product {
+  _id: string;
+  name: string;
+  category: string;
+  price: number;
+}
+
+interface VendorProductsModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  products: Product[];
+  vendorName: string;
+}
+
+const VendorProductsModal: React.FC<VendorProductsModalProps> = ({
+  isOpen,
+  onClose,
+  products,
+  vendorName,
+}) => {
+  const { t } = useTranslation();
+
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-opacity-50 backdrop-blur-md flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg border-4 border-gray-300">
         <h2 className="text-xl font-bold mb-4 text-gray-800">
-          Products for {vendorName}
+          {t("productsFor")} {vendorName}
         </h2>
         {products.length === 0 ? (
           <div className="text-center py-4 text-gray-500">
-            No products available for this vendor.
+            {t("noProductsAvailable")}
           </div>
         ) : (
           <table className="w-full border-collapse">
             <thead>
               <tr className="border-b border-gray-300">
-                <th className="text-left text-gray-800 font-medium py-2">Name</th>
                 <th className="text-left text-gray-800 font-medium py-2">
-                  Category
+                  {t("name")}
                 </th>
-                <th className="text-left text-gray-800 font-medium py-2">Price</th>
+                <th className="text-left text-gray-800 font-medium py-2">
+                  {t("category")}
+                </th>
+                <th className="text-left text-gray-800 font-medium py-2">
+                  {t("price")}
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -39,7 +65,7 @@ const VendorProductsModal = ({ isOpen, onClose, products, vendorName }) => {
           onClick={onClose}
           className="mt-6 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors w-full"
         >
-          Close
+          {t("close")}
         </button>
       </div>
     </div>

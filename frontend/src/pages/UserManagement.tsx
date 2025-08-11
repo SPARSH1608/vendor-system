@@ -7,12 +7,14 @@ import { fetchUsers, updateUserRole, toggleUserStatus } from "../store/slices/us
 import { vendorsAPI } from "../services/api";
 import type { AppDispatch, RootState } from "../store/store"
 import ConfirmationModal from "../components/ConfirmationModal"
-import VendorProductsModal from "../components/VendorProductsModal" // Import the new modal component
+import VendorProductsModal from "../components/VendorProductsModal"
 import * as XLSX from "xlsx"
 import jsPDF from "jspdf"
 import autoTable from "jspdf-autotable"
+import { useTranslation } from "react-i18next"
 
 const UserManagement = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>()
   const { users, loading } = useSelector((state: RootState) => state.users)
   const [showRoleModal, setShowRoleModal] = useState(false)
@@ -60,6 +62,15 @@ const UserManagement = () => {
     return isActive ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"
   }
 
+  const getRoleLabel = (role: string) => {
+    // Fix: Always use "vendor" as key for translation, not the value from t("vendor")
+    if (role === "vendor") return t("vendor");
+    if(role === "super_admin") return t("super_admin");
+    if (role === "admin") return t("admin");
+    if (role === "user") return t("user");
+    return role;
+  };
+
   // Filter users by search
   const filteredUsers = users.filter(
     (u) =>
@@ -92,7 +103,7 @@ const UserManagement = () => {
         body: JSON.stringify({ vendorIds: selectedVendors }),
       })
       const data = await res.json()
-      if (!data.success) throw new Error("Failed to fetch products")
+      if (!data.success) throw new Error(t("failedToFetchProducts"))
 
       // Group products by vendor email
       const vendorMap: Record<string, string[]> = {}
@@ -105,16 +116,16 @@ const UserManagement = () => {
 
       // Prepare rows: one row per vendor, products comma-separated
       const allProducts = Object.entries(vendorMap).map(([email, products]) => ({
-        Vendor: email,
-        Products: products.join(", "),
+        [t("vendor")]: email,
+        [t("products")]: products.join(", "),
       }))
 
-      const ws = XLSX.utils.json_to_sheet(allProducts, { header: ["Vendor", "Products"] })
+      const ws = XLSX.utils.json_to_sheet(allProducts, { header: [t("vendor"), t("products")] })
       const wb = XLSX.utils.book_new()
-      XLSX.utils.book_append_sheet(wb, ws, "Vendor Products")
+      XLSX.utils.book_append_sheet(wb, ws, t("vendorProductsSheet"))
       XLSX.writeFile(wb, "vendor_products.xlsx")
     } catch (err) {
-      alert("Failed to download products.")
+      alert(t("failedToDownloadProducts"))
     }
     setDownloading(false)
   }
@@ -138,13 +149,12 @@ const UserManagement = () => {
       });
 
       const data = await res.json();
-      console.log("Fetched products data:", data); // Debugging
-      if (!data.success) throw new Error("Failed to fetch products");
+      if (!data.success) throw new Error(t("failedToFetchProducts"));
 
       // Group products by vendor name
       const vendorMap: Record<string, string[]> = {};
       data.data.forEach((prod: any) => {
-        const name = prod.vendor_id?.name || "Unknown Vendor";
+        const name = prod.vendor_id?.name || t("unknownVendor");
         const productName = prod.product_id?.name || "";
         if (!vendorMap[name]) vendorMap[name] = [];
         vendorMap[name].push(productName);
@@ -155,10 +165,10 @@ const UserManagement = () => {
         name,
         products.join(", "),
       ]);
-      const head = [["Vendor Name", "Products"]];
+      const head = [[t("vendorName"), t("products")]];
 
       const doc = new jsPDF();
-      doc.text("Vendor Products", 14, 16);
+      doc.text(t("vendorProductsTitle"), 14, 16);
       autoTable(doc, {
         startY: 22,
         head,
@@ -168,7 +178,7 @@ const UserManagement = () => {
       });
       doc.save("vendor_products.pdf");
     } catch (err) {
-      alert("Failed to download products PDF.");
+      alert(t("failedToDownloadProductsPDF"));
     }
     setDownloading(false);
   }
@@ -181,18 +191,18 @@ const UserManagement = () => {
         setSelectedVendorProducts(data.data);
         setShowVendorProductsModal(true);
       } else {
-        alert("Failed to fetch products for this vendor.");
+        alert(t("failedToFetchVendorProducts"));
       }
     } catch (err) {
-      alert("Error fetching vendor products.");
+      alert(t("errorFetchingVendorProducts"));
     }
   };
 
   return (
-    <div className="space-y-6 px-2 sm:px-4 md:px-8 w-full"> {/* Adjusted to take full width */}
+    <div className="space-y-6 px-2 sm:px-4 md:px-8 w-full">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">User Management</h1>
-        <p className="text-gray-600 mt-1 text-sm sm:text-base">Manage user roles and permissions</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{t("userManagementTitle")}</h1>
+        <p className="text-gray-600 mt-1 text-sm sm:text-base">{t("userManagementDesc")}</p>
       </div>
 
       {/* Search */}
@@ -200,7 +210,7 @@ const UserManagement = () => {
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
         <input
           type="text"
-          placeholder="Search users..."
+          placeholder={t("searchUsers")}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
@@ -212,9 +222,11 @@ const UserManagement = () => {
         <div className="p-4 sm:p-6 border-b border-gray-100">
           <div className="flex items-center space-x-2">
             <Shield className="w-5 h-5 text-gray-600" />
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">All Users ({filteredUsers.length})</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">
+              {t("allUsers")} ({filteredUsers.length})
+            </h2>
           </div>
-          <p className="text-gray-600 text-xs sm:text-sm mt-1">View and manage all registered users</p>
+          <p className="text-gray-600 text-xs sm:text-sm mt-1">{t("viewAndManageUsers")}</p>
         </div>
 
         {loading ? (
@@ -228,12 +240,12 @@ const UserManagement = () => {
               <table className="w-full text-xs sm:text-sm">
                 <thead className="bg-gray-50">
                   <tr>
-                    <th className="px-4 py-3"></th> {/* Checkbox column */}
-                    <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase">Phone</th>
-                    <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase">Name</th>
-                    <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase">Role</th>
-                    <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase">Status</th>
-                    <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase">Actions</th>
+                    <th className="px-4 py-3"></th>
+                    <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase">{t("phone")}</th>
+                    <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase">{t("name")}</th>
+                    <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase">{t("role")}</th>
+                    <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase">{t("status")}</th>
+                    <th className="px-4 py-3 text-left font-medium text-gray-500 uppercase">{t("actions")}</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
@@ -253,12 +265,12 @@ const UserManagement = () => {
                       <td className="px-4 py-3">{user.name}</td>
                       <td className="px-4 py-3">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getRoleColor(user.role)}`}>
-                          {user.role}
+                          {getRoleLabel(user.role)}
                         </span>
                       </td>
                       <td className="px-4 py-3">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(user.isActive)}`}>
-                          {user.isActive ? "active" : "inactive"}
+                          {user.isActive ? t("active") : t("inactive")}
                         </span>
                       </td>
                       <td className="px-4 py-3 space-y-1 sm:space-y-0 sm:space-x-2 flex flex-col sm:flex-row">
@@ -268,7 +280,7 @@ const UserManagement = () => {
                             className="inline-flex items-center space-x-1 text-blue-600 hover:text-blue-900"
                           >
                             <UserCheck className="w-4 h-4" />
-                            <span>Make Vendor</span>
+                            <span>{t("makeVendor")}</span>
                           </button>
                         )}
                         {user.role === "vendor" && (
@@ -277,7 +289,7 @@ const UserManagement = () => {
                             className="inline-flex items-center space-x-1 text-orange-600 hover:text-orange-900"
                           >
                             <UserX className="w-4 h-4" />
-                            <span>Remove Vendor</span>
+                            <span>{t("removeVendor")}</span>
                           </button>
                         )}
                         <button
@@ -288,14 +300,14 @@ const UserManagement = () => {
                               : "bg-green-100 text-green-600 hover:bg-green-200"
                           }`}
                         >
-                          {user.isActive ? "Deactivate" : "Activate"}
+                          {user.isActive ? t("deactivate") : t("activate")}
                         </button>
                         {user.role === "vendor" && (
                           <button
                             onClick={() => handleViewVendorProducts(user)}
                             className="inline-flex items-center space-x-1 text-blue-600 hover:text-blue-900"
                           >
-                            <span>View Products</span>
+                            <span>{t("viewProducts")}</span>
                           </button>
                         )}
                       </td>
@@ -310,12 +322,12 @@ const UserManagement = () => {
                 <div key={user._id} className="py-4 px-2 flex flex-col gap-2">
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-gray-900">{user.name}</span>
-                    <span className={`px-2 py-1 text-xs rounded-full ${getRoleColor(user.role)}`}>{user.role}</span>
+                    <span className={`px-2 py-1 text-xs rounded-full ${getRoleColor(user.role)}`}>{getRoleLabel(user.role)}</span>
                   </div>
                   <div className="flex items-center justify-between text-xs text-gray-600">
-                    <span>Phone: {user.phone}</span>
+                    <span>{t("phone")}: {user.phone}</span>
                     <span className={`px-2 py-1 rounded-full ${getStatusColor(user.isActive)}`}>
-                      {user.isActive ? "active" : "inactive"}
+                      {user.isActive ? t("active") : t("inactive")}
                     </span>
                   </div>
                   <div className="flex flex-col gap-2 mt-2">
@@ -325,7 +337,7 @@ const UserManagement = () => {
                         className="inline-flex items-center space-x-1 text-blue-600 hover:text-blue-900 text-xs"
                       >
                         <UserCheck className="w-4 h-4" />
-                        <span>Make Vendor</span>
+                        <span>{t("makeVendor")}</span>
                       </button>
                     )}
                     {user.role === "vendor" && (
@@ -334,7 +346,7 @@ const UserManagement = () => {
                         className="inline-flex items-center space-x-1 text-orange-600 hover:text-orange-900 text-xs"
                       >
                         <UserX className="w-4 h-4" />
-                        <span>Remove Vendor</span>
+                        <span>{t("removeVendor")}</span>
                       </button>
                     )}
                     <button
@@ -345,7 +357,7 @@ const UserManagement = () => {
                           : "bg-green-100 text-green-600 hover:bg-green-200"
                       }`}
                     >
-                      {user.isActive ? "Deactivate" : "Activate"}
+                      {user.isActive ? t("deactivate") : t("activate")}
                     </button>
                   </div>
                 </div>
@@ -362,14 +374,14 @@ const UserManagement = () => {
           disabled={selectedVendors.length === 0 || downloading}
           onClick={handleDownloadProductsExcel}
         >
-          {downloading ? "Downloading..." : "Download Products Excel"}
+          {downloading ? t("downloading") : t("downloadProductsExcel")}
         </button>
         <button
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-60"
           disabled={selectedVendors.length === 0 || downloading}
           onClick={handleDownloadProductsPDF}
         >
-          {downloading ? "Downloading..." : "Download Products PDF"}
+          {downloading ? t("downloading") : t("downloadProductsPDF")}
         </button>
       </div>
 
@@ -383,7 +395,11 @@ const UserManagement = () => {
         onConfirm={handleRoleChange}
         message={
           roleModalUser
-            ? `Are you sure you want to ${roleModalUser.newRole === "vendor" ? "convert" : "revert"} "${roleModalUser.email}" to ${roleModalUser.newRole}?`
+            ? t("confirmRoleChange", {
+                action: roleModalUser.newRole === "vendor" ? t("convert") : t("revert"),
+                email: roleModalUser.email,
+                role: t(roleModalUser.newRole),
+              })
             : ""
         }
         isProcessing={loading}

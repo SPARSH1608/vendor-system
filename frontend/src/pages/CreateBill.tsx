@@ -1,9 +1,10 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import { Plus, Minus, Trash2, Save, FileText, CreditCard } from "lucide-react"
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Plus, Minus, Trash2, Save, FileText, CreditCard } from "lucide-react";
 import { customersAPI } from "../services/api";
+import { useTranslation } from "react-i18next";
 
 interface Product {
   _id: string
@@ -33,28 +34,29 @@ interface CustomerInfo {
 }
 
 const CreateBill = () => {
-  const navigate = useNavigate()
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   const [customer, setCustomer] = useState<CustomerInfo>({
     name: "",
     email: "",
     phone: "",
-  })
-  const [availableProducts, setAvailableProducts] = useState<Product[]>([])
-  const [billItems, setBillItems] = useState<BillItem[]>([])
-  const [location, setLocation] = useState("")
-  const [notes, setNotes] = useState("")
-  const [loading, setLoading] = useState(false)
+  });
+  const [availableProducts, setAvailableProducts] = useState<Product[]>([]);
+  const [billItems, setBillItems] = useState<BillItem[]>([]);
+  const [location, setLocation] = useState("");
+  const [notes, setNotes] = useState("");
+  const [loading, setLoading] = useState(false);
   const [failedImages, setFailedImages] = useState<Set<string>>(new Set());
 
   const locations = [
-    "Dr. Babasaheb Ambedkar Open University Campus",
-    "Shri Bhagwat Vidyapeeth Temple",
-    "Atma vikasa parisara",
-    "Navjeevan Trust Campus",
-    "Gayatri Temple Trust Campus",
-    "Sristi Campus",
-    "Vallabh Vidyanagar",
-  ]
+    t("location1"),
+    t("location2"),
+    t("location3"),
+    t("location4"),
+    t("location5"),
+    t("location6"),
+    t("location7"),
+  ];
 
   useEffect(() => {
     fetchVendorProducts()
@@ -136,7 +138,7 @@ const CreateBill = () => {
   const saveBill = async (status: "draft" | "unpaid" | "paid") => {
     const selectedItems = billItems.filter((item) => item.quantity > 0)
     if (!customer.name || !customer.email || !customer.phone || !location || selectedItems.length === 0) {
-      alert("Please fill in all required fields and add at least one item")
+      alert(t("fillAllFieldsAndAddItem"))
       return
     }
 
@@ -170,15 +172,19 @@ const CreateBill = () => {
 
       if (response.ok) {
         const data = await response.json()
-        alert(`Bill ${status === "draft" ? "saved as draft" : "created"} successfully!`)
+        alert(
+          status === "draft"
+            ? t("billSavedAsDraft")
+            : t("billCreatedSuccessfully")
+        );
         navigate("/vendor/bills")
       } else {
         const error = await response.json()
-        alert(error.message || "Failed to create bill")
+        alert(error.message || t("failedToCreateBill"))
       }
     } catch (error) {
       console.error("Error creating bill:", error)
-      alert("Failed to create bill")
+      alert(t("failedToCreateBill"))
     } finally {
       setLoading(false)
     }
@@ -192,9 +198,9 @@ const CreateBill = () => {
         email: data.data.email,
         phone: data.data.phone,
       });
-      alert("Customer found! Details auto-filled.");
+      alert(t("customerFoundAutoFilled"));
     } catch (error) {
-      alert(error.message || "No customer found with this phone number.");
+      alert(error.message || t("noCustomerFoundWithPhone"));
     }
   };
 
@@ -208,13 +214,13 @@ const CreateBill = () => {
   return (
     <div className="space-y-6 px-0 sm:px-2 md:px-4 lg:px-8 w-full max-w-none mx-0">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Create New Bill</h1>
-        <p className="text-gray-600 mt-1 text-sm sm:text-base">Select product quantities and enter customer details</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{t("createNewBill")}</h1>
+        <p className="text-gray-600 mt-1 text-sm sm:text-base">{t("selectProductsAndCustomerDetails")}</p>
       </div>
 
       {/* Product Selection Cards */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
-        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">Select Products & Quantities</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">{t("selectProductsQuantities")}</h2>
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
           {billItems.map((item, idx) => {
             const product = availableProducts.find((p) => p.product_id._id === item.product_id)
@@ -226,7 +232,7 @@ const CreateBill = () => {
                 <img
                   src={
                     failedImages.has(item.product_id) 
-                      ? "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMiAyMkw0MiA0Mk0yMiA0Mkw0MiAyMiIgc3Ryb2tlPSIjOUI5QkExIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K"
+                      ? "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMiAyMkw0MiA0Mk0yMiA0Mkw0MiAyMiIgc3Ryb2tlPSIjOUI5QkExIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K"
                       : (product?.product_id?.image || "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMiAyMkw0MiA0Mk0yMiA0Mkw0MiAyMiIgc3Ryb2tlPSIjOUI5QkExIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K")
                   }
                   alt={item.productName}
@@ -238,7 +244,7 @@ const CreateBill = () => {
                 />
                 <h4 className="font-medium text-gray-900 truncate text-xs sm:text-base">{item.productName}</h4>
                 <p className="text-xs sm:text-sm text-gray-600 truncate">
-                  ₹{item.price} per {item.stock_unit}
+                  ₹{item.price} {t("per")} {item.stock_unit}
                 </p>
                 <div className="flex items-center space-x-2 mt-2">
                   <button
@@ -284,15 +290,15 @@ const CreateBill = () => {
       {/* Bill Summary */}
       {billItems.some((item) => item.quantity > 0) && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">Bill Summary</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">{t("billSummary")}</h2>
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span className="text-gray-600">Subtotal:</span>
+              <span className="text-gray-600">{t("subtotal")}:</span>
               <span className="font-medium">₹{getSubtotal()}</span>
             </div>
         
             <div className="flex justify-between text-base sm:text-lg font-bold border-t pt-3">
-              <span>Total:</span>
+              <span>{t("total")}:</span>
               <span className="text-green-600">₹{getTotal()}</span>
             </div>
           </div>
@@ -302,17 +308,17 @@ const CreateBill = () => {
       {/* Customer Details */}
       {billItems.some((item) => item.quantity > 0) && (
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">Customer Details</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">{t("customerDetails")}</h2>
           <div className="space-y-4">
             {/* Phone Number Field */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Phone Number *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t("phoneNumber")} *</label>
               <div className="flex items-center gap-2">
                 <input
                   type="tel"
                   value={customer.phone}
                   onChange={(e) => setCustomer({ ...customer, phone: e.target.value })}
-                  placeholder="Enter phone number"
+                  placeholder={t("enterPhoneNumber")}
                   className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 />
                 <button
@@ -320,49 +326,49 @@ const CreateBill = () => {
                     if (customer.phone.length === 10) {
                       fetchCustomerByPhone(customer.phone);
                     } else {
-                      alert("Please enter a valid 10-digit phone number.");
+                      alert(t("enterValidPhoneNumber"));
                     }
                   }}
                   className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
                 >
-                  Check
+                  {t("check")}
                 </button>
               </div>
             </div>
 
             {/* Customer Name Field */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Customer Name *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t("customerName")} *</label>
               <input
                 type="text"
                 value={customer.name}
                 onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
-                placeholder="Enter customer name"
+                placeholder={t("enterCustomerName")}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               />
             </div>
 
             {/* Email Field */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t("email")} *</label>
               <input
                 type="email"
                 value={customer.email}
                 onChange={(e) => setCustomer({ ...customer, email: e.target.value })}
-                placeholder="Enter customer email"
+                placeholder={t("enterCustomerEmail")}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               />
             </div>
 
             {/* Location Field */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Location *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t("location")} *</label>
               <select
                 value={location}
                 onChange={(e) => handleLocationChange(e.target.value)}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               >
-                <option value="">Select location</option>
+                <option value="">{t("selectLocation")}</option>
                 {locations.map((loc) => (
                   <option key={loc} value={loc}>
                     {loc}
@@ -373,11 +379,11 @@ const CreateBill = () => {
 
             {/* Notes Field */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Notes</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">{t("notes")}</label>
               <textarea
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="Additional notes (optional)"
+                placeholder={t("additionalNotesOptional")}
                 rows={3}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm resize-none"
               />
@@ -396,7 +402,7 @@ const CreateBill = () => {
               className="flex items-center justify-center gap-2 w-full bg-gray-100 text-gray-700 py-2 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50"
             >
               <Save className="w-4 h-4" />
-              <span>Save as Draft</span>
+              <span>{t("saveAsDraft")}</span>
             </button>
             <button
               onClick={() => saveBill("unpaid")}
@@ -404,7 +410,7 @@ const CreateBill = () => {
               className="flex items-center justify-center gap-2 w-full bg-orange-600 text-white py-2 rounded-lg hover:bg-orange-700 transition-colors disabled:opacity-50"
             >
               <FileText className="w-4 h-4" />
-              <span>Mark as Unpaid</span>
+              <span>{t("markAsUnpaid")}</span>
             </button>
             <button
               onClick={() => saveBill("paid")}
@@ -412,13 +418,13 @@ const CreateBill = () => {
               className="flex items-center justify-center gap-2 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50"
             >
               <CreditCard className="w-4 h-4" />
-              <span>Mark as Paid</span>
+              <span>{t("markAsPaid")}</span>
             </button>
           </div>
         </div>
       )}
     </div>
-  )
-}
+  );
+};
 
-export default CreateBill
+export default CreateBill;

@@ -1,15 +1,19 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App'
 import './index.css'
-import App from './App.tsx'
+import { initializeI18n } from './i18n/i18n'
+
+// Initialize i18n
+initializeI18n()
 
 const rootElement = document.getElementById('root')
 if (!rootElement) {
   throw new Error('Root element not found')
 }
 
-createRoot(rootElement).render(
-
+ReactDOM.createRoot(rootElement).render(
+  <React.StrictMode>
     <App />
-
+  </React.StrictMode>,
 )

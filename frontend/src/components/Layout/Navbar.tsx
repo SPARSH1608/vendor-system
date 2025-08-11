@@ -5,6 +5,7 @@ import { LogOut, User, LayoutDashboard, ShoppingCart, Users, Activity, FileText,
 import type { RootState } from "../../store/store"
 import { logout } from "../../store/slices/authSlice"
 import { useState } from "react"
+import { useTranslation } from 'react-i18next';
 
 const Navbar = () => {
   const { user } = useSelector((state: RootState) => state.auth)
@@ -12,26 +13,32 @@ const Navbar = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const { t, i18n } = useTranslation();
 
   const handleLogout = () => {
     dispatch(logout())
     navigate("/")
   }
 
+  const changeLanguage = (lang: string) => {
+    i18n.changeLanguage(lang);
+    localStorage.setItem('language', lang); // Persist language preference
+  };
+
   const adminMenuItems = [
-    { icon: LayoutDashboard, label: "Dashboard", path: "/admin" },
-    { icon: ShoppingCart, label: "Products", path: "/admin/products" },
-    { icon: Users, label: "Users", path: "/admin/users" },
-    { icon: Activity, label: "Activities", path: "/admin/activities" },
-    { icon: FileText, label: "Invoices", path: "/admin/invoices" },
-    { icon: FileText, label: "Invoice List", path: "/admin/invoice-list" },
+    { icon: LayoutDashboard, label: t("dashboard"), path: "/admin" },
+    { icon: ShoppingCart, label: t("products"), path: "/admin/products" },
+    { icon: Users, label: t("users"), path: "/admin/users" },
+    { icon: Activity, label: t("activities"), path: "/admin/activities" },
+    { icon: FileText, label: t("invoices"), path: "/admin/invoices" },
+    { icon: FileText, label: t("invoiceList"), path: "/admin/invoice-list" },
   ]
 
   const vendorMenuItems = [
-    { icon: LayoutDashboard, label: "Dashboard", path: "/vendor" },
-    { icon: Package, label: "Products", path: "/vendor/products" },
-    { icon: Receipt, label: "Bills", path: "/vendor/bills" },
-    { icon: History, label: "History", path: "/vendor/history" },
+    { icon: LayoutDashboard, label: t("dashboard"), path: "/vendor" },
+    { icon: Package, label: t("products"), path: "/vendor/products" },
+    { icon: Receipt, label: t("bills"), path: "/vendor/bills" },
+    { icon: History, label: t("history"), path: "/vendor/history" },
   ]
 
   const menuItems = user?.role === "admin" ? adminMenuItems : vendorMenuItems
@@ -39,12 +46,24 @@ const Navbar = () => {
   return (
     <nav className="bg-white shadow-sm border-b border-gray-200 fixed top-0 left-0 right-0 z-50">
       <div className="px-2 sm:px-6 py-4 flex items-center justify-between">
-        {/* Logo and Title */}
+        {/* Images and Title */}
         <div className="flex items-center space-x-2 sm:space-x-4">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-sm">VM</span>
-          </div>
-          <span className="text-lg sm:text-xl font-semibold text-gray-900">Vendor Management</span>
+          <img
+            src="https://gian.org/wp-content/uploads/2024/08/gian.jpg"
+            alt="Logo 1"
+            className="w-8 h-8 rounded object-contain bg-white"
+          />
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnsSHBxVQJpV1qqrPjyFlUJ6bUhAZ0nq4yeg&s"
+            alt="Logo 2"
+            className="w-8 h-8 rounded object-cover"
+          />
+          <img
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEXCCyN4RO_CWkUg6qLXchagzkVPMPWDZ-Zg&s"
+            alt="Logo 3"
+            className="w-8 h-8 rounded object-cover"
+          />
+          <span className="text-lg sm:text-xl font-semibold text-gray-900">Sristi KhedutHaat</span>
         </div>
         {/* Hamburger for mobile */}
         <button
@@ -72,8 +91,8 @@ const Navbar = () => {
             )
           })}
         </div>
-        {/* User Info & Logout */}
-        <div className="hidden sm:flex items-center space-x-2 ml-4">
+        {/* User Info, Logout, and Language Switcher */}
+        <div className="hidden sm:flex items-center space-x-4 ml-4">
           <User className="w-5 h-5 text-gray-600" />
           <span className="text-xs sm:text-sm text-gray-700">{user?.email}</span>
           <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded capitalize">{user?.role}</span>
@@ -82,8 +101,23 @@ const Navbar = () => {
             className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 transition-colors ml-2"
           >
             <LogOut className="w-4 h-4" />
-            <span className="text-xs sm:text-sm">Logout</span>
+            <span className="text-xs sm:text-sm">{t("logout")}</span>
           </button>
+          {/* Language Switcher */}
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={() => changeLanguage('en')}
+              className={`px-2 py-1 rounded ${i18n.language === 'en' ? 'bg-blue-100 text-blue-600' : 'text-gray-600 hover:bg-gray-100'}`}
+            >
+              English
+            </button>
+            <button
+              onClick={() => changeLanguage('gu')}
+              className={`px-2 py-1 rounded ${i18n.language === 'gu' ? 'bg-blue-100 text-blue-600' : 'text-gray-600 hover:bg-gray-100'}`}
+            >
+              ગુજરાતી
+            </button>
+          </div>
         </div>
       </div>
       {/* Mobile Menu */}
@@ -115,7 +149,7 @@ const Navbar = () => {
                 className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 transition-colors ml-2"
               >
                 <LogOut className="w-4 h-4" />
-                <span className="text-xs">Logout</span>
+                <span className="text-xs">{t("logout")}</span>
               </button>
             </div>
           </div>

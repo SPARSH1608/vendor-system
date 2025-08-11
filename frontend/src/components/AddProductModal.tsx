@@ -3,8 +3,7 @@
 import type React from "react";
 import { useState } from "react";
 import { X } from "lucide-react";
-import { useDispatch } from "react-redux";
-import { createProduct } from "../store/slices/productSlice";
+import { useTranslation } from "react-i18next";
 
 interface AddProductModalProps {
   onClose: () => void;
@@ -12,7 +11,7 @@ interface AddProductModalProps {
 }
 
 const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onSubmit }) => {
-  const dispatch = useDispatch();
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -24,8 +23,15 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onSubmit }) 
   const [imageOption, setImageOption] = useState<"url" | "upload">("url");
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
 
-  const categories = ["vegetables", "fruits", "dairy", "masala", "dry fruits", "pulses"];
-  const units = ["kg", "litre", "piece", "gram"];
+  const categories = [
+    t("vegetables"),
+    t("fruits"),
+    t("dairy"),
+    t("masala"),
+    t("dryFruits"),
+    t("pulses"),
+  ];
+  const units = [t("kg"), t("litre"), t("piece"), t("gram")];
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -64,56 +70,54 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onSubmit }) 
       if (uploadedImage) {
         productData.append("image", uploadedImage);
       } else {
-        alert("Please upload an image file.");
+        alert(t("uploadImageError"));
         return;
       }
     } else if (imageOption === "url") {
       if (formData.image && typeof formData.image === "string") {
         productData.append("image", formData.image);
       } else {
-        alert("Please enter a valid image URL.");
+        alert(t("enterValidImageUrl"));
         return;
       }
     }
-console.log("Submitting product data:", productData);
+
     onSubmit(productData);
   };
 
   return (
-    <div
-      className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm"
-    >
+    <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm">
       <div className="bg-white rounded-2xl p-6 w-full max-w-md mx-4 border border-gray-300">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-gray-900">Add New Product</h2>
+          <h2 className="text-xl font-bold text-gray-900">{t("addNewProduct")}</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
             <X className="w-6 h-6" />
           </button>
         </div>
 
-        <p className="text-gray-600 text-sm mb-6">Create a new product for vendors to select from.</p>
+        <p className="text-gray-600 text-sm mb-6">{t("createNewProductMessage")}</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Product Name *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t("productName")} *</label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              placeholder="Enter product name"
+              placeholder={t("enterProductName")}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t("description")}</label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
-              placeholder="Enter product description"
+              placeholder={t("enterDescription")}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
             />
@@ -121,7 +125,7 @@ console.log("Submitting product data:", productData);
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Price (₹) *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t("price")} (₹) *</label>
               <input
                 type="number"
                 name="price"
@@ -135,7 +139,7 @@ console.log("Submitting product data:", productData);
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Unit *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t("unit")} *</label>
               <select
                 name="stock_unit"
                 value={formData.stock_unit}
@@ -152,7 +156,7 @@ console.log("Submitting product data:", productData);
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t("category")} *</label>
             <select
               name="category"
               value={formData.category}
@@ -160,7 +164,7 @@ console.log("Submitting product data:", productData);
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             >
-              <option value="">Select category</option>
+              <option value="">{t("selectCategory")}</option>
               {categories.map((category) => (
                 <option key={category} value={category}>
                   {category}
@@ -170,7 +174,7 @@ console.log("Submitting product data:", productData);
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Image</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t("image")}</label>
             <div className="flex items-center space-x-4">
               <label className="flex items-center space-x-2">
                 <input
@@ -180,7 +184,7 @@ console.log("Submitting product data:", productData);
                   checked={imageOption === "url"}
                   onChange={() => handleImageOptionChange("url")}
                 />
-                <span>From URL</span>
+                <span>{t("fromUrl")}</span>
               </label>
               <label className="flex items-center space-x-2">
                 <input
@@ -190,7 +194,7 @@ console.log("Submitting product data:", productData);
                   checked={imageOption === "upload"}
                   onChange={() => handleImageOptionChange("upload")}
                 />
-                <span>Upload</span>
+                <span>{t("upload")}</span>
               </label>
             </div>
 
@@ -200,7 +204,7 @@ console.log("Submitting product data:", productData);
                 name="image"
                 value={formData.image}
                 onChange={handleChange}
-                placeholder="Enter image URL"
+                placeholder={t("enterImageUrl")}
                 className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             )}
@@ -221,13 +225,13 @@ console.log("Submitting product data:", productData);
               onClick={onClose}
               className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Cancel
+              {t("cancel")}
             </button>
             <button
               type="submit"
               className="flex-1 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
             >
-              Add Product
+              {t("addProduct")}
             </button>
           </div>
         </form>

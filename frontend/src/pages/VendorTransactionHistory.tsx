@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { Calendar, MapPin, Package, TrendingUp, X } from "lucide-react"
 import { vendorsAPI } from "../services/api"
+import { useTranslation } from "react-i18next"
 
 interface ActivityItem {
   product_id: string
@@ -22,6 +23,7 @@ interface Activity {
 }
 
 const VendorTransactionHistory = () => {
+  const { t } = useTranslation();
   const [activities, setActivities] = useState<Activity[]>([])
   const [loading, setLoading] = useState(true)
   const [filters, setFilters] = useState({
@@ -108,28 +110,28 @@ const locations = [
   return (
     <div className="space-y-6 px-0 sm:px-4 md:px-8 lg:px-12 w-full max-w-none mx-0">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Transaction History</h1>
-        <p className="text-gray-600 mt-1 text-sm sm:text-base">View your complete transaction history</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{t("transactionHistoryTitle")}</h1>
+        <p className="text-gray-600 mt-1 text-sm sm:text-base">{t("transactionHistoryDesc")}</p>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
         <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
-          <p className="text-xs sm:text-sm font-medium text-gray-600">Total Transactions</p>
+          <p className="text-xs sm:text-sm font-medium text-gray-600">{t("totalTransactions")}</p>
           <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.totalTransactions}</p>
           <div className="w-8 h-8 sm:w-12 sm:h-12 bg-blue-100 rounded-lg flex items-center justify-center mt-2">
             <Package className="w-4 h-4 sm:w-6 sm:h-6 text-blue-600" />
           </div>
         </div>
         <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
-          <p className="text-xs sm:text-sm font-medium text-gray-600">Completed</p>
+          <p className="text-xs sm:text-sm font-medium text-gray-600">{t("completed")}</p>
           <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.completedTransactions}</p>
           <div className="w-8 h-8 sm:w-12 sm:h-12 bg-green-100 rounded-lg flex items-center justify-center mt-2">
             <Calendar className="w-4 h-4 sm:w-6 sm:h-6 text-green-600" />
           </div>
         </div>
         <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center">
-          <p className="text-xs sm:text-sm font-medium text-gray-600">Total Revenue</p>
+          <p className="text-xs sm:text-sm font-medium text-gray-600">{t("totalRevenue")}</p>
           <p className="text-xl sm:text-2xl font-bold text-gray-900">₹{stats.totalRevenue.toLocaleString()}</p>
           <div className="w-8 h-8 sm:w-12 sm:h-12 bg-purple-100 rounded-lg flex items-center justify-center mt-2">
             <TrendingUp className="w-4 h-4 sm:w-6 sm:h-6 text-purple-600" />
@@ -140,25 +142,25 @@ const locations = [
       {/* Filters */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 sm:p-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 gap-2">
-          <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
+          <h2 className="text-lg font-semibold text-gray-900">{t("filters")}</h2>
           <div className="flex gap-2">
             <button
               onClick={clearFilters}
               className="flex items-center text-sm text-gray-500 hover:text-red-600 border border-gray-200 px-3 py-1 rounded"
               disabled={
-                !filters.startDate && !filters.endDate && filters.location === "All Locations"
+                !filters.startDate && !filters.endDate && filters.location === t("allLocations")
               }
               type="button"
             >
               <X className="w-4 h-4 mr-1" />
-              Clear Filters
+              {t("clearFilters")}
             </button>
             <button
               onClick={() => setResetKey(prev => prev + 1)}
               className="flex items-center text-sm text-gray-500 hover:text-blue-600 border border-gray-200 px-3 py-1 rounded"
               type="button"
             >
-              Reset
+              {t("reset")}
             </button>
           </div>
         </div>
@@ -175,7 +177,7 @@ const locations = [
           key={resetKey}
         >
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t("startDate")}</label>
             <input
               type="date"
               name="startDate"
@@ -184,7 +186,7 @@ const locations = [
             />
           </div>
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t("endDate")}</label>
             <input
               type="date"
               name="endDate"
@@ -193,12 +195,13 @@ const locations = [
             />
           </div>
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Location</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t("location")}</label>
             <select
               name="location"
               defaultValue={filters.location}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
+              <option value={t("allLocations")}>{t("allLocations")}</option>
               {locations.map((location) => (
                 <option key={location} value={location}>
                   {location}
@@ -211,7 +214,7 @@ const locations = [
               type="submit"
               className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
             >
-              Apply
+              {t("apply")}
             </button>
           </div>
         </form>
@@ -220,8 +223,8 @@ const locations = [
       {/* Transactions */}
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 w-full">
         <div className="p-4 sm:p-6 border-b border-gray-100">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Transactions</h2>
-          <p className="text-gray-600 text-xs sm:text-sm mt-1">Your transaction history with detailed information</p>
+          <h2 className="text-lg sm:text-xl font-semibold text-gray-900">{t("transactions")}</h2>
+          <p className="text-gray-600 text-xs sm:text-sm mt-1">{t("transactionHistorySectionDesc")}</p>
         </div>
 
         {loading ? (
@@ -262,12 +265,12 @@ const locations = [
                         <div className="flex justify-between items-center">
                           <h4 className="font-medium text-gray-900 truncate">{item.productName}</h4>
                           <span className="text-xs bg-gray-200 text-gray-700 px-2 py-0.5 rounded">
-                            Qty: {item.quantity}
+                            {t("qty")}: {item.quantity}
                           </span>
                         </div>
                         <div className="flex justify-between items-center text-xs text-gray-600">
-                          <span>Unit Price: ₹{item.price}</span>
-                          <span>Total: <span className="font-semibold text-gray-900">₹{item.total}</span></span>
+                          <span>{t("unitPrice")}: ₹{item.price}</span>
+                          <span>{t("total")}: <span className="font-semibold text-gray-900">₹{item.total}</span></span>
                         </div>
                       </div>
                     ))}
@@ -283,7 +286,7 @@ const locations = [
 
         {filteredActivities.length === 0 && !loading && (
           <div className="text-center py-12">
-            <p className="text-gray-500">No transactions found matching your criteria.</p>
+            <p className="text-gray-500">{t("noTransactionsFound")}</p>
           </div>
         )}
       </div>

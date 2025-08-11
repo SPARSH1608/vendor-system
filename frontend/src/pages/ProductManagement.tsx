@@ -1,62 +1,83 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { useDispatch, useSelector } from "react-redux"
-import { Plus, Search, Filter } from "lucide-react"
-import { fetchProducts, createProduct, deleteProduct, updateProduct, toggleProductStatus, fetchVendorsByProduct } from "../store/slices/productSlice"
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Plus, Search, Filter } from "lucide-react";
+import {
+  fetchProducts,
+  createProduct,
+  deleteProduct,
+  updateProduct,
+  toggleProductStatus,
+  fetchVendorsByProduct,
+} from "../store/slices/productSlice";
 import { productsAPI } from "../services/api";
-import type { AppDispatch, RootState } from "../store/store"
-import ProductCard from "../components/ProductCard"
-import AddProductModal from "../components/AddProductModal"
-import EditProductModal from "../components/EditProductModal"
-import ConfirmationModal from "../components/ConfirmationModal"
-import VendorModal from "../components/VendorModal"
+import type { AppDispatch, RootState } from "../store/store";
+import ProductCard from "../components/ProductCard";
+import AddProductModal from "../components/AddProductModal";
+import EditProductModal from "../components/EditProductModal";
+import ConfirmationModal from "../components/ConfirmationModal";
+import VendorModal from "../components/VendorModal";
+import { useTranslation } from "react-i18next";
 
 const ProductManagement = () => {
-  const [showAddModal, setShowAddModal] = useState(false)
-  const [showEditModal, setShowEditModal] = useState(false)
-  const [showDeleteModal, setShowDeleteModal] = useState(false)
-  const [showVendorModal, setShowVendorModal] = useState(false)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [selectedCategory, setSelectedCategory] = useState("All Categories")
-  const [selectedProduct, setSelectedProduct] = useState(null)
-  const [selectedProductVendors, setSelectedProductVendors] = useState([])
-  const [selectedProductName, setSelectedProductName] = useState("")
-  const [deleteError, setDeleteError] = useState("")
+  const { t } = useTranslation();
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showVendorModal, setShowVendorModal] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All Categories");
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedProductVendors, setSelectedProductVendors] = useState([]);
+  const [selectedProductName, setSelectedProductName] = useState("");
+  const [deleteError, setDeleteError] = useState("");
 
-  const dispatch = useDispatch<AppDispatch>()
-  const { products, loading, vendors, vendorsLoading, vendorsError } = useSelector((state: RootState) => state.products)
+  const dispatch = useDispatch<AppDispatch>();
+  const { products, loading, vendors, vendorsLoading, vendorsError } = useSelector(
+    (state: RootState) => state.products
+  );
 
   useEffect(() => {
-    dispatch(fetchProducts())
-  }, [dispatch])
+    dispatch(fetchProducts());
+  }, [dispatch]);
 
-  const categories = ["All Categories", "vegetables", "fruits", "dairy", "masala", "dry fruits", "pulses"]
+  const categories = [
+    t("allCategories"),
+    t("vegetables"),
+    t("fruits"),
+    t("dairy"),
+    t("masala"),
+    t("dryFruits"),
+    t("pulses"),
+  ];
 
   const filteredProducts = products.filter((product) => {
-    const matchesSearch = product?.name?.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesCategory = selectedCategory === "All Categories" || product.category === selectedCategory
-    return matchesSearch && matchesCategory
-  })
+    // Use Gujarati name if available, else fallback to English name
+    const displayName = product?.name_gu || product?.name || "";
+    const matchesSearch = displayName.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory === t("allCategories") || product.category === selectedCategory;
+    return matchesSearch && matchesCategory;
+  });
 
-  const activeProducts = filteredProducts.filter((p) => p.isActive)
-  const inactiveProducts = filteredProducts.filter((p) => !p.isActive)
+  const activeProducts = filteredProducts.filter((p) => p.isActive);
+  const inactiveProducts = filteredProducts.filter((p) => !p.isActive);
 
   const handleEditProduct = (product) => {
-    setSelectedProduct(product)
-    setShowEditModal(true)
-  }
+    setSelectedProduct(product);
+    setShowEditModal(true);
+  };
 
   const handleDeleteProduct = async (productId) => {
     try {
-      setDeleteError("")
-      await dispatch(deleteProduct(productId))
-      dispatch(fetchProducts())
-      setShowDeleteModal(false)
+      setDeleteError("");
+      await dispatch(deleteProduct(productId));
+      dispatch(fetchProducts());
+      setShowDeleteModal(false);
     } catch (error) {
-      setDeleteError("Failed to delete product. Please try again.")
+      setDeleteError(t("failedToDeleteProduct"));
     }
-  }
+  };
 
   const handleToggleStatus = async (product) => {
     await dispatch(toggleProductStatus(product._id));
@@ -64,14 +85,13 @@ const ProductManagement = () => {
   };
 
   const handleViewVendors = async (product) => {
-    console.log("Product clicked:", product); // Debugging
-    setSelectedProductName(product.name);
+    // Use Gujarati name if available, else fallback to English name
+    setSelectedProductName(product.name_gu || product.name);
     try {
       await dispatch(fetchVendorsByProduct(product._id));
       setShowVendorModal(true);
     } catch (err) {
-      console.error("Error fetching vendors:", err); // Debugging
-      alert("Error fetching vendors.");
+      alert(t("errorFetchingVendors"));
     }
   };
 
@@ -80,39 +100,39 @@ const ProductManagement = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Product Management</h1>
-          <p className="text-gray-600 mt-1 text-sm sm:text-base">Manage your product inventory</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{t("productManagementTitle")}</h1>
+          <p className="text-gray-600 mt-1 text-sm sm:text-base">{t("productManagementDesc")}</p>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2 w-full sm:w-auto justify-center"
         >
           <Plus className="w-4 h-4" />
-          <span>Add Product</span>
+          <span>{t("addProduct")}</span>
         </button>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center">
-          <p className="text-xs font-medium text-gray-600">Total Products</p>
+          <p className="text-xs font-medium text-gray-600">{t("totalProducts")}</p>
           <p className="text-lg font-bold text-gray-900">{products.length}</p>
           <span className="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded mt-1">
-            {products.length} Items
+            {products.length} {t("items")}
           </span>
         </div>
         <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center">
-          <p className="text-xs font-medium text-gray-600">Active Products</p>
+          <p className="text-xs font-medium text-gray-600">{t("activeProducts")}</p>
           <p className="text-lg font-bold text-gray-900">{activeProducts.length}</p>
           <span className="text-xs bg-green-100 text-green-600 px-2 py-0.5 rounded mt-1">
-            Active
+            {t("active")}
           </span>
         </div>
         <div className="bg-white p-3 rounded-lg shadow-sm border border-gray-100 flex flex-col items-center">
-          <p className="text-xs font-medium text-gray-600">Inactive Products</p>
+          <p className="text-xs font-medium text-gray-600">{t("inactiveProducts")}</p>
           <p className="text-lg font-bold text-gray-900">{inactiveProducts.length}</p>
           <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded mt-1">
-            Inactive
+            {t("inactive")}
           </span>
         </div>
       </div>
@@ -123,7 +143,7 @@ const ProductManagement = () => {
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
           <input
             type="text"
-            placeholder="Search products..."
+            placeholder={t("searchProducts")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
@@ -155,7 +175,11 @@ const ProductManagement = () => {
           {filteredProducts.map((product) => (
             <ProductCard
               key={product._id}
-              product={product}
+              product={{
+                ...product,
+                // Pass display name for rendering in ProductCard
+                displayName: product.name_gu || product.name,
+              }}
               onEdit={handleEditProduct}
               onDelete={() => {
                 setSelectedProduct(product);
@@ -171,7 +195,7 @@ const ProductManagement = () => {
 
       {filteredProducts.length === 0 && !loading && (
         <div className="text-center py-12">
-          <p className="text-gray-500">No products found matching your criteria.</p>
+          <p className="text-gray-500">{t("noProductsFound")}</p>
         </div>
       )}
 
@@ -180,9 +204,9 @@ const ProductManagement = () => {
         <AddProductModal
           onClose={() => setShowAddModal(false)}
           onSubmit={async (productData) => {
-            await dispatch(createProduct(productData))
-            await dispatch(fetchProducts())
-            setShowAddModal(false)
+            await dispatch(createProduct(productData));
+            await dispatch(fetchProducts());
+            setShowAddModal(false);
           }}
         />
       )}
@@ -204,7 +228,8 @@ const ProductManagement = () => {
           isOpen={showDeleteModal}
           onClose={() => setShowDeleteModal(false)}
           onConfirm={() => handleDeleteProduct(selectedProduct._id)}
-          message={`Are you sure you want to delete "${selectedProduct.name}"?`}
+          // Use Gujarati name if available, else fallback to English name
+          message={t("deleteProductConfirm", { name: selectedProduct.name_gu || selectedProduct.name })}
           isProcessing={loading}
           error={deleteError}
         />
@@ -214,14 +239,14 @@ const ProductManagement = () => {
         <VendorModal
           isOpen={showVendorModal}
           onClose={() => setShowVendorModal(false)}
-          vendors={vendors} // Pass vendors from Redux state
+          vendors={vendors}
           productName={selectedProductName}
           vendorsLoading={vendorsLoading}
           vendorsError={vendorsError}
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ProductManagement
+export default ProductManagement;

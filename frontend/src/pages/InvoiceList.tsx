@@ -4,9 +4,11 @@ import { useEffect, useState } from "react"
 import { invoicesAPI } from "../services/api"
 import { Eye } from "lucide-react"
 import jsPDF from "jspdf"
-import autoTable from "jspdf-autotable"; 
+import autoTable from "jspdf-autotable";
+import { useTranslation } from "react-i18next";
 
 const InvoiceList = () => {
+  const { t } = useTranslation();
   const [invoices, setInvoices] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedInvoice, setSelectedInvoice] = useState<any>(null)
@@ -53,7 +55,7 @@ const InvoiceList = () => {
       )
       setSelectedInvoice((prev: any) => ({ ...prev, status: updated.data.status }))
     } catch (err: any) {
-      alert(err.message || "Failed to update status")
+      alert(err.message || t("failedToUpdateStatus"))
     } finally {
       setStatusUpdating(false)
     }
@@ -68,29 +70,29 @@ const InvoiceList = () => {
       // Add Invoice Header
       doc.setFontSize(22);
       doc.setFont("helvetica", "bold");
-      doc.text("INVOICE", 105, 20, { align: "center" });
+      doc.text(t("invoiceTitle"), 105, 20, { align: "center" });
 
       doc.setFontSize(12);
       doc.setFont("helvetica", "normal");
-      doc.text(`Invoice Number: ${selectedInvoice.invoiceNumber || selectedInvoice._id}`, 14, 40);
-      doc.text(`Vendor: ${selectedInvoice.vendor_id?.name || "N/A"}`, 14, 50);
+      doc.text(`${t("invoiceNumber")}: ${selectedInvoice.invoiceNumber || selectedInvoice._id}`, 14, 40);
+      doc.text(`${t("vendor")}: ${selectedInvoice.vendor_id?.name || t("notAvailable")}`, 14, 50);
       doc.text(
-        `Date Range: ${selectedInvoice.dateRange?.start?.slice(0, 10)} to ${selectedInvoice.dateRange?.end?.slice(0, 10)}`,
+        `${t("dateRange")}: ${selectedInvoice.dateRange?.start?.slice(0, 10)} ${t("to")} ${selectedInvoice.dateRange?.end?.slice(0, 10)}`,
         14,
         60
       );
-      doc.text(`Status: ${selectedInvoice.status || "Draft"}`, 14, 70);
+      doc.text(`${t("status")}: ${selectedInvoice.status || t("draft")}`, 14, 70);
 
       // Add Table for Items
       const tableData = selectedInvoice.items.map((item: any) => [
         item.productName,
-        item.quantity.toFixed(2), // Ensure numbers are formatted correctly
-        `INR ${item.price.toFixed(2)}`, // Replace ₹ with INR
-        `INR ${item.total.toFixed(2)}`, // Replace ₹ with INR
+        item.quantity.toFixed(2),
+        `${t("currency")} ${item.price.toFixed(2)}`,
+        `${t("currency")} ${item.total.toFixed(2)}`,
       ]);
 
       autoTable(doc, {
-        head: [["Product", "Quantity", "Price", "Total"]],
+        head: [[t("product"), t("quantity"), t("price"), t("total")]],
         body: tableData,
         startY: 80,
         theme: "grid",
@@ -116,21 +118,21 @@ const InvoiceList = () => {
       doc.setFontSize(12);
       doc.setFont("helvetica", "bold");
       doc.setFontSize(14);
-      doc.text(`Total: INR ${selectedInvoice.totalAmount.toFixed(2)}`, 14, finalY + 20); // Replace ₹ with INR
+      doc.text(`${t("total")}: ${t("currency")} ${selectedInvoice.totalAmount.toFixed(2)}`, 14, finalY + 20);
 
       // Save the PDF
       doc.save(`invoice-${selectedInvoice.invoiceNumber || selectedInvoice._id}.pdf`);
     } catch (err) {
       console.error("Error generating PDF:", err);
-      alert("Failed to generate PDF. Please try again.");
+      alert(t("pdfGenerationFailed"));
     }
   }
 
   return (
     <div className="space-y-6 px-2 sm:px-4 md:px-8 max-w-5xl mx-auto">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">All Invoices</h1>
-        <p className="text-gray-600 mt-1 text-sm sm:text-base">View and manage all generated invoices</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{t("invoiceListTitle")}</h1>
+        <p className="text-gray-600 mt-1 text-sm sm:text-base">{t("invoiceListDesc")}</p>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-2 sm:p-6">
@@ -141,17 +143,17 @@ const InvoiceList = () => {
         ) : error ? (
           <div className="text-red-600 text-center py-8">{error}</div>
         ) : invoices.length === 0 ? (
-          <div className="text-gray-500 text-center py-8">No invoices found.</div>
+          <div className="text-gray-500 text-center py-8">{t("noInvoicesFound")}</div>
         ) : (
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y divide-gray-200 text-xs sm:text-sm">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-2 sm:px-4 py-3 text-left font-medium text-gray-500 uppercase">Invoice #</th>
-                  <th className="px-2 sm:px-4 py-3 text-left font-medium text-gray-500 uppercase">Vendor</th>
-                  <th className="px-2 sm:px-4 py-3 text-left font-medium text-gray-500 uppercase">Date Range</th>
-                  <th className="px-2 sm:px-4 py-3 text-left font-medium text-gray-500 uppercase">Total</th>
-                  <th className="px-2 sm:px-4 py-3 text-left font-medium text-gray-500 uppercase">Status</th>
+                  <th className="px-2 sm:px-4 py-3 text-left font-medium text-gray-500 uppercase">{t("invoiceNumberShort")}</th>
+                  <th className="px-2 sm:px-4 py-3 text-left font-medium text-gray-500 uppercase">{t("vendor")}</th>
+                  <th className="px-2 sm:px-4 py-3 text-left font-medium text-gray-500 uppercase">{t("dateRange")}</th>
+                  <th className="px-2 sm:px-4 py-3 text-left font-medium text-gray-500 uppercase">{t("total")}</th>
+                  <th className="px-2 sm:px-4 py-3 text-left font-medium text-gray-500 uppercase">{t("status")}</th>
                   <th className="px-2 sm:px-4 py-3"></th>
                 </tr>
               </thead>
@@ -163,9 +165,9 @@ const InvoiceList = () => {
                       {invoice.vendor_id?.name || "-"}
                     </td>
                     <td className="px-2 sm:px-4 py-3 text-gray-900">
-                      {invoice.dateRange?.start?.slice(0, 10)} to {invoice.dateRange?.end?.slice(0, 10)}
+                      {invoice.dateRange?.start?.slice(0, 10)} {t("to")} {invoice.dateRange?.end?.slice(0, 10)}
                     </td>
-                    <td className="px-2 sm:px-4 py-3 text-gray-900 font-semibold">₹{invoice.totalAmount}</td>
+                    <td className="px-2 sm:px-4 py-3 text-gray-900 font-semibold">{t("currency")}{invoice.totalAmount}</td>
                     <td className="px-2 sm:px-4 py-3">
                       <span
                         className={`inline-block px-2 py-1 rounded-full text-xs font-semibold ${
@@ -178,14 +180,14 @@ const InvoiceList = () => {
                             : "bg-gray-100 text-gray-700"
                         }`}
                       >
-                        {invoice.status || "generated"}
+                        {t(invoice.status || "generated")}
                       </span>
                     </td>
                     <td className="px-2 sm:px-4 py-3">
                       <button
                         className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-100 rounded-lg transition-colors"
                         onClick={() => handlePreview(invoice)}
-                        title="Preview"
+                        title={t("preview")}
                       >
                         <Eye className="w-5 h-5" />
                       </button>
@@ -205,15 +207,15 @@ const InvoiceList = () => {
             {/* Modal Header */}
             <div className="flex items-center justify-between px-4 sm:px-8 py-4 sm:py-6 border-b border-gray-100 rounded-t-2xl bg-gray-50">
               <div>
-                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">Invoice Preview</h2>
+                <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">{t("invoicePreview")}</h2>
                 <div className="text-gray-500 text-xs sm:text-sm">
-                  Invoice #: <span className="font-mono">{selectedInvoice.invoiceNumber}</span>
+                  {t("invoiceNumberShort")}: <span className="font-mono">{selectedInvoice.invoiceNumber}</span>
                 </div>
               </div>
               <button
                 className="text-gray-400 hover:text-red-500 transition-colors text-2xl font-bold"
                 onClick={closeModal}
-                aria-label="Close"
+                aria-label={t("close")}
               >
                 ×
               </button>
@@ -224,39 +226,39 @@ const InvoiceList = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                 <div>
                   <div className="mb-2">
-                    <span className="font-medium text-gray-700">Vendor:</span>{" "}
+                    <span className="font-medium text-gray-700">{t("vendor")}:</span>{" "}
                     <span className="text-gray-900">{selectedInvoice.vendor_id?.email || "-"}</span>
                   </div>
                   <div className="mb-2">
-                    <span className="font-medium text-gray-700">Date Range:</span>{" "}
+                    <span className="font-medium text-gray-700">{t("dateRange")}:</span>{" "}
                     <span className="text-gray-900">
-                      {selectedInvoice.dateRange?.start?.slice(0, 10)} to {selectedInvoice.dateRange?.end?.slice(0, 10)}
+                      {selectedInvoice.dateRange?.start?.slice(0, 10)} {t("to")} {selectedInvoice.dateRange?.end?.slice(0, 10)}
                     </span>
                   </div>
                   <div className="mb-2">
-                    <span className="font-medium text-gray-700">Status:</span>{" "}
-                    <span className="text-gray-900">{selectedInvoice.status || "generated"}</span>
+                    <span className="font-medium text-gray-700">{t("status")}:</span>{" "}
+                    <span className="text-gray-900">{t(selectedInvoice.status || "generated")}</span>
                   </div>
                 </div>
                 <div className="bg-gray-50 rounded-lg p-4 flex flex-col justify-center">
                   <div className="flex justify-between mb-1">
-                    <span className="text-gray-600">Subtotal:</span>
-                    <span className="font-medium text-gray-900">₹{selectedInvoice.subtotal}</span>
+                    <span className="text-gray-600">{t("subtotal")}:</span>
+                    <span className="font-medium text-gray-900">{t("currency")}{selectedInvoice.subtotal}</span>
                   </div>
                   <div className="flex justify-between mb-1">
-                    <span className="text-gray-600">Tax ({selectedInvoice.taxRate || 10}%):</span>
-                    <span className="font-medium text-gray-900">₹{selectedInvoice.tax}</span>
+                    <span className="text-gray-600">{t("tax")}: ({selectedInvoice.taxRate || 10}%)</span>
+                    <span className="font-medium text-gray-900">{t("currency")}{selectedInvoice.tax}</span>
                   </div>
                   <div className="flex justify-between text-base font-bold border-t pt-2 mt-2">
-                    <span>Total:</span>
-                    <span>₹{selectedInvoice.totalAmount}</span>
+                    <span>{t("total")}:</span>
+                    <span>{t("currency")}{selectedInvoice.totalAmount}</span>
                   </div>
                 </div>
               </div>
 
               {/* Status Update */}
               <div className="mb-4">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Change Status</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">{t("changeStatus")}</label>
                 <div className="flex items-center gap-2">
                   <select
                     value={newStatus}
@@ -264,32 +266,32 @@ const InvoiceList = () => {
                     className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
                     disabled={statusUpdating}
                   >
-                    <option value="draft">Draft</option>
-                    <option value="sent">Sent</option>
-                    <option value="paid">Paid</option>
-                    <option value="overdue">Overdue</option>
+                    <option value="draft">{t("draft")}</option>
+                    <option value="sent">{t("sent")}</option>
+                    <option value="paid">{t("paid")}</option>
+                    <option value="overdue">{t("overdue")}</option>
                   </select>
                   <button
                     onClick={handleStatusUpdate}
                     disabled={statusUpdating || newStatus === (selectedInvoice.status || "draft")}
                     className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm"
                   >
-                    {statusUpdating ? "Updating..." : "Update"}
+                    {statusUpdating ? t("updating") : t("update")}
                   </button>
                 </div>
               </div>
 
               {/* Items Table */}
               <div>
-                <h3 className="font-semibold mb-2 text-gray-900">Items</h3>
+                <h3 className="font-semibold mb-2 text-gray-900">{t("items")}</h3>
                 <div className="overflow-x-auto">
                   <table className="w-full text-xs sm:text-sm mb-4 border border-gray-200 rounded-lg">
                     <thead className="bg-gray-100">
                       <tr>
-                        <th className="text-left py-2 px-2 sm:px-3">Product</th>
-                        <th className="text-left py-2 px-2 sm:px-3">Qty</th>
-                        <th className="text-left py-2 px-2 sm:px-3">Price</th>
-                        <th className="text-left py-2 px-2 sm:px-3">Total</th>
+                        <th className="text-left py-2 px-2 sm:px-3">{t("product")}</th>
+                        <th className="text-left py-2 px-2 sm:px-3">{t("qty")}</th>
+                        <th className="text-left py-2 px-2 sm:px-3">{t("price")}</th>
+                        <th className="text-left py-2 px-2 sm:px-3">{t("total")}</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -297,8 +299,8 @@ const InvoiceList = () => {
                         <tr key={idx} className="border-t border-gray-100">
                           <td className="py-2 px-2 sm:px-3">{item.productName}</td>
                           <td className="py-2 px-2 sm:px-3">{item.quantity}</td>
-                          <td className="py-2 px-2 sm:px-3">₹{item.price}</td>
-                          <td className="py-2 px-2 sm:px-3">₹{item.total}</td>
+                          <td className="py-2 px-2 sm:px-3">{t("currency")}{item.price}</td>
+                          <td className="py-2 px-2 sm:px-3">{t("currency")}{item.total}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -310,7 +312,7 @@ const InvoiceList = () => {
               <div className="flex flex-col sm:flex-row justify-end items-center gap-6 mt-6">
                 {selectedInvoice.qrCode && (
                   <div className="flex flex-col items-center">
-                    <span className="mb-1 text-xs text-gray-500">QR Code</span>
+                    <span className="mb-1 text-xs text-gray-500">{t("qrCode")}</span>
                     <img src={selectedInvoice.qrCode} alt="QR Code" className="w-20 h-20 border rounded" />
                   </div>
                 )}
@@ -318,7 +320,7 @@ const InvoiceList = () => {
                   onClick={handleDownloadPDF}
                   className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                 >
-                  Download PDF
+                  {t("downloadPDF")}
                 </button>
               </div>
             </div>

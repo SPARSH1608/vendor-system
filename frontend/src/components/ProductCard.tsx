@@ -5,16 +5,19 @@ import { Edit, Trash, ToggleLeft, ToggleRight, Loader } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { updateProduct, fetchProducts } from "../store/slices/productSlice";
 import type { AppDispatch } from "../store/store";
+import { useTranslation } from "react-i18next";
 
 interface Product {
   _id: string;
   name: string;
+  name_gu?: string;
   description?: string;
   price: number;
   category: string;
   stock_unit: string;
   image?: string;
   isActive: boolean;
+  displayName?: string; // Added for fallback
 }
 
 interface ProductCardProps {
@@ -26,6 +29,7 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit, onDelete }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
 
   const toggleProductStatus = async () => {
     setIsLoading(true);
@@ -39,6 +43,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit, onDelete }) 
     setIsLoading(false);
   };
 
+  // Use displayName if passed, else fallback to Gujarati name, else English name
+  const displayName = product.displayName || product.name_gu || product.name;
+
   return (
     <div className="bg-white p-2 rounded-md shadow-sm border border-gray-200 hover:shadow-md transition-shadow text-xs">
       {/* Product Image */}
@@ -46,7 +53,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit, onDelete }) 
         {product.image ? (
           <img
             src={product.image}
-            alt={product.name}
+            alt={displayName}
             className="w-full h-full object-cover"
           />
         ) : (
@@ -59,11 +66,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit, onDelete }) 
       {/* Product Details */}
       <div>
         <h3 className="text-xs font-semibold text-gray-900 truncate">
-          {product.name}
+          {displayName}
         </h3>
         <p className="text-xs text-gray-600 truncate">{product.description}</p>
         <p className="text-xs font-medium text-gray-800 mt-1">
-          ₹{product.price} per {product.stock_unit}
+          ₹{product.price} {t("per")} {product.stock_unit}
         </p>
       </div>
 
@@ -81,7 +88,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onEdit, onDelete }) 
               product.isActive ? "text-green-600" : "text-red-600"
             }`}
           >
-            {product.isActive ? "Active" : "Inactive"}
+            {product.isActive ? t("active") : t("inactive")}
           </span>
         </div>
 

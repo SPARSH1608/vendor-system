@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { Calendar, MapPin, Activity as ActivityIcon } from "lucide-react"
 import { vendorsAPI } from "../services/api"
+import { useTranslation } from "react-i18next"
 
 interface ActivityItem {
   product_id: string
@@ -23,8 +24,9 @@ interface Activity {
 }
 
 const VendorActivities = () => {
-  const [allActivities, setAllActivities] = useState<Activity[]>([]) // Store all activities
-  const [activities, setActivities] = useState<Activity[]>([]) // Filtered activities
+  const { t } = useTranslation();
+  const [allActivities, setAllActivities] = useState<Activity[]>([])
+  const [activities, setActivities] = useState<Activity[]>([])
   const [loading, setLoading] = useState(true)
   const [selectedVendor, setSelectedVendor] = useState("")
   const [selectedProduct, setSelectedProduct] = useState("")
@@ -65,8 +67,6 @@ const VendorActivities = () => {
   // Generate unique products for the dropdown
   useEffect(() => {
     if (allActivities.length > 0) {
-      console.log("Sample activity for debugging:", allActivities[0]) // Debug log
-      
       const allProducts = allActivities.flatMap((activity) => 
         activity.items.map((item) => {
           // Handle case where product_id is an object
@@ -81,27 +81,21 @@ const VendorActivities = () => {
         })
       )
       
-      console.log("All products before filtering:", allProducts) // Debug log
-      
       // Remove duplicates by product_id
       const uniqueProducts = allProducts.filter((product, index, self) => 
         index === self.findIndex(p => p.id === product.id)
       )
       
-      console.log("Unique products:", uniqueProducts) // Debug log
       setProducts(uniqueProducts)
     }
   }, [allActivities])
 
   // Apply filters on the frontend
   useEffect(() => {
-    console.log("Filtering with:", { selectedVendor, selectedProduct, allActivitiesCount: allActivities.length })
-    
     let filtered = allActivities
 
     if (selectedVendor) {
       filtered = filtered.filter((activity) => activity.vendor_id._id === selectedVendor)
-      console.log("After vendor filter:", filtered.length)
     }
 
     if (selectedProduct) {
@@ -112,11 +106,9 @@ const VendorActivities = () => {
             ? item.product_id._id 
             : item.product_id
         
-          console.log("Comparing:", productId, "with", selectedProduct)
           return productId === selectedProduct
         })
       )
-      console.log("After product filter:", filtered.length)
     }
 
     setActivities(filtered)
@@ -134,32 +126,47 @@ const VendorActivities = () => {
     }
     return new Intl.DateTimeFormat("en-US", options).format(new Date(dateString))
   }
-  console.log("Activities:", activities)
-  console.log("Vendors:", vendors)
-  console.log("Products:", products)  
-  console.log("Selected Vendor:", selectedVendor)
-  console.log("Selected Product:", selectedProduct)
-  console.log('filtered Activities:', activities)
+
+  const getLocationKey = (location: string) => {
+    switch (location) {
+      case "Dr. Babasaheb Ambedkar Open University Campus":
+        return "location1";
+      case "Shri Bhagwat Vidyapeeth Temple":
+        return "location2";
+      case "Atma vikasa parisara":
+        return "location3";
+      case "Navjeevan Trust Campus":
+        return "location4";
+      case "Gayatri Temple Trust Campus":
+        return "location5";
+      case "Sristi Campus":
+        return "location6";
+      case "Vallabh Vidyanagar":
+        return "location7";
+      default:
+        return location; // fallback to raw value if not found
+    }
+  };
 
   return (
     <div className="space-y-6 px-4 sm:px-6 lg:px-8 w-full">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Vendor Activities</h1>
-        <p className="text-gray-600 mt-1 text-sm sm:text-base">Track vendor daily activities and transactions</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{t("vendorActivitiesTitle")}</h1>
+        <p className="text-gray-600 mt-1 text-sm sm:text-base">{t("vendorActivitiesDesc")}</p>
       </div>
 
       {/* Filters */}
       <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-gray-100">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Filters</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">{t("filters")}</h2>
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Vendor</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t("vendor")}</label>
             <select
               value={selectedVendor}
               onChange={(e) => setSelectedVendor(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="">All Vendors</option>
+              <option value="">{t("allVendors")}</option>
               {vendors.map((vendor) => (
                 <option key={vendor.id} value={vendor.id}>
                   {vendor.name}
@@ -169,16 +176,13 @@ const VendorActivities = () => {
           </div>
 
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">Product</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t("product")}</label>
             <select
               value={selectedProduct}
-              onChange={(e) => {
-                console.log("Product selected:", e.target.value)
-                setSelectedProduct(e.target.value)
-              }}
+              onChange={(e) => setSelectedProduct(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
-              <option value="">All Products</option>
+              <option value="">{t("allProducts")}</option>
               {products.map((product) => (
                 <option key={product.id} value={product.id}>
                   {product.name}
@@ -194,9 +198,9 @@ const VendorActivities = () => {
         <div className="p-4 sm:p-6 border-b border-gray-100">
           <div className="flex items-center space-x-2">
             <ActivityIcon className="w-5 h-5 text-gray-600" />
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Vendor Activities</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">{t("vendorActivitiesSectionTitle")}</h2>
           </div>
-          <p className="text-gray-600 text-xs sm:text-sm mt-1">Daily activities and transactions by vendors</p>
+          <p className="text-gray-600 text-xs sm:text-sm mt-1">{t("vendorActivitiesSectionDesc")}</p>
         </div>
 
         {loading ? (
@@ -224,22 +228,23 @@ const VendorActivities = () => {
                       </div>
                       <div className="flex items-center space-x-1">
                         <MapPin className="w-4 h-4" />
-                        <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded text-xs">{activity.location}</span>
+                        <span className="bg-blue-100 text-blue-600 px-2 py-1 rounded text-xs">
+                          {t(getLocationKey(activity.location))}
+                        </span>
                       </div>
                     </div>
                   </div>
                   <div className="text-right mt-2 sm:mt-0">
-                    <span className="text-xl sm:text-2xl font-bold text-gray-900">₹{activity.totalAmount}</span>
+                    <span className="text-xl sm:text-2xl font-bold text-gray-900">{t("currency")}{activity.totalAmount}</span>
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {(activity.items || []).map((item, index) => {
-                    // Handle case where product_id is an object
-                    const productId = typeof item.product_id === 'object' 
-                      ? item.product_id._id 
+                    const productId = typeof item.product_id === 'object'
+                      ? item.product_id._id
                       : item.product_id
-                    
+
                     return (
                       <div
                         key={`${productId}-${index}`}
@@ -252,12 +257,10 @@ const VendorActivities = () => {
                         <div>
                           <h4 className="font-medium text-gray-900">{item.productName}</h4>
                           <p className="text-xs sm:text-sm text-gray-600">
-                            {item.quantity} × ₹{item.price}
+                            {item.quantity} × {t("currency")}{item.price}
                           </p>
-                          {/* Debug info */}
-                          <p className="text-xs text-gray-400">ID: {productId}</p>
                         </div>
-                        <span className="font-semibold text-gray-900 mt-2 sm:mt-0">₹{item.total}</span>
+                        <span className="font-semibold text-gray-900 mt-2 sm:mt-0">{t("currency")}{item.total}</span>
                       </div>
                     )
                   })}
@@ -266,7 +269,7 @@ const VendorActivities = () => {
             ))}
             {activities.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-gray-500">No activities found.</p>
+                <p className="text-gray-500">{t("noActivitiesFound")}</p>
               </div>
             )}
           </div>

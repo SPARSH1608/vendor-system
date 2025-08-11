@@ -57,11 +57,7 @@ function AppRoutes() {
     <Routes>
       <Route
         path="/"
-        element={
-          <ProtectedRoute allowedRoles={[]}>
-            <LandingPage />
-          </ProtectedRoute>
-        }
+        element={<LoginPage/>  }
       />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />

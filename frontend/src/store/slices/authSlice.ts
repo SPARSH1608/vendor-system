@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit"
+import { authAPI } from "../../services/api" // <-- import authAPI
 
 interface User {
   _id: string
@@ -29,13 +30,7 @@ export const loginUser = createAsyncThunk(
   "auth/login",
   async ({ email, password }: { email: string; password: string }, { rejectWithValue }) => {
     try {
-      const response = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      })
-      const data = await response.json()
-      if (!response.ok) throw new Error(data.message)
+      const data = await authAPI.login({ email, password }) // <-- use api.js method
       return data
     } catch (error: any) {
       return rejectWithValue(error.message || "Login failed")

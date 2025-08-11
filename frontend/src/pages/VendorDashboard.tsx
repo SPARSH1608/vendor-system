@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Package, TrendingUp } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 interface DashboardStats {
   myProducts: number
@@ -23,6 +24,7 @@ interface Product {
 }
 
 const VendorDashboard = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate()
   const [stats, setStats] = useState<DashboardStats>({
     myProducts: 0,
@@ -84,9 +86,9 @@ const VendorDashboard = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 w-full">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Vendor Dashboard</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{t("vendorDashboardTitle")}</h1>
           <p className="text-gray-600 mt-1 text-sm sm:text-base">
-            Welcome back! Here are your selected products and stats.
+            {t("vendorDashboardDesc")}
           </p>
         </div>
         <button
@@ -94,26 +96,26 @@ const VendorDashboard = () => {
           className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-2 w-full md:w-auto justify-center"
         >
           <Package className="w-5 h-5" />
-          <span>Manage Products</span>
+          <span>{t("manageProducts")}</span>
         </button>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 w-full">
         <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center w-full">
-          <p className="text-xs sm:text-sm font-medium text-gray-600">My Products</p>
+          <p className="text-xs sm:text-sm font-medium text-gray-600">{t("myProducts")}</p>
           <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.myProducts}</p>
         </div>
         <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center w-full">
-          <p className="text-xs sm:text-sm font-medium text-gray-600">Total Bills</p>
+          <p className="text-xs sm:text-sm font-medium text-gray-600">{t("totalBills")}</p>
           <p className="text-xl sm:text-2xl font-bold text-gray-900">{stats.totalBills}</p>
         </div>
         <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center w-full">
-          <p className="text-xs sm:text-sm font-medium text-gray-600">Paid Bills</p>
+          <p className="text-xs sm:text-sm font-medium text-gray-600">{t("paidBills")}</p>
           <p className="text-xl sm:text-2xl font-bold text-green-600">{stats.paidBills}</p>
         </div>
         <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm border border-gray-100 flex flex-col items-center justify-center text-center w-full">
-          <p className="text-xs sm:text-sm font-medium text-gray-600">Revenue</p>
+          <p className="text-xs sm:text-sm font-medium text-gray-600">{t("revenue")}</p>
           <p className="text-xl sm:text-2xl font-bold text-blue-600">₹{stats.totalRevenue.toLocaleString()}</p>
         </div>
       </div>
@@ -123,25 +125,25 @@ const VendorDashboard = () => {
         <div className="p-4 sm:p-6 border-b border-gray-100 flex items-center justify-between">
           <div className="flex items-center space-x-2">
             <Package className="w-5 h-5 text-gray-600" />
-            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Selected Products</h2>
+            <h2 className="text-lg sm:text-xl font-semibold text-gray-900">{t("selectedProducts")}</h2>
           </div>
           <button
             onClick={() => navigate("/vendor/products")}
             className="text-blue-600 hover:text-blue-700 text-xs sm:text-sm font-medium"
           >
-            Manage Products
+            {t("manageProducts")}
           </button>
         </div>
         <div className="p-4 sm:p-6 flex-1">
           {myProducts.length === 0 ? (
             <div className="text-center py-8">
               <Package className="w-10 h-10 sm:w-12 sm:h-12 text-gray-300 mx-auto mb-3" />
-              <p className="text-gray-500 mb-4">No products selected yet</p>
+              <p className="text-gray-500 mb-4">{t("noProductsSelected")}</p>
               <button
                 onClick={() => navigate("/vendor/products")}
                 className="text-blue-600 hover:text-blue-700 font-medium"
               >
-                Select Products →
+                {t("selectProducts")}
               </button>
             </div>
           ) : (
@@ -161,9 +163,8 @@ const VendorDashboard = () => {
                   <div className="flex-1 w-full text-center">
                     <h4 className="font-medium text-gray-900 truncate">{product.product_id.name}</h4>
                     <p className="text-xs sm:text-sm text-gray-600 truncate">
-                      ₹{product.product_id.price} per {product.product_id.stock_unit}
+                      ₹{product.product_id.price} {t("perUnit", { unit: product.product_id.stock_unit })}
                     </p>
-                 
                   </div>
                 </div>
               ))}

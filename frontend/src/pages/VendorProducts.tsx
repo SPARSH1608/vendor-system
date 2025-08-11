@@ -9,8 +9,10 @@ import {
   deselectVendorProduct,
 } from "../store/slices/vendorProductSlice"
 import type { RootState, AppDispatch } from "../store/store"
+import { useTranslation } from "react-i18next"
 
 const VendorProducts = () => {
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>()
   const { products, loading, selectedCount } = useSelector(
     (state: RootState) => state.vendorProducts,
@@ -31,13 +33,13 @@ const VendorProducts = () => {
   }
 
   const categories = [
-    "All Categories",
-    "vegetables",
-    "fruits",
-    "dairy",
-    "masala",
-    "dry fruits",
-    "pulses",
+    t("allCategories"),
+    t("vegetables"),
+    t("fruits"),
+    t("dairy"),
+    t("masala"),
+    t("dryFruits"),
+    t("pulses"),
   ]
 
   const filteredProducts = products.filter((product) => {
@@ -66,14 +68,14 @@ const VendorProducts = () => {
   return (
     <div className="space-y-6 px-2 sm:px-4 md:px-8 max-w-7xl mx-auto">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">All Products</h1>
-        <p className="text-gray-600 mt-1 text-sm sm:text-base">Select products you want to sell to your customers</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">{t("allProductsTitle")}</h1>
+        <p className="text-gray-600 mt-1 text-sm sm:text-base">{t("allProductsDesc")}</p>
       </div>
 
       {/* Selection Summary */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between bg-blue-50 border border-blue-200 rounded-lg p-4 gap-2">
-        <span className="text-sm font-medium text-blue-900">Selected Products: {selectedCount}</span>
-        <span className="text-sm text-blue-700">Total: {products.length} products available</span>
+        <span className="text-sm font-medium text-blue-900">{t("selectedProductsSummary", { count: selectedCount })}</span>
+        <span className="text-sm text-blue-700">{t("totalProductsAvailable", { count: products.length })}</span>
       </div>
 
       {/* Search and Filter */}
@@ -82,7 +84,7 @@ const VendorProducts = () => {
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
           <input
             type="text"
-            placeholder="Search products..."
+            placeholder={t("searchProducts")}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
@@ -143,7 +145,7 @@ const VendorProducts = () => {
                 <div className="flex items-start justify-between mb-1">
                   <h3 className="font-semibold text-gray-900 text-base line-clamp-1">{product.name}</h3>
                   <span className={`text-xs px-2 py-1 rounded ${getCategoryColor(product.category)}`}>
-                    {product.category}
+                    {t(product.category)}
                   </span>
                 </div>
 
@@ -153,7 +155,7 @@ const VendorProducts = () => {
 
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-base font-bold text-gray-900">₹{product.price}</span>
-                  <span className="text-xs text-gray-600">per {product.stock_unit}</span>
+                  <span className="text-xs text-gray-600">{t("perUnit", { unit: product.stock_unit })}</span>
                 </div>
 
                 <button
@@ -167,12 +169,12 @@ const VendorProducts = () => {
                   {product.isSelected ? (
                     <>
                       <Check className="w-4 h-4" />
-                      <span>Selected</span>
+                      <span>{t("selected")}</span>
                     </>
                   ) : (
                     <>
                       <Plus className="w-4 h-4" />
-                      <span>Select Product</span>
+                      <span>{t("selectProduct")}</span>
                     </>
                   )}
                 </button>
@@ -184,7 +186,7 @@ const VendorProducts = () => {
 
       {filteredProducts.length === 0 && !loading && (
         <div className="text-center py-12">
-          <p className="text-gray-500">No products found matching your criteria.</p>
+          <p className="text-gray-500">{t("noProductsFound")}</p>
         </div>
       )}
     </div>

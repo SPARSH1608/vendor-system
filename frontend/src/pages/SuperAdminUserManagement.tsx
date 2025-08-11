@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { usersAPI } from '../services/api'
 import { useSelector } from 'react-redux'
 import { Search, Shield, UserCheck, UserX, Trash2, Users, UserCog } from 'lucide-react'
+import { useTranslation } from "react-i18next"
 
 interface User {
   _id: string
@@ -25,6 +26,7 @@ interface UserStats {
 }
 
 const SuperAdminUserManagement = () => {
+  const { t } = useTranslation();
   const [allUsers, setAllUsers] = useState<User[]>([]) // Store all users
   const [stats, setStats] = useState<UserStats | null>(null)
   const [loading, setLoading] = useState(true)
@@ -44,7 +46,6 @@ const SuperAdminUserManagement = () => {
   const fetchUsers = async () => {
     try {
       setLoading(true)
-      // Fetch all users without filters - let frontend handle filtering
       const response = await usersAPI.getUsers({})
       setAllUsers(response.data)
     } catch (error) {
@@ -64,71 +65,64 @@ const SuperAdminUserManagement = () => {
   }
 
   const handleRoleChange = async (userId: string, newRole: string) => {
-    if (window.confirm(`Are you sure you want to change this user's role to ${newRole}?`)) {
+    if (window.confirm(t("confirmRoleChange", { role: t(newRole) }))) {
       try {
-        await usersAPI.updateUserRole(userId, { role: newRole }); // Correct API call
+        await usersAPI.updateUserRole(userId, { role: newRole });
         await fetchUsers();
         await fetchStats();
       } catch (error: any) {
         console.error('Error updating role:', error)
-        alert('Failed to update user role: ' + (error.response?.data?.message || 'Unknown error'))
+        alert(t("failedToUpdateRole", { message: error.response?.data?.message || t("unknownError") }))
       }
     }
   }
 
-  const handleStatusChange = async (userId: string, newStatus: string) => {
-    if (window.confirm(`Are you sure you want to ${newStatus === 'active' ? 'activate' : 'deactivate'} this user?`)) {
+  const handleStatusChange = async (userId: string, newStatus: boolean) => {
+    const statusText = newStatus ? t("activateUser") : t("deactivateUser")
+    if (window.confirm(statusText)) {
       try {
-        await usersAPI.updateUserStatus(userId, newStatus); // Correct API call
+        await usersAPI.updateUserStatus(userId, newStatus);
         await fetchUsers();
         await fetchStats();
       } catch (error: any) {
         console.error('Error updating status:', error);
-        alert('Failed to update user status: ' + (error.response?.data?.message || 'Unknown error'));
+        alert(t("failedToUpdateStatus", { message: error.response?.data?.message || t("unknownError") }));
       }
     }
   }
 
   const handleDeleteUser = async (userId: string, userEmail: string) => {
-    if (window.confirm(`Are you sure you want to delete user "${userEmail}"? This action cannot be undone.`)) {
+    if (window.confirm(t("confirmDeleteUser", { email: userEmail }))) {
       try {
         await usersAPI.deleteUser(userId)
         await fetchUsers()
         await fetchStats()
       } catch (error: any) {
         console.error('Error deleting user:', error)
-        alert('Failed to delete user: ' + (error.response?.data?.message || 'Unknown error'))
+        alert(t("failedToDeleteUser", { message: error.response?.data?.message || t("unknownError") }))
       }
     }
   }
 
-  // Function to get available roles based on current user's role
   const getAvailableRoles = () => {
     if (isSuperAdmin) {
       return [
-        { value: "user", label: "User" },
-        { value: "vendor", label: "Vendor" },
-        { value: "admin", label: "Admin" }
+        { value: "user", label: t("user") },
+        { value: "vendor", label: t("vendor") },
+        { value: "admin", label: t("admin") }
       ]
     } else {
       return [
-        { value: "user", label: "User" },
-        { value: "vendor", label: "Vendor" }
+        { value: "user", label: t("user") },
+        { value: "vendor", label: t("vendor") }
       ]
     }
   }
 
-  // Function to check if current user can edit this user's role
   const canEditUserRole = (userToEdit: User) => {
-    // Can't edit super admin
     if (userToEdit.role === 'super_admin') return false
-    
-    // Super admin can edit anyone (except super admin)
     if (isSuperAdmin) return true
-    
-    // Regular admin can only edit users and vendors, not other admins
     if (currentUser?.role === 'admin' && userToEdit.role === 'admin') return false
-    
     return true
   }
 
@@ -151,31 +145,22 @@ const SuperAdminUserManagement = () => {
     return colors[status as keyof typeof colors] || "bg-gray-100 text-gray-600"
   }
 
-  // Apply frontend filters
   const filteredUsers = allUsers.filter(user => {
-    // Search filter
-    const matchesSearch = search === "" || 
+    const matchesSearch = search === "" ||
       user.email.toLowerCase().includes(search.toLowerCase()) ||
       user.name.toLowerCase().includes(search.toLowerCase()) ||
       user.phone.includes(search)
-
-    // Role filter
     const matchesRole = selectedRole === "all" || user.role === selectedRole
-
-    // Status filter
     const matchesStatus = selectedStatus === "all" || user.status === selectedStatus
-
     return matchesSearch && matchesRole && matchesStatus
   })
 
-  // Clear all filters
   const clearFilters = () => {
     setSearch("")
     setSelectedRole("all")
     setSelectedStatus("all")
   }
 
-  // Check if any filter is active
   const hasActiveFilters = search !== "" || selectedRole !== "all" || selectedStatus !== "all"
 
   return (
@@ -187,24 +172,23 @@ const SuperAdminUserManagement = () => {
             <div className="flex items-center space-x-3">
               <Shield className="w-8 h-8 text-purple-600" />
               <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-                {isSuperAdmin ? 'Super Admin Dashboard' : 'Admin Dashboard'}
+                {isSuperAdmin ? t("superAdminDashboard") : t("adminDashboard")}
               </h1>
             </div>
             <button
               onClick={() => {
-                // Add logout logic here
-                localStorage.removeItem('authToken'); // Example: Clear auth token
-                window.location.href = '/login'; // Redirect to login page
+                localStorage.removeItem('authToken');
+                window.location.href = '/login';
               }}
               className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
             >
-              Logout
+              {t("logout")}
             </button>
           </div>
           <p className="text-gray-600 text-sm sm:text-base">
             {isSuperAdmin
-              ? 'Manage all users, roles, and system access'
-              : 'Manage users and vendors'}
+              ? t("superAdminDesc")
+              : t("adminDesc")}
           </p>
         </div>
 
@@ -214,7 +198,7 @@ const SuperAdminUserManagement = () => {
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Total Users</p>
+                  <p className="text-sm font-medium text-gray-600">{t("totalUsers")}</p>
                   <p className="text-2xl font-bold text-gray-900">{stats.totalUsers}</p>
                 </div>
                 <Users className="w-8 h-8 text-blue-600" />
@@ -223,7 +207,7 @@ const SuperAdminUserManagement = () => {
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Active Users</p>
+                  <p className="text-sm font-medium text-gray-600">{t("activeUsers")}</p>
                   <p className="text-2xl font-bold text-green-600">{stats.activeUsers}</p>
                 </div>
                 <UserCheck className="w-8 h-8 text-green-600" />
@@ -232,7 +216,7 @@ const SuperAdminUserManagement = () => {
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Vendors</p>
+                  <p className="text-sm font-medium text-gray-600">{t("vendors")}</p>
                   <p className="text-2xl font-bold text-blue-600">{stats.vendors}</p>
                 </div>
                 <UserCog className="w-8 h-8 text-blue-600" />
@@ -241,7 +225,7 @@ const SuperAdminUserManagement = () => {
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-medium text-gray-600">Admins</p>
+                  <p className="text-sm font-medium text-gray-600">{t("admins")}</p>
                   <p className="text-2xl font-bold text-red-600">{stats.admins}</p>
                 </div>
                 <Shield className="w-8 h-8 text-red-600" />
@@ -253,13 +237,13 @@ const SuperAdminUserManagement = () => {
         {/* Filters */}
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-6">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 space-y-3 sm:space-y-0">
-            <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
+            <h2 className="text-lg font-semibold text-gray-900">{t("filters")}</h2>
             {hasActiveFilters && (
               <button
                 onClick={clearFilters}
                 className="text-sm text-purple-600 hover:text-purple-700 font-medium"
               >
-                Clear All Filters
+                {t("clearAllFilters")}
               </button>
             )}
           </div>
@@ -268,34 +252,32 @@ const SuperAdminUserManagement = () => {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
               <input
                 type="text"
-                placeholder="Search users..."
+                placeholder={t("searchUsers")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
               />
             </div>
-            
             <select
               value={selectedRole}
               onChange={(e) => setSelectedRole(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             >
-              <option value="all">All Roles</option>
-              <option value="user">Users</option>
-              <option value="vendor">Vendors</option>
-              <option value="admin">Admins</option>
-              {isSuperAdmin && <option value="super_admin">Super Admins</option>}
+              <option value="all">{t("allRoles")}</option>
+              <option value="user">{t("users")}</option>
+              <option value="vendor">{t("vendors")}</option>
+              <option value="admin">{t("admins")}</option>
+              {isSuperAdmin && <option value="super_admin">{t("superAdmins")}</option>}
             </select>
-            
             <select
               value={selectedStatus}
               onChange={(e) => setSelectedStatus(e.target.value)}
               className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             >
-              <option value="all">All Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-              <option value="suspended">Suspended</option>
+              <option value="all">{t("allStatus")}</option>
+              <option value="active">{t("active")}</option>
+              <option value="inactive">{t("inactive")}</option>
+              <option value="suspended">{t("suspended")}</option>
             </select>
           </div>
         </div>
@@ -305,10 +287,10 @@ const SuperAdminUserManagement = () => {
           <div className="p-6 border-b border-gray-100">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-3 sm:space-y-0">
               <h2 className="text-xl font-semibold text-gray-900">
-                User Management
+                {t("userManagement")}
               </h2>
               <div className="text-sm text-gray-500">
-                Showing {filteredUsers.length} of {allUsers.length} users
+                {t("showingUsers", { count: filteredUsers.length, total: allUsers.length })}
               </div>
             </div>
           </div>
@@ -323,19 +305,19 @@ const SuperAdminUserManagement = () => {
                 <thead className="bg-gray-50">
                   <tr>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      User
+                      {t("user")}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Contact
+                      {t("contact")}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Role
+                      {t("role")}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Status
+                      {t("status")}
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                      Joined
+                      {t("joined")}
                     </th>
                   </tr>
                 </thead>
@@ -367,7 +349,7 @@ const SuperAdminUserManagement = () => {
                               user.role
                             )}`}
                           >
-                            {user.role.replace('_', ' ')}
+                            {t(user.role)}
                           </span>
                         ) : (
                           <select
@@ -392,7 +374,7 @@ const SuperAdminUserManagement = () => {
                               user.isActive ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
                             }`}
                           >
-                            {user.isActive ? 'Active' : 'Inactive'}
+                            {user.isActive ? t("active") : t("inactive")}
                           </span>
                           {user.role !== 'super_admin' && isSuperAdmin && (
                             <>
@@ -401,14 +383,14 @@ const SuperAdminUserManagement = () => {
                                   onClick={() => handleStatusChange(user._id, false)}
                                   className="text-xs font-medium text-red-600 hover:text-red-800 transition-colors"
                                 >
-                                  Deactivate
+                                  {t("deactivate")}
                                 </button>
                               ) : (
                                 <button
                                   onClick={() => handleStatusChange(user._id, true)}
                                   className="text-xs font-medium text-green-600 hover:text-green-800 transition-colors"
                                 >
-                                  Activate
+                                  {t("activate")}
                                 </button>
                               )}
                             </>
@@ -426,14 +408,14 @@ const SuperAdminUserManagement = () => {
               {filteredUsers.length === 0 && !loading && (
                 <div className="text-center py-12">
                   <p className="text-gray-500">
-                    {hasActiveFilters ? 'No users match your filters.' : 'No users found.'}
+                    {hasActiveFilters ? t("noUsersMatchFilters") : t("noUsersFound")}
                   </p>
                   {hasActiveFilters && (
                     <button
                       onClick={clearFilters}
                       className="mt-2 text-purple-600 hover:text-purple-700 font-medium"
                     >
-                      Clear filters to see all users
+                      {t("clearFiltersToSeeAll")}
                     </button>
                   )}
                 </div>

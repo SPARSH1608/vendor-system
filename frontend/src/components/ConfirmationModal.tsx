@@ -1,4 +1,5 @@
 import React from "react"
+import { useTranslation } from "react-i18next"
 
 interface ConfirmationModalProps {
   isOpen: boolean
@@ -6,14 +7,16 @@ interface ConfirmationModalProps {
   onConfirm: () => void
   message: string
   isProcessing: boolean
-  error?: string // Add error prop to display error messages
+  error?: string
 }
 
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onClose, onConfirm, message, isProcessing, error }) => {
+  const { t } = useTranslation()
+
   if (!isOpen) return null
 
   return (
-    <div className="fixed inset-0  bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-sm">
         <p className="text-gray-800 text-center mb-4">{message}</p>
         {error && (
@@ -27,7 +30,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onClose, 
             className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
             disabled={isProcessing}
           >
-            Cancel
+            {t("cancel")}
           </button>
           <button
             onClick={onConfirm}
@@ -36,7 +39,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({ isOpen, onClose, 
             }`}
             disabled={isProcessing}
           >
-            {isProcessing ? "Processing..." : "OK"}
+            {isProcessing ? t("processing") : t("ok")}
           </button>
         </div>
       </div>

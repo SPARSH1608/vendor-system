@@ -3,6 +3,7 @@
 import type React from "react";
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface EditProductModalProps {
   product: any; // Product data to pre-fill the form
@@ -11,6 +12,7 @@ interface EditProductModalProps {
 }
 
 const EditProductModal: React.FC<EditProductModalProps> = ({ product, onClose, onSubmit }) => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: product.name || "",
     description: product.description || "",
@@ -22,8 +24,15 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ product, onClose, o
   const [imageOption, setImageOption] = useState<"url" | "upload">("url");
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
 
-  const categories = ["vegetables", "fruits", "dairy", "masala", "dry fruits", "pulses"];
-  const units = ["kg", "litre", "piece", "gram"];
+  const categories = [
+    t("vegetables"),
+    t("fruits"),
+    t("dairy"),
+    t("masala"),
+    t("dryFruits"),
+    t("pulses"),
+  ];
+  const units = [t("kg"), t("litre"), t("piece"), t("gram")];
 
   // Reset state when product changes
   useEffect(() => {
@@ -64,9 +73,6 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ product, onClose, o
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("formData before submit:", formData);
-    console.log("uploadedImage before submit:", uploadedImage);
-
     const productData = new FormData();
     productData.append("name", formData.name);
     productData.append("description", formData.description);
@@ -87,7 +93,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ product, onClose, o
     <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-sm border-black">
       <div className="bg-white rounded-2xl p-6 w-full max-w-md mx-4">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-gray-900">Edit Product</h2>
+          <h2 className="text-xl font-bold text-gray-900">{t("editProduct")}</h2>
           <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition-colors">
             <X className="w-6 h-6" />
           </button>
@@ -95,25 +101,25 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ product, onClose, o
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Product Name *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t("productName")} *</label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
-              placeholder="Enter product name"
+              placeholder={t("enterProductName")}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t("description")}</label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
-              placeholder="Enter product description"
+              placeholder={t("enterDescription")}
               rows={3}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
             />
@@ -121,7 +127,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ product, onClose, o
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Price (₹) *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t("price")} (₹) *</label>
               <input
                 type="number"
                 name="price"
@@ -135,7 +141,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ product, onClose, o
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Unit *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">{t("unit")} *</label>
               <select
                 name="stock_unit"
                 value={formData.stock_unit}
@@ -152,7 +158,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ product, onClose, o
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Category *</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t("category")} *</label>
             <select
               name="category"
               value={formData.category}
@@ -160,7 +166,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ product, onClose, o
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             >
-              <option value="">Select category</option>
+              <option value="">{t("selectCategory")}</option>
               {categories.map((category) => (
                 <option key={category} value={category}>
                   {category}
@@ -170,7 +176,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ product, onClose, o
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Image</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">{t("image")}</label>
             <div className="flex items-center space-x-4">
               <label className="flex items-center space-x-2">
                 <input
@@ -180,7 +186,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ product, onClose, o
                   checked={imageOption === "url"}
                   onChange={() => handleImageOptionChange("url")}
                 />
-                <span>From URL</span>
+                <span>{t("fromUrl")}</span>
               </label>
               <label className="flex items-center space-x-2">
                 <input
@@ -190,7 +196,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ product, onClose, o
                   checked={imageOption === "upload"}
                   onChange={() => handleImageOptionChange("upload")}
                 />
-                <span>Upload</span>
+                <span>{t("upload")}</span>
               </label>
             </div>
 
@@ -200,7 +206,7 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ product, onClose, o
                 name="image"
                 value={formData.image}
                 onChange={handleChange}
-                placeholder="Enter image URL"
+                placeholder={t("enterImageUrl")}
                 className="w-full mt-2 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             )}
@@ -221,13 +227,13 @@ const EditProductModal: React.FC<EditProductModalProps> = ({ product, onClose, o
               onClick={onClose}
               className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Cancel
+              {t("cancel")}
             </button>
             <button
               type="submit"
               className="flex-1 px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors"
             >
-              Save Changes
+              {t("saveChanges")}
             </button>
           </div>
         </form>
