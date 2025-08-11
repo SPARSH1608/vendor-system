@@ -52,6 +52,8 @@ const VendorProducts = () => {
     t("Healthy Diets"),
     t("Sugar"),
     t("Honey"),
+    t("Dairy Products"),
+    t("Oils"),
   ]
 
   const filteredProducts = products.filter((product) => {

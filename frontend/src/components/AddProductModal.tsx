@@ -24,6 +24,7 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onSubmit }) 
   const [uploadedImage, setUploadedImage] = useState<File | null>(null);
 
   const categories = [
+    t("allCategories"),
     t("Dry Fruits"),
     t("Masala"),
     t("Uncultivated"),
@@ -42,6 +43,8 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onSubmit }) 
     t("Healthy Diets"),
     t("Sugar"),
     t("Honey"),
+    t("Dairy Products"),
+    t("Oils"),
   ];
   const units = [t("kg"), t("litre"), t("piece"), t("gram")];
 

@@ -61,6 +61,8 @@ const productValidation = [
       "Healthy Diets",
       "Sugar",
       "Honey",
+      "Dairy Products",
+      "Oils",
     ])
     .withMessage("Please select a valid category"),
   body("stock_unit").isIn(["kg", "litre", "piece", "gram"]).withMessage("Please select a valid stock unit"),

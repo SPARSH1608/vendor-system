@@ -270,5 +270,7 @@
   "totalProductsAvailable": "Total: {{count}} products available",
   "selected": "Selected",
   "selectProduct": "Select Product",
-  "noProductsFound": "No products found matching your criteria."
+  "noProductsFound": "No products found matching your criteria.",
+  "Dairy Products": "Dairy Products",
+  "Oils": "Oils"
 }

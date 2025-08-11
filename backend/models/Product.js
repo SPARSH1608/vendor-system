@@ -41,6 +41,8 @@ const productSchema = new mongoose.Schema(
           "Healthy Diets",
           "Sugar",
           "Honey",
+          "Dairy Products",
+          "Oils",
         ],
         message: "Please select a valid category",
       },
