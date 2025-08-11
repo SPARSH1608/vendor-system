@@ -163,7 +163,7 @@
   "dairy": "Dairy",
   "masala": "Masala",
   "dryFruits": "Dry Fruits",
-  "pulses": "Pulses",
+  "pulses": "pulses",
   "noProductsFound": "No products found matching your criteria.",
   "failedToDeleteProduct": "Failed to delete product. Please try again.",
   "deleteProductConfirm": "Are you sure you want to delete \"{{name}}\"?",

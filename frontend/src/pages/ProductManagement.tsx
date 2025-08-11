@@ -55,8 +55,13 @@ const ProductManagement = () => {
   const filteredProducts = products.filter((product) => {
     // Use Gujarati name if available, else fallback to English name
     const displayName = product?.name_gu || product?.name || "";
-    const matchesSearch = displayName.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === t("allCategories") || product.category === selectedCategory;
+    const description = product?.description || "";
+    const searchLower = searchTerm.toLowerCase();
+    const matchesSearch =
+      displayName.toLowerCase().includes(searchLower) ||
+      description.toLowerCase().includes(searchLower);
+    const matchesCategory =
+      selectedCategory === t("allCategories") || product.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 

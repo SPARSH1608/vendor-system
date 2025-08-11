@@ -42,7 +42,7 @@ const productValidation = [
   body("name").trim().isLength({ min: 1, max: 100 }).withMessage("Product name must be between 1 and 100 characters"),
   body("price").isFloat({ min: 0 }).withMessage("Price must be a positive number"),
   body("category")
-    .isIn(["vegetables", "fruits", "dairy", "masala", "dry fruits", "pulses"])
+    .isIn(["vegetables", "fruits", "dairy", "masala", "dry fruits", "Pulses"])
     .withMessage("Please select a valid category"),
   body("stock_unit").isIn(["kg", "litre", "piece", "gram"]).withMessage("Please select a valid stock unit"),
   body("description").optional().trim().isLength({ max: 500 }).withMessage("Description cannot exceed 500 characters"),
