@@ -46,15 +46,15 @@ const VendorBills = () => {
   })
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState("")
-  const [statusFilter, setStatusFilter] = useState("All Status")
+  const [statusFilter, setStatusFilter] = useState("all")
   const [selectedBill, setSelectedBill] = useState<Bill | null>(null)
   const [showBillModal, setShowBillModal] = useState(false)
 
   const statusOptions = [
-    t("allStatus"),
-    "draft",
-    "unpaid",
-    "paid"
+    { value: "all", label: t("allStatus") },
+    { value: "draft", label: t("draft") },
+    { value: "unpaid", label: t("unpaid") },
+    { value: "paid", label: t("paid") },
   ]
 
   useEffect(() => {
@@ -66,6 +66,7 @@ const VendorBills = () => {
     setLoading(true)
     try {
       const data = await vendorsAPI.getVendorBills()
+      console.log("Fetched Bills:", data.data)  
       setBills(data.data)
     } catch (error) {
       console.error("Error fetching bills:", error)
@@ -77,6 +78,7 @@ const VendorBills = () => {
   const fetchStats = async () => {
     try {
       const data = await vendorsAPI.getVendorBillStats()
+      console.log(data)
       setStats(data.data)
     } catch (error) {
       console.error("Error fetching stats:", error)
@@ -88,7 +90,7 @@ const VendorBills = () => {
       bill.customer.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       bill.customer.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
       bill.billNumber.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = statusFilter === t("allStatus") || bill.status === statusFilter
+    const matchesStatus = statusFilter === "all" || bill.status === statusFilter
     return matchesSearch && matchesStatus
   })
 
@@ -177,8 +179,8 @@ const VendorBills = () => {
           className="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
         >
           {statusOptions.map((status) => (
-            <option key={status} value={status}>
-              {status === "draft" || status === "unpaid" || status === "paid" ? t(status) : status}
+            <option key={status.value} value={status.value}>
+              {status.label}
             </option>
           ))}
         </select>
