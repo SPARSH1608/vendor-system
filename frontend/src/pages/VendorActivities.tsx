@@ -6,7 +6,7 @@ import { vendorsAPI } from "../services/api"
 import { useTranslation } from "react-i18next"
 
 interface ActivityItem {
-  product_id: string
+  product_id: string | { _id: string }
   productName: string
   quantity: number
   price: number
@@ -70,9 +70,10 @@ const VendorActivities = () => {
       const allProducts = allActivities.flatMap((activity) => 
         activity.items.map((item) => {
           // Handle case where product_id is an object
-          const productId = typeof item.product_id === 'object' 
-            ? item.product_id._id 
-            : item.product_id
+        const productId =
+  item.product_id && typeof item.product_id === 'object' && item.product_id._id
+    ? item.product_id._id
+    : item.product_id
         
           return {
             id: productId,
@@ -240,10 +241,20 @@ const VendorActivities = () => {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {(activity.items || []).map((item, index) => {
-                    const productId = typeof item.product_id === 'object'
-                      ? item.product_id._id
-                      : item.product_id
+                {(activity.items || []).map((item, index) => {
+  // Remove or comment out the debug log if not needed
+  // console.log("Item:", item);
+
+                let productId: string | undefined;
+                if (item.product_id && typeof item.product_id === 'object') {
+                  productId = item.product_id._id;
+                } else if (item.product_id && typeof item.product_id === 'string') {
+                  productId = item.product_id;
+                } else if (item._id) {
+                  productId = item._id;
+                } else {
+                  productId = undefined;
+                }
 
                     return (
                       <div
