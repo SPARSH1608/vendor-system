@@ -36,6 +36,8 @@ app.use(
       process.env.FRONTEND_URL || "http://localhost:3000",
       "http://localhost:5173", // Vite default port
       "http://localhost:4173", // Vite preview port
+      "https://app.sristikheduthaat.com",
+      "https://vendor-virid.vercel.app",
     ],
     credentials: true,
   }),
