@@ -63,24 +63,17 @@ export const registerUser = createAsyncThunk(
 );
 
 // Async thunk to fetch user data
-export const fetchUserData = createAsyncThunk("auth/fetchUserData", async (_, { rejectWithValue }) => {
-  try {
-    const token = localStorage.getItem("token") // Ensure token is retrieved from localStorage
-    const response = await fetch("/api/auth/me", {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`, // Pass the token in the Authorization header
-      },
-    })
-    const data = await response.json()
-    if (!response.ok) {
-      return rejectWithValue(data.message || "Failed to fetch user data")
+export const fetchUserData = createAsyncThunk(
+  "auth/fetchUserData",
+  async (_, { rejectWithValue }) => {
+    try {
+      const data = await authAPI.getMe();
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Failed to fetch user data");
     }
-    return data
-  } catch (error: any) {
-    return rejectWithValue(error.message || "Server error")
   }
-})
+)
 
 const authSlice = createSlice({
   name: "auth",
