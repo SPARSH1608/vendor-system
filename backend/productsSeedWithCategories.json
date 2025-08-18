@@ -1,0 +1,3769 @@
+[
+  {
+    "name": "Paneer (Cow/Goat)",
+    "description": "પનીર (ગાય/બકરી)",
+    "price": 300,
+    "category": "Dairy Products",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Butter",
+    "description": "માખણ",
+    "price": 500,
+    "category": "Dairy Products",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Gir Cow Milk",
+    "description": "ગીર ગાયનું દુધ",
+    "price": 80,
+    "category": "Dairy Products",
+    "image": "",
+    "stock_unit": "litre",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Butter milk",
+    "description": "છાસ",
+    "price": 40,
+    "category": "Dairy Products",
+    "image": "",
+    "stock_unit": "litre",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Desi Cow milk",
+    "description": "દેશી ગાયનું દુધ",
+    "price": 70,
+    "category": "Dairy Products",
+    "image": "",
+    "stock_unit": "litre",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Peanut Butter",
+    "description": "દાણા માખણ",
+    "price": 350,
+    "category": "Dairy Products",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Shrikhand",
+    "description": "શ્રીખંડ",
+    "price": 200,
+    "category": "Dairy Products",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Ground nut oil",
+    "description": "દાણા તેલ",
+    "price": 180,
+    "category": "Oils",
+    "image": "",
+    "stock_unit": "litre",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "black Sesame oil",
+    "description": "કાળા તલનું તેલ",
+    "price": 250,
+    "category": "Oils",
+    "image": "",
+    "stock_unit": "litre",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Caster OIL",
+    "description": "અરંડીનુ તેલ",
+    "price": 150,
+    "category": "Oils",
+    "image": "",
+    "stock_unit": "litre",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Coconut Oil",
+    "description": "નાળિયેરનું તેલ",
+    "price": 300,
+    "category": "Oils",
+    "image": "",
+    "stock_unit": "litre",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Yellow Mustard Oil",
+    "description": "પીળા સરસવનું તેલ",
+    "price": 120,
+    "category": "Oils",
+    "image": "",
+    "stock_unit": "litre",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Sunflower Oil",
+    "description": "સૂર્યમુખી તેલ",
+    "price": 160,
+    "category": "Oils",
+    "image": "",
+    "stock_unit": "litre",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "white Sesame Oil",
+    "description": "સફેદ તલનું તેલ",
+    "price": 220,
+    "category": "Oils",
+    "image": "",
+    "stock_unit": "litre",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Mustard oil",
+    "description": "સરસવનું તેલ",
+    "price": 110,
+    "category": "Oils",
+    "image": "",
+    "stock_unit": "litre",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Anjeer",
+    "description": "અંજીર",
+    "price": 800,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Walnuts",
+    "description": "અખરોટ",
+    "price": 900,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Raw Cashews",
+    "description": "કાજુ",
+    "price": 1200,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Rosted Cashews",
+    "description": "ભૂંયેલા કાજુ",
+    "price": 1300,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Raisins",
+    "description": "કિસમિસ",
+    "price": 400,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Cranberry",
+    "description": "ક્રેનબેરી",
+    "price": 1000,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Dates",
+    "description": "ખજુર",
+    "price": 500,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Salted Pistachios",
+    "description": "મીઠા પિસ્તા",
+    "price": 1500,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Chia Seeds",
+    "description": "ચિયા બીજ",
+    "price": 600,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Dry Plum",
+    "description": "સૂકા જાંબુ",
+    "price": 700,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Raw Almonds",
+    "description": "કાચા બદામ",
+    "price": 1000,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Kagzi Almonnd",
+    "description": "કાગજી બદામ",
+    "price": 1100,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Mamra Almonds",
+    "description": "મામરા બદામ",
+    "price": 1800,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Almonds Roasted",
+    "description": "ભૂંયેલા બદામ",
+    "price": 1200,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Roasted Almonds with Coco Coated",
+    "description": "કોકો કોટેડ ભૂંયેલા બદામ",
+    "price": 1400,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Makhana",
+    "description": "મખાણા",
+    "price": 800,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Melon Seeds",
+    "description": "કરબુઝાના બીજ",
+    "price": 500,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Mathadi Roasted Penuts",
+    "description": "મઠાડી ભૂંયેલા દાણા",
+    "price": 300,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Mathadi Penuts",
+    "description": "મઠાડી દાણા",
+    "price": 250,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Mathadi Salted Penuts",
+    "description": "મઠાડી મીઠા દાણા",
+    "price": 280,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Mix Seeds",
+    "description": "મિશ્રિત બીજ",
+    "price": 450,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Munakka",
+    "description": "મુનક્કા",
+    "price": 600,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Pista",
+    "description": "પિસ્તા",
+    "price": 1600,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Roasted Penuts",
+    "description": "ભૂંયેલા દાણા",
+    "price": 200,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Roasted Salted penuts",
+    "description": "ભૂંયેલા મીઠા દાણા",
+    "price": 220,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Sunflower Seeds",
+    "description": "સૂર્યમુખી બીજ",
+    "price": 350,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Peanuts",
+    "description": "દાણા",
+    "price": 180,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Hazelnut",
+    "description": "હેઝલનટ",
+    "price": 1400,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Charoli",
+    "description": "ચરોળી",
+    "price": 900,
+    "category": "Dry Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+
+  {
+    "name": "Ajwain",
+    "description": "અજવાઇન",
+    "price": 200,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Cardamon",
+    "description": "ઈલાયચી",
+    "price": 1800,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Turmeric",
+    "description": "હળદર",
+    "price": 150,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Kasuri Fenugreek",
+    "description": "કસૂરી મેથી",
+    "price": 250,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Kashmiri Chili",
+    "description": "કાશ્મીરી મરચું",
+    "price": 400,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Black Sesame",
+    "description": "કાળા તલ",
+    "price": 300,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Kokum",
+    "description": "કોકમ",
+    "price": 350,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Coriander Powder",
+    "description": "ધાણા પાવડર",
+    "price": 120,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Mustard",
+    "description": "સરસવ",
+    "price": 100,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Reshampatti Chili",
+    "description": "રેશમપટ્ટી મરચું",
+    "price": 350,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Lahori Sendha Salt",
+    "description": "લાહોરી સેંધા મીઠું",
+    "price": 80,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Black Salt/ Sendha Salt",
+    "description": "કાળું મીઠું/સેંધા મીઠું",
+    "price": 90,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "White Sesame",
+    "description": "સફેદ તલ",
+    "price": 250,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Rock Salt",
+    "description": "સેંધા મીઠું",
+    "price": 70,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Sunth Powder",
+    "description": "સૂંઠ પાવડર",
+    "price": 200,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Selam Turmeric Powder",
+    "description": "સેલમ હળદર પાવડર",
+    "price": 180,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Turmeric Powder",
+    "description": "હળદર પાવડર",
+    "price": 160,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Fennel",
+    "description": "વરિયાળી",
+    "price": 220,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Aambodiya",
+    "description": "આંબોડિયા",
+    "price": 280,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Desi Chili Powder",
+    "description": "દેશી મરચું પાવડર",
+    "price": 300,
+    "category": "Masala",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+
+  {
+    "name": "Theg",
+    "description": "થેગ",
+    "price": 150,
+    "category": "Uncultivated",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Takamaria",
+    "description": "તકામરિયા",
+    "price": 200,
+    "category": "Uncultivated",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Fang",
+    "description": "ફાંગ",
+    "price": 180,
+    "category": "Uncultivated",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+
+  {
+    "name": "Urad Dal",
+    "description": "ઉડદ દાળ",
+    "price": 120,
+    "category": "Pulses",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Masur Dal",
+    "description": "મસુર દાળ",
+    "price": 100,
+    "category": "Pulses",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Kadthi",
+    "description": "કઠી",
+    "price": 110,
+    "category": "Pulses",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Chickpeas",
+    "description": "ચણા",
+    "price": 90,
+    "category": "Pulses",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "White Chickpeas",
+    "description": "સફેદ ચણા",
+    "price": 100,
+    "category": "Pulses",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Chana Dal",
+    "description": "ચણા દાળ",
+    "price": 110,
+    "category": "Pulses",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Chola",
+    "description": "ચોળા",
+    "price": 95,
+    "category": "Pulses",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Tuvar Dal",
+    "description": "તુવર દાળ",
+    "price": 130,
+    "category": "Pulses",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Pindi Chana",
+    "description": "પિંડી ચણા",
+    "price": 105,
+    "category": "Pulses",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Moong",
+    "description": "મૂગ",
+    "price": 115,
+    "category": "Pulses",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Moong Dal",
+    "description": "મૂગ દાળ",
+    "price": 125,
+    "category": "Pulses",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Sprouted Moong",
+    "description": "અંકુરિત મૂગ",
+    "price": 140,
+    "category": "Pulses",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Moth Beans",
+    "description": "મોથ",
+    "price": 95,
+    "category": "Pulses",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Kidney Beans",
+    "description": "રાજમા",
+    "price": 150,
+    "category": "Pulses",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Red Choli",
+    "description": "લાલ ચોળા",
+    "price": 110,
+    "category": "Pulses",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Flat Beans",
+    "description": "પાપડી",
+    "price": 100,
+    "category": "Pulses",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "White Choli",
+    "description": "સફેદ ચોળા",
+    "price": 105,
+    "category": "Pulses",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Tuvar",
+    "description": "તુવર",
+    "price": 120,
+    "category": "Pulses",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Chana",
+    "description": "ચણા",
+    "price": 90,
+    "category": "Pulses",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+
+  {
+    "name": "Ashwagandha ghee",
+    "description": "અશ્વગંધા ઘી",
+    "price": 1200,
+    "category": "Ghee",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Kankrej cow's Vedic Ghee",
+    "description": "કંકરેજ ગાયનું વૈદિક ઘી",
+    "price": 1500,
+    "category": "Ghee",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Kankrej cow's Ghee",
+    "description": "કંકરેજ ગાયનું ઘી",
+    "price": 1400,
+    "category": "Ghee",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Kankrej cow's Valona Ghee",
+    "description": "કંકરેજ ગાયનું વલોણા ઘી",
+    "price": 1600,
+    "category": "Ghee",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Gir Cow Ghee",
+    "description": "ગીર ગાયનું ઘી",
+    "price": 1800,
+    "category": "Ghee",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Gir Cow's Valona Ghee",
+    "description": "ગીર ગાયનું વલોણા ઘી",
+    "price": 2000,
+    "category": "Ghee",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Triphala Ghee",
+    "description": "ત્રિફળા ઘી",
+    "price": 1300,
+    "category": "Ghee",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Desi Ghee",
+    "description": "દેશી ઘી",
+    "price": 1000,
+    "category": "Ghee",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Desi Cow Ghee",
+    "description": "દેશી ગાયનું ઘી",
+    "price": 1100,
+    "category": "Ghee",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Desi Gir Cow Malai Ghee",
+    "description": "દેશી ગીર ગાયનું મલાઈ ઘી",
+    "price": 2200,
+    "category": "Ghee",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Brahmi Ghee",
+    "description": "બ્રાહ્મી ઘી",
+    "price": 1700,
+    "category": "Ghee",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Shatavari Ghee",
+    "description": "શતાવરી ઘી",
+    "price": 1900,
+    "category": "Ghee",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+
+  {
+    "name": "Flaxseeds",
+    "description": "અલસીના બીજ",
+    "price": 200,
+    "category": "Mukhvas",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Mouthwash of Bansi Wheat",
+    "description": "બંસી ઘઉંનું માઉથવોશ",
+    "price": 150,
+    "category": "Mukhvas",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Green Fennel",
+    "description": "હરી વરિયાળી",
+    "price": 180,
+    "category": "Mukhvas",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Pumpkin Seeds",
+    "description": "કોળાના બીજ",
+    "price": 220,
+    "category": "Mukhvas",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+
+  {
+    "name": "Amla",
+    "description": "આમલા",
+    "price": 100,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Raw Banana",
+    "description": "કાચા કેળા",
+    "price": 40,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Raw papaya",
+    "description": "કાચા પપૈયા",
+    "price": 50,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Banana",
+    "description": "કેળા",
+    "price": 60,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Golden Custard apple",
+    "description": "સોનેરી સીતાફળ",
+    "price": 200,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Chiku",
+    "description": "ચીકુ",
+    "price": 120,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Guava",
+    "description": "જાંબુ",
+    "price": 80,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "DragonFruit",
+    "description": "ડ્રેગન ફ્રુટ",
+    "price": 300,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Nagpur Orange",
+    "description": "નાગપુર સંતરા",
+    "price": 90,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Papaya",
+    "description": "પપૈયા",
+    "price": 50,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Bijora",
+    "description": "બિજોરા",
+    "price": 70,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Blueberry",
+    "description": "બ્લુબેરી",
+    "price": 400,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Sweet Lemon",
+    "description": "મીઠા લીંબુ",
+    "price": 60,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Red Guava",
+    "description": "લાલ જાંબુ",
+    "price": 100,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Water Chestnuts/ Singhara",
+    "description": "શિંગાડા",
+    "price": 150,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Coconut",
+    "description": "નાળિયેર",
+    "price": 40,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Custard Apple",
+    "description": "સીતાફળ",
+    "price": 120,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Desi Pomegranate",
+    "description": "દેશી દાડમ",
+    "price": 150,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Red Pomegranate",
+    "description": "લાલ દાડમ",
+    "price": 180,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Strawberries",
+    "description": "સ્ટ્રોબેરી",
+    "price": 250,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Sugarcane",
+    "description": "ઊસ",
+    "price": 30,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Golden Berry",
+    "description": "ગોલ્ડન બેરી",
+    "price": 350,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Green Grapes",
+    "description": "હરી દ્રાક્ષ",
+    "price": 120,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Red Grapes",
+    "description": "લાલ દ્રાક્ષ",
+    "price": 140,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Black Seed grapes",
+    "description": "કાળા બીજવાળી દ્રાક્ષ",
+    "price": 160,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Watermelon",
+    "description": "તરબૂચ",
+    "price": 25,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Muskmelon",
+    "description": "ખરબૂજ",
+    "price": 30,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "chibhda",
+    "description": "ચીભડા",
+    "price": 80,
+    "category": "Fruits",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+
+  {
+    "name": "Apamarga",
+    "description": "અપામાર્ગ",
+    "price": 250,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Amla Powder",
+    "description": "આમલા પાવડર",
+    "price": 300,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Aloe Vera Leaf",
+    "description": "એલોવેરા પાંદડું",
+    "price": 50,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Dathan of Kamboi",
+    "description": "કંબોઈની દાતણ",
+    "price": 100,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Dathan of Karanj",
+    "description": "કરંજની દાતણ",
+    "price": 120,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Kokum Syrup",
+    "description": "કોકમ સિરપ",
+    "price": 200,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "litre",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Garo",
+    "description": "ગારો",
+    "price": 180,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Dathan of Garo",
+    "description": "ગારોની દાતણ",
+    "price": 110,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Javara",
+    "description": "જવારા",
+    "price": 150,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Chyawanprash",
+    "description": "ચ્યવનપ્રાશ",
+    "price": 400,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Jambu Seeds Powder",
+    "description": "જાંબુ બીજ પાવડર",
+    "price": 280,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Jambu Toothpaste",
+    "description": "જાંબુ ટૂથપેસ્ટ",
+    "price": 120,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Jasud's Powder",
+    "description": "જાસૂદનો પાવડર",
+    "price": 220,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Jethimadh",
+    "description": "જેઠીમધ",
+    "price": 350,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Basil",
+    "description": "તુલસી",
+    "price": 100,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Nasya Bindu",
+    "description": "નસ્ય બિંદુ",
+    "price": 250,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Punarnava (Satodi)",
+    "description": "પુનર્નવા (સાટોડી)",
+    "price": 180,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Findla",
+    "description": "ફિંડલા",
+    "price": 200,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Findla Powder",
+    "description": "ફિંડલા પાવડર",
+    "price": 220,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Dathan of Bavala",
+    "description": "બાવળની દાતણ",
+    "price": 90,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Neem tooth",
+    "description": "નીમ દાતણ",
+    "price": 80,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Lemon Grass/ Green Tea",
+    "description": "લેમન ગ્રાસ/ ગ્રીન ટી",
+    "price": 150,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Drumstick leaves",
+    "description": "સરગવાનાં પાંદડા",
+    "price": 60,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Drumstick leaves powder",
+    "description": "સરગવાનાં પાંદડાનો પાવડર",
+    "price": 200,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Drumstick powder",
+    "description": "સરગવો પાવડર",
+    "price": 180,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Herbal Pain Relief",
+    "description": "હર્બલ પેઇન રિલીફ",
+    "price": 250,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Herbal Lip Balm",
+    "description": "હર્બલ લિપ બામ",
+    "price": 120,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Brihati (ભૂઈપત્રી)",
+    "description": "ભૂઈપત્રી",
+    "price": 180,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Roasted Mahuda Flower",
+    "description": "ભૂંયેલા મહુડાના ફૂલ",
+    "price": 150,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Mahuda Ark",
+    "description": "મહુડા અર્ક",
+    "price": 300,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "litre",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Aritha",
+    "description": "અરીઠા",
+    "price": 120,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Dhavda Gunder",
+    "description": "ધાવડા ગુંદર",
+    "price": 200,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Baval Gunder",
+    "description": "બાવળ ગુંદર",
+    "price": 180,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Hemoglobin Powder",
+    "description": "હિમોગ્લોબિન પાવડર",
+    "price": 350,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Vitamin B12 Powder",
+    "description": "વિટામિન B12 પાવડર",
+    "price": 400,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Body Detox Supplement",
+    "description": "બોડી ડિટોક્સ સપ્લિમેન્ટ",
+    "price": 450,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Ashwagandha Powder",
+    "description": "અશ્વગંધા પાવડર",
+    "price": 380,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Shatavari Powder",
+    "description": "શતાવરી પાવડર",
+    "price": 420,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Harde Churna",
+    "description": "હરડે ચૂર્ણ",
+    "price": 280,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Triphla Churna",
+    "description": "ત્રિફળા ચૂર્ણ",
+    "price": 320,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Giloy Powder",
+    "description": "ગિલોય પાવડર",
+    "price": 350,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Baval seeds Powder",
+    "description": "બાવળના બીજનો પાવડર",
+    "price": 200,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Bottle Ground Powder",
+    "description": "બોટલ ગ્રાઉન્ડ પાવડર",
+    "price": 150,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Karela Powder",
+    "description": "કારેલા પાવડર",
+    "price": 180,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Alpha Alpha Powder",
+    "description": "આલ્ફા આલ્ફા પાવડર",
+    "price": 300,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Spirulina Powder",
+    "description": "સ્પિરુલીના પાવડર",
+    "price": 500,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Nirgundi Churna",
+    "description": "નિર્ગુંડી ચૂર્ણ",
+    "price": 250,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Tulsi leaf powder",
+    "description": "તુલસી પાંદડા પાવડર",
+    "price": 220,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Stevia Leaf Powder",
+    "description": "સ્ટેવિયા પાંદડા પાવડર",
+    "price": 400,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Papaya Leaf Powder",
+    "description": "પપૈયાના પાંદડાનો પાવડર",
+    "price": 280,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Gokhru Powder",
+    "description": "ગોંખરુ પાવડર",
+    "price": 320,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Raw Papaya Powder",
+    "description": "કાચા પપૈયાનો પાવડર",
+    "price": 250,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Barley Grass Powder",
+    "description": "બાર્લી ગ્રાસ પાવડર",
+    "price": 350,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Organic Face Pack",
+    "description": "ઑર્ગેનિક ફેસ પેક",
+    "price": 200,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Panchgavya Soap",
+    "description": "પંચગવ્ય સાબણ",
+    "price": 120,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Multani Mitti Powder",
+    "description": "મુલતાની મીટ્ટી પાવડર",
+    "price": 150,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Kasturi Turmeric Powder",
+    "description": "કસ્તુરી હળદર પાવડર",
+    "price": 400,
+    "category": "Aruvedic",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+
+  {
+    "name": "White/Yellow Turmeric",
+    "description": "સફેદ/પીળી હળદર",
+    "price": 120,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Ginger",
+    "description": "આદુ",
+    "price": 80,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Prickly Brinjal",
+    "description": "કંટાળી વાંગણ",
+    "price": 60,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Kantola",
+    "description": "કંતોળા",
+    "price": 70,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Colour Capsicum",
+    "description": "રંગીન કેપ્સિકમ",
+    "price": 150,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Oro Brinjal",
+    "description": "ઓરો વાંગણ",
+    "price": 55,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Cucumber",
+    "description": "કાકડી",
+    "price": 40,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "raw tomato",
+    "description": "કાચા ટામેટા",
+    "price": 30,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Karela",
+    "description": "કારેલા",
+    "price": 50,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "capsicum Shimla Chili",
+    "description": "કેપ્સિકમ શિમલા મરચું",
+    "price": 120,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Coriander",
+    "description": "કોથમીર",
+    "price": 20,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Cabbage",
+    "description": "કોબીજ",
+    "price": 35,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Pumpkin",
+    "description": "કોળું",
+    "price": 30,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Pickled Cucumber",
+    "description": "અથાણાની કાકડી",
+    "price": 60,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Galka",
+    "description": "ગલકા",
+    "price": 45,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Carrot",
+    "description": "ગાજર",
+    "price": 40,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Guar",
+    "description": "ગવાર",
+    "price": 50,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Round bottle gourd",
+    "description": "ગોળ દુધી",
+    "price": 35,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Chilli",
+    "description": "મરચું",
+    "price": 60,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Cheery Tomato",
+    "description": "ચેરી ટામેટા",
+    "price": 80,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Choli Beans",
+    "description": "ચોળી બીન્સ",
+    "price": 70,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Zucchini",
+    "description": "ઝુકીની",
+    "price": 90,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Tomato",
+    "description": "ટામેટા",
+    "price": 35,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Tindora",
+    "description": "ટિંડોરા",
+    "price": 50,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Tandelo Bhaji",
+    "description": "તાંડેલો ભાજી",
+    "price": 40,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Spicy Chilli",
+    "description": "તીખા મરચું",
+    "price": 80,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Turia",
+    "description": "તુરિયા",
+    "price": 45,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Tuvar",
+    "description": "તુવર",
+    "price": 55,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Bottle Gourd",
+    "description": "દુધી",
+    "price": 30,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Baby Potato",
+    "description": "બેબી બટાટા",
+    "price": 40,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Spinach",
+    "description": "પાલક",
+    "price": 25,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Picador Chili",
+    "description": "પિકાડોર મરચું",
+    "price": 100,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "yellow Turmeric",
+    "description": "પીળી હળદર",
+    "price": 110,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "French Beans",
+    "description": "ફ્રેન્ચ બીન્સ",
+    "price": 70,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Mint",
+    "description": "પુદીના",
+    "price": 30,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Cauliflower",
+    "description": "ફૂલકોબી",
+    "price": 45,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Potato",
+    "description": "બટાટા",
+    "price": 25,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Beetroot",
+    "description": "બીટરૂટ",
+    "price": 40,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Broccoli",
+    "description": "બ્રોકોલી",
+    "price": 100,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Okra/Bhindi",
+    "description": "ભીંડા",
+    "price": 50,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Curry Leaves",
+    "description": "કરી પત્તા",
+    "price": 20,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Radish",
+    "description": "મૂળો",
+    "price": 30,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Fenugreek Leaves",
+    "description": "મેથીના પાંદડા",
+    "price": 35,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "green Chilli",
+    "description": "હરી મરચું",
+    "price": 50,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Small Brinjal (Ravaiya)",
+    "description": "નાના વાંગણ (રવૈયા)",
+    "price": 45,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Queen Pumpkin",
+    "description": "ક્વીન કોળું",
+    "price": 60,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Brinjal",
+    "description": "વાંગણ",
+    "price": 40,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Garlic",
+    "description": "લસણ",
+    "price": 80,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Red Chilli",
+    "description": "લાલ મરચું",
+    "price": 90,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Lemon",
+    "description": "લીંબુ",
+    "price": 40,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Spring Onion",
+    "description": "સ્પ્રિંગ ઓનિયન",
+    "price": 35,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Fresh Pigeon Pea",
+    "description": "તાજા તુવેર",
+    "price": 60,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "green Pumpkin",
+    "description": "હરી કોળું",
+    "price": 35,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Green Garlic",
+    "description": "હરી લસણ",
+    "price": 70,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Fresh Valor Beans",
+    "description": "તાજી વાલોર બીન્સ",
+    "price": 65,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Sweet potato",
+    "description": "શક્કરિયા બટાટા",
+    "price": 50,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "White Pumpkin",
+    "description": "સફેદ કોળું",
+    "price": 40,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Drumstick",
+    "description": "સરગવો",
+    "price": 60,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "mustard green leaves",
+    "description": "સરસવના હરા પાંદડા",
+    "price": 30,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "onion",
+    "description": "ડુંગળી",
+    "price": 25,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Yam",
+    "description": "રતાળુ",
+    "price": 55,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Surti Papdi",
+    "description": "સુરતી પાપડી",
+    "price": 70,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Dudhiya Valor",
+    "description": "દૂધિયા વાલોર",
+    "price": 65,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Tura Valor",
+    "description": "તુરા વાલોર",
+    "price": 60,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Chibhada",
+    "description": "ચીભડા",
+    "price": 45,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Peas",
+    "description": "ટપકા",
+    "price": 80,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Green Chana",
+    "description": "હરી ચણા",
+    "price": 70,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Brown Tomato",
+    "description": "બ્રાઉન ટામેટા",
+    "price": 90,
+    "category": "Vegetable",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+
+  {
+    "name": "Idli Flour",
+    "description": "ઇડલીનો લોટ",
+    "price": 80,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Quinoa Flour",
+    "description": "કિનોઆ લોટ",
+    "price": 300,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Wheat",
+    "description": "ઘઉંનો લોટ",
+    "price": 50,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Gram Flour",
+    "description": "બેસન",
+    "price": 70,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Rice Flour",
+    "description": "ચોખાનો લોટ",
+    "price": 60,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Jav Flour",
+    "description": "જવનો લોટ",
+    "price": 65,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Jowar Flour",
+    "description": "જુવારનો લોટ",
+    "price": 70,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Dhokla",
+    "description": "ઢોકળા",
+    "price": 90,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Thalipeeth",
+    "description": "થાળીપીઠ",
+    "price": 100,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Bajra Flour",
+    "description": "બાજરીનો લોટ",
+    "price": 60,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Maize Flour",
+    "description": "મકાઈનો લોટ",
+    "price": 55,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Multi Grain Flour",
+    "description": "મલ્ટી ગ્રેઈન લોટ",
+    "price": 120,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Millet Flour",
+    "description": "મિલેટ લોટ",
+    "price": 100,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Ragi Flour",
+    "description": "રાગીનો લોટ",
+    "price": 90,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Rajgira Flour",
+    "description": "રાજગીરા લોટ",
+    "price": 110,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Red Sorghum Flour",
+    "description": "લાલ જુવારનો લોટ",
+    "price": 85,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Sattu",
+    "description": "સત્તુ",
+    "price": 80,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "White Jowar Flour",
+    "description": "સફેદ જુવારનો લોટ",
+    "price": 70,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Handwa Flour",
+    "description": "હાંડવા લોટ",
+    "price": 90,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Bhakhri Flour",
+    "description": "ભાખરી લોટ",
+    "price": 75,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Bajra Dalia",
+    "description": "બાજરી દળિયા",
+    "price": 65,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "White Jowar Dalia",
+    "description": "સફેદ જુવાર દળિયા",
+    "price": 70,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "White Maize Dalia",
+    "description": "સફેદ મકાઈ દળિયા",
+    "price": 60,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Yellow Maize Dalia",
+    "description": "પીળા મકાઈ દળિયા",
+    "price": 65,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Red Maize Flour",
+    "description": "લાલ મકાઈનો લોટ",
+    "price": 70,
+    "category": "Flour",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+
+  {
+    "name": "Masala Jaggery Cubes",
+    "description": "મસાલા ગોળના ટુકડા",
+    "price": 120,
+    "category": "Jaggery",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Plain Jaggery",
+    "description": "સાદો ગોળ",
+    "price": 100,
+    "category": "Jaggery",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Jaggery Powder",
+    "description": "ગોળ પાવડર",
+    "price": 110,
+    "category": "Jaggery",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+
+  {
+    "name": "Oats",
+    "description": "ઓટ્સ",
+    "price": 90,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Banana Flowers",
+    "description": "કેળાના ફૂલ",
+    "price": 60,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Banana Leaves",
+    "description": "કેળાના પાંદડા",
+    "price": 40,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Kothmada",
+    "description": "કોઠમડા",
+    "price": 80,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Kothmada Chips",
+    "description": "કોઠમડા ચિપ્સ",
+    "price": 120,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Khati Bhindi",
+    "description": "ખાટી ભીંડા",
+    "price": 70,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Khati Bhindi leaves",
+    "description": "ખાટી ભીંડાના પાંદડા",
+    "price": 50,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Khicado",
+    "description": "ખીચડો",
+    "price": 90,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Cow Dung",
+    "description": "ગાયનો છાણ",
+    "price": 20,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Cow Dung Cubes",
+    "description": "ગાયના છાણના ક્યુબ્સ",
+    "price": 30,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Cow Dung based incense stick",
+    "description": "ગાયના છાણના અગરબત્તી",
+    "price": 100,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Cow Dung based Cups",
+    "description": "ગાયના છાણના કપ",
+    "price": 150,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Jeevamrit fertilizer",
+    "description": "જીવામૃત ખાતર",
+    "price": 80,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "litre",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Jitela",
+    "description": "જીતેલા",
+    "price": 70,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Tomato Powders",
+    "description": "ટામેટા પાવડર",
+    "price": 120,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Tandla/Cheno",
+    "description": "તાંદળા/ચેણો",
+    "price": 90,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Betel Leaves",
+    "description": "પાન",
+    "price": 60,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Chilli Pickle",
+    "description": "મરચુંનું અથાણું",
+    "price": 150,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Earthenware",
+    "description": "માટીના વાસણ",
+    "price": 200,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Moraiyo",
+    "description": "મોરૈયો",
+    "price": 80,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Rava",
+    "description": "રવા",
+    "price": 60,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Lemon Pickle",
+    "description": "લીંબુનું અથાણું",
+    "price": 140,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Vermicompost",
+    "description": "વર્મીકમ્પોસ્ટ",
+    "price": 50,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "CTC Tea",
+    "description": "CTC ચા",
+    "price": 300,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Semolina",
+    "description": "સોજી",
+    "price": 70,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Rice Dhaniyu",
+    "description": "ચોખા ધાણિયા",
+    "price": 90,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Bansi Wheat Ponk",
+    "description": "બંસી ઘઉંનો પોંક",
+    "price": 120,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Potato Papad",
+    "description": "બટાકા પાપડ",
+    "price": 100,
+    "category": "Others",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+
+  {
+    "name": "Kang",
+    "description": "કંગ",
+    "price": 100,
+    "category": "Millets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Quinoa",
+    "description": "કિનોઆ",
+    "price": 350,
+    "category": "Millets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Kodari",
+    "description": "કોદરી",
+    "price": 90,
+    "category": "Millets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Gajro/Kuri",
+    "description": "ગજરો/કુરી",
+    "price": 80,
+    "category": "Millets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Bajra",
+    "description": "બાજરી",
+    "price": 70,
+    "category": "Millets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Corn",
+    "description": "મકાઈ",
+    "price": 60,
+    "category": "Millets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Millets",
+    "description": "મિલેટ્સ",
+    "price": 110,
+    "category": "Millets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Ragi",
+    "description": "રાગી",
+    "price": 100,
+    "category": "Millets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Red Sorghum",
+    "description": "લાલ જુવાર",
+    "price": 85,
+    "category": "Millets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Foxtail Wet Kangni",
+    "description": "ફોક્સટેઇલ વેટ કંગણી",
+    "price": 95,
+    "category": "Millets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "White Jowar",
+    "description": "સફેદ જુવાર",
+    "price": 75,
+    "category": "Millets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Samo",
+    "description": "સામો",
+    "price": 120,
+    "category": "Millets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Bhagar Rice",
+    "description": "ભાગર ચોખા",
+    "price": 150,
+    "category": "Millets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Jeerasar Rice",
+    "description": "જીરાસર ચોખા",
+    "price": 130,
+    "category": "Millets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Indrayani Rice",
+    "description": "ઇન્દ્રાયણી ચોખા",
+    "price": 140,
+    "category": "Millets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+
+  {
+    "name": "Krishna Kamod Rice (old)",
+    "description": "કૃષ્ણા કામોદ ચોખા (જુના)",
+    "price": 180,
+    "category": "Grains",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Desi Basmati Rice",
+    "description": "દેશી બાસમતી ચોખા",
+    "price": 200,
+    "category": "Grains",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Brown Khichdi Rice",
+    "description": "બ્રાઉન ખીચડી ચોખા",
+    "price": 150,
+    "category": "Grains",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+
+  {
+    "name": "Kokum Juice",
+    "description": "કોકમ જ્યુસ",
+    "price": 120,
+    "category": "Juice",
+    "image": "",
+    "stock_unit": "litre",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Sugarcane Juice",
+    "description": "ઊસનો રસ",
+    "price": 60,
+    "category": "Juice",
+    "image": "",
+    "stock_unit": "litre",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Hibiscus Flower Juice",
+    "description": "જાસૂદના ફૂલનો રસ",
+    "price": 150,
+    "category": "Juice",
+    "image": "",
+    "stock_unit": "litre",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Fresh Beetroot Juice",
+    "description": "તાજા બીટરૂટનો રસ",
+    "price": 100,
+    "category": "Juice",
+    "image": "",
+    "stock_unit": "litre",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Amla Juice",
+    "description": "આમલાનો રસ",
+    "price": 130,
+    "category": "Juice",
+    "image": "",
+    "stock_unit": "litre",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+
+  {
+    "name": "Dates Punch",
+    "description": "ખજૂર પંચ",
+    "price": 180,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Ganthiya",
+    "description": "ગાંઠિયા",
+    "price": 120,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Jav",
+    "description": "જવ",
+    "price": 90,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Jav Kaju",
+    "description": "જવ કાજુ",
+    "price": 250,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Jav Chocolate",
+    "description": "જવ ચોકલેટ",
+    "price": 280,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Jav cookies",
+    "description": "જવ કૂકીઝ",
+    "price": 200,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Sev (Nylon)",
+    "description": "સેવ (નાયલોન)",
+    "price": 150,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Jowar Mamra",
+    "description": "જુવાર મામરા",
+    "price": 130,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Biscuits of Jowar, Bajri and Khapli wheat",
+    "description": "જુવાર, બાજરી અને ખપ્લી ઘઉંની બિસ્કિટ",
+    "price": 180,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Papad",
+    "description": "પાપડ",
+    "price": 100,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Poha",
+    "description": "પોહા",
+    "price": 80,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Sev of Bansi Wheat",
+    "description": "બંસી ઘઉંની સેવ",
+    "price": 160,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Khakhra of Bansi Wheat",
+    "description": "બંસી ઘઉંની ખાખરા",
+    "price": 140,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Mamra",
+    "description": "મામરા",
+    "price": 120,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Mix Seeds Bar",
+    "description": "મિક્સ સીડ્સ બાર",
+    "price": 200,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Millet Khakhra (Cumin, Masala, Fenugreek)",
+    "description": "મિલેટ ખાખરા (જીરું, મસાલા, મેથી)",
+    "price": 150,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Millet Noodles",
+    "description": "મિલેટ નૂડલ્સ",
+    "price": 120,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Millet Pasta",
+    "description": "મિલેટ પાસ્તા",
+    "price": 130,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Millet Poha",
+    "description": "મિલેટ પોહા",
+    "price": 100,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Millet Flakes",
+    "description": "મિલેટ ફ્લેક્સ",
+    "price": 110,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Millet Sev",
+    "description": "મિલેટ સેવ",
+    "price": 140,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Ragi Biscuit",
+    "description": "રાગી બિસ્કિટ",
+    "price": 160,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Ragi Mamra",
+    "description": "રાગી મામરા",
+    "price": 130,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Ragi Cookies with cashew and choco Chips",
+    "description": "રાગી કૂકીઝ કાજુ અને ચોકો ચિપ્સ સાથે",
+    "price": 220,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Roasted Gram",
+    "description": "ભૂંયેલા ચણા",
+    "price": 90,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Drumstick Biscuits",
+    "description": "સરગવા બિસ્કિટ",
+    "price": 180,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Healthy Nrutibar",
+    "description": "હેલ્ધી નૃતિબાર",
+    "price": 200,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "piece",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Rice Papad",
+    "description": "ચોખા પાપડ",
+    "price": 110,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Khakhra of Bansi Wheat",
+    "description": "બંસી ઘઉંની ખાખરા",
+    "price": 140,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Ragi Papad",
+    "description": "રાગી પાપડ",
+    "price": 120,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Potato Chips",
+    "description": "બટાકા ચિપ્સ",
+    "price": 150,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Organic Mango Pulp",
+    "description": "ઑર્ગેનિક કેરીની પલ્પ",
+    "price": 250,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Umbadiyu",
+    "description": "ઉંબાડિયુ",
+    "price": 180,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Undhiyu",
+    "description": "ઊંધિયુ",
+    "price": 200,
+    "category": "Healthy Diets",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+
+  {
+    "name": "Rock Sugar",
+    "description": "મિસરી",
+    "price": 100,
+    "category": "Sugar",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Khandsari",
+    "description": "ખાંડસારી",
+    "price": 80,
+    "category": "Sugar",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Brown Sugar",
+    "description": "બ્રાઉન શુગર",
+    "price": 120,
+    "category": "Sugar",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+
+  {
+    "name": "Honey",
+    "description": "મધ",
+    "price": 400,
+    "category": "Honey",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Ajwain Honet",
+    "description": "અજવાઇન મધ",
+    "price": 450,
+    "category": "Honey",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Honey Multi Flora",
+    "description": "મલ્ટી ફ્લોરા મધ",
+    "price": 500,
+    "category": "Honey",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  },
+  {
+    "name": "Fennel Honey",
+    "description": "વરિયાળી મધ",
+    "price": 480,
+    "category": "Honey",
+    "image": "",
+    "stock_unit": "kg",
+    "created_by": "686523b51d986600d9a60b32",
+    "isActive": true
+  }
+]

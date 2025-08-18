@@ -81,21 +81,12 @@ const AddProductModal: React.FC<AddProductModalProps> = ({ onClose, onSubmit }) 
     productData.append("stock_unit", formData.stock_unit);
     productData.append("isActive", "true");
 
-    if (imageOption === "upload") {
-      if (uploadedImage) {
-        productData.append("image", uploadedImage);
-      } else {
-        alert(t("uploadImageError"));
-        return;
-      }
-    } else if (imageOption === "url") {
-      if (formData.image && typeof formData.image === "string") {
-        productData.append("image", formData.image);
-      } else {
-        alert(t("enterValidImageUrl"));
-        return;
-      }
+    if (imageOption === "upload" && uploadedImage) {
+      productData.append("image", uploadedImage);
+    } else if (imageOption === "url" && formData.image) {
+      productData.append("image", formData.image);
     }
+    // No alert or error if image is not provided
 
     onSubmit(productData);
   };
