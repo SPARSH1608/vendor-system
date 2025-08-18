@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 import { Package, TrendingUp } from "lucide-react"
 import { useTranslation } from "react-i18next"
+import { vendorsAPI } from "../services/api"; // adjust path if needed
 
 interface DashboardStats {
   myProducts: number
@@ -36,40 +37,27 @@ const VendorDashboard = () => {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchDashboardData()
-  }, [])
+    fetchDashboardData();
+  }, []);
 
   const fetchDashboardData = async () => {
     try {
-      const token = localStorage.getItem("token")
-      const headers = {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      }
+      const statsData = await vendorsAPI.getVendorBillStats();
+      setStats({
+        myProducts: 0,
+        totalBills: statsData.data.totalBills,
+        paidBills: statsData.data.paidBills,
+        totalRevenue: statsData.data.totalRevenue,
+      });
 
-      // Fetch stats
-      const statsResponse = await fetch("/api/vendors/bills/stats", { headers })
-      if (statsResponse.ok) {
-        const statsData = await statsResponse.json()
-        setStats({
-          myProducts: 0, // Will be updated after fetching products
-          totalBills: statsData.data.totalBills,
-          paidBills: statsData.data.paidBills,
-          totalRevenue: statsData.data.totalRevenue,
-        })
-      }
-
-      // Fetch vendor products
-      const productsResponse = await fetch("/api/vendors/products", { headers })
-      if (productsResponse.ok) {
-        const productsData = await productsResponse.json()
-        setMyProducts(productsData.data)
-        setStats((prev) => ({ ...prev, myProducts: productsData.data.length }))
-      }
+      const productsData = await vendorsAPI.getVendorProducts();
+      console.log("productsData", productsData.data); // <--- Check this in your browser console
+      setMyProducts(productsData.data);
+      setStats((prev) => ({ ...prev, myProducts: productsData.data.length }));
     } catch (error) {
-      console.error("Error fetching dashboard data:", error)
+      console.error("Error fetching dashboard data:", error);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
@@ -148,26 +136,31 @@ const VendorDashboard = () => {
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-4">
-              {myProducts.map((product) => (
-                <div
-                  key={product._id}
-                  className="bg-gray-50 rounded-lg p-3 flex flex-col items-center gap-2 shadow-sm border border-gray-200"
-                >
-                  <img
-                    src={product.product_id?.image || "/placeholder-product.png"}
-                    alt={product.product_id.name}
-                    className="h-16 w-16 object-cover rounded-md border border-gray-200 bg-white"
-                    loading="lazy"
-                    onError={e => { e.currentTarget.src = "/placeholder-product.png" }}
-                  />
-                  <div className="flex-1 w-full text-center">
-                    <h4 className="font-medium text-gray-900 truncate">{product.product_id.name}</h4>
-                    <p className="text-xs sm:text-sm text-gray-600 truncate">
-                      ₹{product.product_id.price} {t("perUnit", { unit: product.product_id.stock_unit })}
-                    </p>
+              {myProducts
+                .filter(product => product.isSelected) // Only show selected products
+                .map((product) => (
+                  <div key={product._id} className="bg-gray-50 rounded-lg p-3 flex flex-col items-center gap-2 shadow-sm border border-gray-200">
+                    <img
+                      src={product.image || "/placeholder-product.png"}
+                      alt={product.name || "Product"}
+                      className="h-16 w-16 object-cover rounded-md border border-gray-200 bg-white"
+                      loading="lazy"
+                      onError={e => {
+                        const target = e.currentTarget as HTMLImageElement;
+                        if (!target.dataset.hasPlaceholder) {
+                          target.src = "/placeholder-product.png";
+                          target.dataset.hasPlaceholder = "true";
+                        }
+                      }}
+                    />
+                    <div className="flex-1 w-full text-center">
+                      <h4 className="font-medium text-gray-900 truncate">{product.name || "Unnamed"}</h4>
+                      <p className="text-xs sm:text-sm text-gray-600 truncate">
+                        ₹{product.price ?? "-"} {t("perUnit", { unit: product.stock_unit || "" })}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           )}
         </div>

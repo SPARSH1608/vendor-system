@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Plus, Minus, Trash2, Save, FileText, CreditCard } from "lucide-react";
-import { customersAPI } from "../services/api";
+import { customersAPI, vendorsAPI } from "../services/api";
 import { useTranslation } from "react-i18next";
 
 interface Product {
@@ -72,30 +72,34 @@ const CreateBill = () => {
 
   const fetchVendorProducts = async () => {
     try {
-      const token = localStorage.getItem("token")
-      const response = await fetch("/api/vendors/products", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setAvailableProducts(data.data)
-        // Initialize billItems with all products, quantity 0
-        setBillItems(
-          data.data.map((product: Product) => ({
-            product_id: product.product_id._id,
-            productName: product.product_id.name,
-            price: product.product_id.price,
-            quantity: 0,
-            stock_unit: product.product_id.stock_unit,
-            total: 0,
-          }))
-        )
+      // Get vendorId from persist:root in localStorage
+      const persistRoot = localStorage.getItem("persist:root");
+      let vendorId = "";
+      if (persistRoot) {
+        const userObj = JSON.parse(persistRoot).user;
+        if (userObj) {
+          vendorId = JSON.parse(userObj)._id;
+        }
       }
+      if (!vendorId) {
+        throw new Error("Vendor ID not found");
+      }
+      const data = await vendorsAPI.getVendorProductsById(vendorId);
+      // Use all products returned by the API
+      const products = data.data.filter(Boolean); // Remove any nulls if present
+      setAvailableProducts(products);
+      setBillItems(
+        products.map((product: any) => ({
+          product_id: product._id,
+          productName: product.name,
+          price: product.price,
+          quantity: 0,
+          stock_unit: product.stock_unit || "",
+          total: 0,
+        }))
+      );
     } catch (error) {
-      console.error("Error fetching products:", error)
+      console.error("Error fetching products:", error);
     }
   }
 
@@ -223,7 +227,7 @@ const CreateBill = () => {
         <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-3">{t("selectProductsQuantities")}</h2>
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4">
           {billItems.map((item, idx) => {
-            const product = availableProducts.find((p) => p.product_id._id === item.product_id)
+            const product = availableProducts.find((p) => p._id === item.product_id)
             return (
               <div
                 key={item.product_id}
@@ -233,7 +237,7 @@ const CreateBill = () => {
                   src={
                     failedImages.has(item.product_id) 
                       ? "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMiAyMkw0MiA0Mk0yMiA0Mkw0MiAyMiIgc3Ryb2tlPSIjOUI5QkExIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K"
-                      : (product?.product_id?.image || "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMiAyMkw0MiA0Mk0yMiA0Mkw0MiAyMiIgc3Ryb2tlPSIjOUI5QkExIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K")
+                      : (product?.image || "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1zbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yMiAyMkw0MiA0Mk0yMiA0Mkw0MiAyMiIgc3Ryb2tlPSIjOUI5QkExIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K")
                   }
                   alt={item.productName}
                   className="h-12 w-12 sm:h-16 sm:w-16 object-cover rounded-md border border-gray-200 bg-white"
