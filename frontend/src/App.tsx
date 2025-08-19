@@ -1,5 +1,5 @@
 import type React from "react"
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom"
+import { HashRouter as Router, Routes, Route, Navigate } from "react-router-dom"
 import { Provider } from "react-redux"
 import { store } from "./store/store"
 import { useSelector } from "react-redux"

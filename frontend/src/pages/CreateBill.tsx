@@ -148,7 +148,6 @@ const CreateBill = () => {
 
     setLoading(true)
     try {
-      const token = localStorage.getItem("token")
       const subtotal = getSubtotal()
       const totalAmount = getTotal()
 
@@ -165,30 +164,18 @@ const CreateBill = () => {
         totalAmount,
       }
 
-      const response = await fetch("/api/vendors/bills", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(billData),
-      })
+      // Use the vendorsAPI.createBill function
+      await vendorsAPI.createBill(billData);
 
-      if (response.ok) {
-        const data = await response.json()
-        alert(
-          status === "draft"
-            ? t("billSavedAsDraft")
-            : t("billCreatedSuccessfully")
-        );
-        navigate("/vendor/bills")
-      } else {
-        const error = await response.json()
-        alert(error.message || t("failedToCreateBill"))
-      }
-    } catch (error) {
+      alert(
+        status === "draft"
+          ? t("billSavedAsDraft")
+          : t("billCreatedSuccessfully")
+      );
+      navigate("/vendor/bills")
+    } catch (error: any) {
       console.error("Error creating bill:", error)
-      alert(t("failedToCreateBill"))
+      alert(error.message || t("failedToCreateBill"))
     } finally {
       setLoading(false)
     }

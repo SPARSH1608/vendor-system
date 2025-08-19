@@ -127,6 +127,12 @@ export const vendorsAPI = {
   getVendorBills: () =>
     apiCall("/vendors/bills"),
 
+  createBill: (billData) =>
+    apiCall("/vendors/bills", {
+      method: "POST",
+      data: billData,
+    }),
+
   getVendorBillStats: () =>
     apiCall("/vendors/bills/stats"),
 
