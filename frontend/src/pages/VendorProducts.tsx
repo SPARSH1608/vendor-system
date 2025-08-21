@@ -141,15 +141,15 @@ const VendorProducts = () => {
                 </div>
               )}
 
-              <div className="flex justify-center items-center bg-gray-100 aspect-square">
+              <div className="flex justify-center items-center bg-gray-100 aspect-square w-full min-h-[120px] sm:min-h-[140px]">
                 {product.image ? (
                   <img
                     src={product.image || "/placeholder.svg"}
                     alt={product.name}
-                    className="w-20 h-20 sm:w-24 sm:h-24 object-cover rounded-lg shadow-sm"
+                    className="w-full h-full object-cover rounded-lg shadow-sm"
                   />
                 ) : (
-                  <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                  <div className="w-full h-full bg-gray-200 rounded-lg flex items-center justify-center">
                     <span className="text-gray-400 text-2xl font-bold">{getProductInitial(product.name)}</span>
                   </div>
                 )}

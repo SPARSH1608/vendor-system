@@ -330,6 +330,18 @@ const UserManagement = () => {
                       {user.isActive ? t("active") : t("inactive")}
                     </span>
                   </div>
+                  {/* Add vendor checkbox for mobile */}
+                  {user.role === "vendor" && (
+                    <div className="flex items-center gap-2 mt-1">
+                      <input
+                        type="checkbox"
+                        checked={selectedVendors.includes(user._id)}
+                        onChange={() => handleVendorSelect(user._id)}
+                        className="accent-blue-600"
+                      />
+                      <span className="text-xs text-gray-700">{t("selectVendor")}</span>
+                    </div>
+                  )}
                   <div className="flex flex-col gap-2 mt-2">
                     {user.role === "user" && (
                       <button
@@ -366,16 +378,10 @@ const UserManagement = () => {
           </>
         )}
       </div>
-
+ 
       {/* Download Button */}
       <div className="flex justify-end mt-4 space-x-2">
-        <button
-          className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-60"
-          disabled={selectedVendors.length === 0 || downloading}
-          onClick={handleDownloadProductsExcel}
-        >
-          {downloading ? t("downloading") : t("downloadProductsExcel")}
-        </button>
+    
         <button
           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:opacity-60"
           disabled={selectedVendors.length === 0 || downloading}
