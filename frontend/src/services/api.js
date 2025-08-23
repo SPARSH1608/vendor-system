@@ -151,6 +151,12 @@ export const vendorsAPI = {
     apiCall(`/vendors/${vendorId}/products`, {
       method: "GET",
     }),
+
+  getVendorProductsByIds: (vendorIds) =>
+    apiCall("/vendors/products-by-vendors", {
+      method: "POST",
+      data: { vendorIds },
+    }),
 };
 
 // Users API functions

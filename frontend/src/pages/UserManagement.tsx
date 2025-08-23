@@ -94,15 +94,8 @@ const UserManagement = () => {
   const handleDownloadProductsExcel = async () => {
     setDownloading(true)
     try {
-      const res = await fetch("/api/vendors/products-by-vendors", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ vendorIds: selectedVendors }),
-      })
-      const data = await res.json()
+      // Use the API function instead of fetch
+      const data = await vendorsAPI.getVendorProductsByIds(selectedVendors)
       if (!data.success) throw new Error(t("failedToFetchProducts"))
 
       // Group products by vendor email
