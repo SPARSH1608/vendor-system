@@ -41,7 +41,7 @@ const RegisterPage = () => {
     }
 
     try {
-      await dispatch(
+      const result = await dispatch(
         registerUser({
           name: formData.name,
           email: formData.email,
@@ -49,7 +49,20 @@ const RegisterPage = () => {
           phone: formData.phone,
         }),
       ).unwrap()
-      navigate("/")
+      localStorage.setItem("loggedIn", "true");
+      localStorage.setItem("role", result.user.role);
+      localStorage.setItem("user", JSON.stringify(result.user));
+      if (result.user.role === "super_admin") {
+        navigate("/super-admin", { replace: true });
+      } else if (result.user.role === "admin") {
+        navigate("/admin", { replace: true });
+      } else if (result.user.role === "vendor") {
+        navigate("/vendor/bills/create", { replace: true });
+      } else if (result.user.role === "user") {
+        navigate("/pending", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
     } catch (error) {
       console.error("Registration failed:", error)
     }

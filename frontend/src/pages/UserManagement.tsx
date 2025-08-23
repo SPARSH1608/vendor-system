@@ -357,6 +357,15 @@ const UserManagement = () => {
                     >
                       {user.isActive ? t("deactivate") : t("activate")}
                     </button>
+                    {/* View Products button for vendor on mobile */}
+                    {user.role === "vendor" && (
+                      <button
+                        onClick={() => handleViewVendorProducts(user)}
+                        className="inline-flex items-center space-x-1 text-blue-600 hover:text-blue-900 text-xs"
+                      >
+                        <span>{t("viewProducts")}</span>
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}

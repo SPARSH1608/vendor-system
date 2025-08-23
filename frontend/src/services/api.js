@@ -1,11 +1,10 @@
 import axios from "axios";
 
-const API_BASE_URL = "https://vendor-system.onrender.com/api";
+const API_BASE_URL = "https://vendor-system.onrender.com/api"; // Change this to your backend URL
 
 // Create an Axios instance
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL,
-  // DO NOT set Content-Type here globally!
 });
 
 // Add an interceptor to include the auth token in requests
@@ -20,18 +19,22 @@ axiosInstance.interceptors.request.use((config) => {
 // Helper function to make API calls
 const apiCall = async (endpoint, options = {}) => {
   try {
-    // If data is FormData, do NOT set Content-Type (let browser handle it)
     let headers = options.headers || {};
     if (options.data instanceof FormData) {
-      // Remove Content-Type if present
       if (headers["Content-Type"]) delete headers["Content-Type"];
     } else {
-      // For JSON, set Content-Type
       headers["Content-Type"] = "application/json";
     }
 
+    // Always prefix endpoint with API_BASE_URL if not already absolute
+    const url =
+      endpoint.startsWith("http") ||
+      endpoint.startsWith(`${API_BASE_URL}`)
+        ? endpoint
+        : `${API_BASE_URL}${endpoint.startsWith("/") ? "" : "/"}${endpoint}`;
+
     const response = await axiosInstance.request({
-      url: endpoint,
+      url,
       ...options,
       headers,
     });
@@ -45,21 +48,21 @@ const apiCall = async (endpoint, options = {}) => {
 // Auth API functions
 export const authAPI = {
   register: (userData) =>
-    apiCall("/auth/register", {
+    apiCall(`/auth/register`, {
       method: "POST",
       data: userData,
     }),
 
   login: (credentials) =>
-    apiCall("/auth/login", {
+    apiCall(`/auth/login`, {
       method: "POST",
       data: credentials,
     }),
 
-  getMe: () => apiCall("/auth/me"),
+  getMe: () => apiCall(`/auth/me`),
 
   updatePassword: (passwordData) =>
-    apiCall("/auth/password", {
+    apiCall(`/auth/password`, {
       method: "PUT",
       data: passwordData,
     }),
@@ -69,13 +72,15 @@ export const authAPI = {
 export const productsAPI = {
   getProducts: (params = {}) => {
     const queryString = new URLSearchParams(params).toString();
-    return apiCall(`/products${queryString ? `?${queryString}` : ""}`);
+    return apiCall(
+      `/products${queryString ? `?${queryString}` : ""}`
+    );
   },
 
   getProductById: (id) => apiCall(`/products/${id}`),
 
   createProduct: (productData) =>
-    apiCall("/products", {
+    apiCall(`/products`, {
       method: "POST",
       data: productData,
     }),
@@ -96,7 +101,7 @@ export const productsAPI = {
       method: "DELETE",
     }),
 
-  getProductStats: () => apiCall("/products/stats"),
+  getProductStats: () => apiCall(`/products/stats`),
 
   getVendorsByProduct: (productId) =>
     apiCall(`/products/${productId}/vendors`, {
@@ -108,13 +113,15 @@ export const productsAPI = {
 export const vendorsAPI = {
   getVendorActivities: (params = {}) => {
     const queryString = new URLSearchParams(params).toString();
-    return apiCall(`/vendors/activities${queryString ? `?${queryString}` : ""}`);
+    return apiCall(
+      `/vendors/activities${queryString ? `?${queryString}` : ""}`
+    );
   },
 
-  getVendorProducts: () => apiCall("/vendors/available-products"),
+  getVendorProducts: () => apiCall(`/vendors/available-products`),
 
   selectVendorProduct: (productId) =>
-    apiCall("/vendors/products", {
+    apiCall(`/vendors/products`, {
       method: "POST",
       data: { product_id: productId },
     }),
@@ -125,16 +132,16 @@ export const vendorsAPI = {
     }),
 
   getVendorBills: () =>
-    apiCall("/vendors/bills"),
+    apiCall(`/vendors/bills`),
 
   createBill: (billData) =>
-    apiCall("/vendors/bills", {
+    apiCall(`/vendors/bills`, {
       method: "POST",
       data: billData,
     }),
 
   getVendorBillStats: () =>
-    apiCall("/vendors/bills/stats"),
+    apiCall(`/vendors/bills/stats`),
 
   updateBillStatus: (billId, status) =>
     apiCall(`/vendors/bills/${billId}/status`, {
@@ -144,7 +151,9 @@ export const vendorsAPI = {
 
   getMyActivities: (params = {}) => {
     const queryString = new URLSearchParams(params).toString();
-    return apiCall(`/vendors/my-activities${queryString ? `?${queryString}` : ""}`);
+    return apiCall(
+      `/vendors/my-activities${queryString ? `?${queryString}` : ""}`
+    );
   },
 
   getVendorProductsById: (vendorId) =>
@@ -153,13 +162,13 @@ export const vendorsAPI = {
     }),
 
   getVendorProductsByIds: (vendorIds) =>
-    apiCall("/vendors/products-by-vendors", {
+    apiCall(`/vendors/products-by-vendors`, {
       method: "POST",
       data: { vendorIds },
     }),
 
   getVendorProductsForPDF: (vendors) =>
-    apiCall("/vendors/products-by-vendors", {
+    apiCall(`/vendors/products-by-vendors`, {
       method: "POST",
       data: { vendors },
     }),
@@ -193,7 +202,7 @@ export const usersAPI = {
 // Invoices API functions
 export const invoicesAPI = {
   generateInvoice: (invoiceData) =>
-    apiCall("/invoices/generate", {
+    apiCall(`/invoices/generate`, {
       method: "POST",
       data: invoiceData,
     }),
@@ -207,16 +216,19 @@ export const invoicesAPI = {
       data: { status },
     }),
   downloadInvoicePDF: async (invoiceId) => {
-    const response = await axiosInstance.get(`/invoices/${invoiceId}/pdf`, {
-      responseType: "blob", // Ensure the response is treated as a file
-    });
+    const response = await axiosInstance.get(
+      `/invoices/${invoiceId}/pdf`,
+      {
+        responseType: "blob",
+      }
+    );
     return response;
   },
 };
 
 // Admin API functions
 export const adminAPI = {
-  getDashboardStats: () => apiCall("/vendors/stats"),
+  getDashboardStats: () => apiCall(`/vendors/stats`),
   // Add more admin endpoints as needed
 };
 
@@ -231,7 +243,9 @@ export const customersAPI = {
 export const superAdminAPI = {
   getAllUsers: (params = {}) => {
     const queryString = new URLSearchParams(params).toString();
-    return apiCall(`/super-admin/users${queryString ? `?${queryString}` : ""}`);
+    return apiCall(
+      `/super-admin/users${queryString ? `?${queryString}` : ""}`
+    );
   },
 
   getUserById: (userId) =>
@@ -257,7 +271,7 @@ export const superAdminAPI = {
     }),
 
   getUserStats: () =>
-    apiCall("/super-admin/users/stats", {
+    apiCall(`/super-admin/users/stats`, {
       method: "GET",
     }),
 };

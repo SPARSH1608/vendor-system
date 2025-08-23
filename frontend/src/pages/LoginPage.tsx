@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { useDispatch, useSelector } from "react-redux"
 import { loginUser } from "../store/slices/authSlice"
@@ -18,7 +18,25 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false)
 
   const dispatch = useDispatch<AppDispatch>()
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (localStorage.getItem("loggedIn") === "true") {
+      const role = localStorage.getItem("role");
+      if (role === "super_admin") {
+        navigate("/super-admin", { replace: true });
+      } else if (role === "admin") {
+        navigate("/admin", { replace: true });
+      } else if (role === "vendor") {
+        navigate("/vendor/bills/create", { replace: true });
+      } else if (role === "user") {
+        navigate("/pending", { replace: true });
+      } else {
+        navigate("/", { replace: true });
+      }
+    }
+  }, [navigate]);
+
   const { loading, error } = useSelector((state: RootState) => state.auth)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,16 +50,19 @@ const LoginPage = () => {
     e.preventDefault()
     try {
       const result = await dispatch(loginUser(formData)).unwrap()
-      
+      localStorage.setItem("loggedIn", "true") // <-- Set loggedIn flag
+
       // Redirect based on role
       if (result.user.role === "super_admin") {
-        navigate("/super-admin")
+        navigate("/super-admin", { replace: true })
       } else if (result.user.role === "admin") {
-        navigate("/admin")
+        navigate("/admin", { replace: true })
       } else if (result.user.role === "vendor") {
-        navigate("/vendor/bills/create")
-      } else {
-        navigate("/")
+        navigate("/vendor/bills/create", { replace: true })
+      } else if (result.user.role === "user") {
+        navigate("/pending", { replace: true })
+      }else{
+        navigate("/", { replace: true })
       }
     } catch (error) {
       console.error("Login failed:", error)

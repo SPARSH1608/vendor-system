@@ -84,6 +84,9 @@ const authSlice = createSlice({
       state.token = null
       state.isAuthenticated = false
       localStorage.removeItem("token")
+      localStorage.removeItem("loggedIn")
+      localStorage.removeItem("role") // <-- Remove role
+      localStorage.removeItem("user") // <-- Remove user
     },
     clearError: (state) => {
       state.error = null
@@ -106,6 +109,9 @@ const authSlice = createSlice({
         state.token = action.payload.token
         state.isAuthenticated = true
         localStorage.setItem("token", action.payload.token)
+        localStorage.setItem("loggedIn", "true")
+        localStorage.setItem("role", action.payload.user.role) // <-- Set role
+        localStorage.setItem("user", JSON.stringify(action.payload.user)) // <-- Set user
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false
@@ -121,6 +127,9 @@ const authSlice = createSlice({
         state.token = action.payload.token
         state.isAuthenticated = true
         localStorage.setItem("token", action.payload.token)
+        localStorage.setItem("loggedIn", "true")
+        localStorage.setItem("role", action.payload.user.role) // <-- Set role
+        localStorage.setItem("user", JSON.stringify(action.payload.user)) // <-- Set user
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false

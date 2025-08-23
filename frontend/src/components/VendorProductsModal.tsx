@@ -6,6 +6,7 @@ interface Product {
   name: string;
   category: string;
   price: number;
+  description?: string; // <-- add this line
 }
 
 interface VendorProductsModalProps {
@@ -36,34 +37,26 @@ const VendorProductsModal: React.FC<VendorProductsModalProps> = ({
             {t("noProductsFound")}
           </div>
         ) : (
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="border-b border-gray-300">
-                <th className="text-left text-gray-800 font-medium py-2">
-                  {t("name")}
-                </th>
-                <th className="text-left text-gray-800 font-medium py-2">
-                  {t("category")}
-                </th>
-                <th className="text-left text-gray-800 font-medium py-2">
-                  {t("price")}
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map((product) => (
-                <tr key={product._id} className="border-b border-gray-200">
-                  <td className="py-2 text-gray-800">{product.name}</td>
-                  <td className="py-2 text-gray-600">{product.category}</td>
-                  <td className="py-2 text-gray-600">₹{product.price}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <ul className="divide-y divide-gray-100">
+            {products.map((product) => (
+              <li key={product._id} className="py-3">
+                <div className="font-semibold">{product.name}</div>
+                {product.description && (
+                  <div className="text-gray-500 text-sm">
+                    {product.description}
+                  </div>
+                )}
+                <div className="text-xs text-gray-600 mt-1">
+                  {t("category")}: {product.category} | {t("price")}: ₹
+                  {product.price}
+                </div>
+              </li>
+            ))}
+          </ul>
         )}
         <button
+          className="mt-6 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
           onClick={onClose}
-          className="mt-6 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors w-full"
         >
           {t("close")}
         </button>

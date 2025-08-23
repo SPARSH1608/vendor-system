@@ -3,6 +3,7 @@ import { usersAPI } from '../services/api'
 import { useSelector } from 'react-redux'
 import { Search, Shield, UserCheck, UserX, Trash2, Users, UserCog } from 'lucide-react'
 import { useTranslation } from "react-i18next"
+import { useNavigate } from "react-router-dom";
 
 interface User {
   _id: string
@@ -37,6 +38,7 @@ const SuperAdminUserManagement = () => {
   // Get current user's role from Redux store
   const { user: currentUser } = useSelector((state: any) => state.auth)
   const isSuperAdmin = currentUser?.role === 'super_admin'
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchUsers()
@@ -178,7 +180,10 @@ const SuperAdminUserManagement = () => {
             <button
               onClick={() => {
                 localStorage.removeItem('authToken');
-                window.location.href = '/login';
+                localStorage.removeItem('loggedIn');
+                localStorage.removeItem('role');
+                localStorage.removeItem('user');
+                navigate('/login', { replace: true }); // Use navigate instead of window.location.href
               }}
               className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors"
             >

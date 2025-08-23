@@ -57,9 +57,12 @@ const VendorProducts = () => {
   ]
 
   const filteredProducts = products.filter((product) => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const search = searchTerm.toLowerCase();
+    const matchesSearch =
+      product.name.toLowerCase().includes(search) ||
+      (product.description && product.description.toLowerCase().includes(search)); // <-- add this line
     const matchesCategory =
-      selectedCategory === "All Categories" || product.category === selectedCategory
+      selectedCategory === "All Categories" || product.category === selectedCategory;
     return matchesSearch && matchesCategory
   })
 
