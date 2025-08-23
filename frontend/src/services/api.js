@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "https://vendor-system.onrender.com/api";
+const API_BASE_URL = "http://localhost:5000/api";
 
 // Create an Axios instance
 const axiosInstance = axios.create({
@@ -156,6 +156,12 @@ export const vendorsAPI = {
     apiCall("/vendors/products-by-vendors", {
       method: "POST",
       data: { vendorIds },
+    }),
+
+  getVendorProductsForPDF: (vendors) =>
+    apiCall("/vendors/products-by-vendors", {
+      method: "POST",
+      data: { vendors },
     }),
 };
 

@@ -457,7 +457,7 @@ const getProductsByVendor = async (req, res) => {
 
     // Find products selected by this vendor
     const products = await VendorProduct.find({ vendor_id: vendorId })
-      .populate('product_id', 'name category price') // Populate product details
+      .populate('product_id', 'name category price image') // Populate product details
       .select('product_id');
 
     res.json({

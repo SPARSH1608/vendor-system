@@ -10,12 +10,15 @@ import {
   MapPin,
   History,
   Receipt,
+  Globe
 } from "lucide-react"
 import type { RootState } from "../../store/store"
+import { useTranslation } from "react-i18next"
 
 const Sidebar = () => {
   const location = useLocation()
   const { user } = useSelector((state: RootState) => state.auth)
+  const { i18n } = useTranslation();
 
   const adminMenuItems = [
     { icon: LayoutDashboard, label: "Dashboard", path: "/admin" },
@@ -23,7 +26,7 @@ const Sidebar = () => {
     { icon: Users, label: "Users", path: "/admin/users" },
     { icon: Activity, label: "Activities", path: "/admin/activities" },
     { icon: FileText, label: "Invoices", path: "/admin/invoices" },
-    { icon: FileText, label: "Invoice List", path: "/admin/invoice-list" }, // <-- Add this line
+    { icon: FileText, label: "Invoice List", path: "/admin/invoice-list" },
   ]
 
   const vendorMenuItems = [
@@ -34,6 +37,11 @@ const Sidebar = () => {
   ]
 
   const menuItems = user?.role === "admin" ? adminMenuItems : vendorMenuItems
+
+  const changeLanguage = (lang: string) => {
+    i18n.changeLanguage(lang);
+    localStorage.setItem('language', lang);
+  };
 
   return (
     <aside className="fixed left-0 top-16 h-full w-64 bg-white shadow-sm border-r border-gray-200 z-40">
@@ -55,6 +63,24 @@ const Sidebar = () => {
               </li>
             )
           })}
+          {/* Language Switcher as menu item */}
+          <li>
+            <div className="flex items-center space-x-3 px-4 py-3 rounded-lg">
+              <Globe className="w-5 h-5 text-gray-500" />
+              <button
+                onClick={() => changeLanguage('en')}
+                className={`px-2 py-1 rounded text-sm font-medium ${i18n.language === 'en' ? 'bg-blue-100 text-blue-600' : 'text-gray-600 hover:bg-gray-100'}`}
+              >
+                English
+              </button>
+              <button
+                onClick={() => changeLanguage('gu')}
+                className={`px-2 py-1 rounded text-sm font-medium ${i18n.language === 'gu' ? 'bg-blue-100 text-blue-600' : 'text-gray-600 hover:bg-gray-100'}`}
+              >
+                ગુજરાતી
+              </button>
+            </div>
+          </li>
         </ul>
       </nav>
     </aside>

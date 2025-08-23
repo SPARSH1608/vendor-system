@@ -268,7 +268,8 @@
   "totalProductsAvailable": "Total: {{count}} products available",
   "selected": "Selected",
   "selectProduct": "Select Product",
-  "noProductsFound": "No products found matching your criteria.",
+  "noProductsFound": "No products found for this vendor.",
   "Dairy Products": "Dairy Products",
-  "Oils": "Oils"
+  "Oils": "Oils",
+  "productsFor": "Products for {{name}}"
 }

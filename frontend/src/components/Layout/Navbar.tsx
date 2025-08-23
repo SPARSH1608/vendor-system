@@ -90,21 +90,8 @@ const Navbar = () => {
               </Link>
             )
           })}
-        </div>
-        {/* User Info, Logout, and Language Switcher */}
-        <div className="hidden sm:flex items-center space-x-4 ml-4">
-          <User className="w-5 h-5 text-gray-600" />
-          <span className="text-xs sm:text-sm text-gray-700">{user?.email}</span>
-          <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded capitalize">{user?.role}</span>
-          <button
-            onClick={handleLogout}
-            className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 transition-colors ml-2"
-          >
-            <LogOut className="w-4 h-4" />
-            <span className="text-xs sm:text-sm">{t("logout")}</span>
-          </button>
-          {/* Language Switcher */}
-          <div className="flex items-center space-x-2">
+          {/* Language Switcher as menu item */}
+          <div className="flex items-center space-x-1 px-2 py-2 rounded-lg text-sm font-medium">
             <button
               onClick={() => changeLanguage('en')}
               className={`px-2 py-1 rounded ${i18n.language === 'en' ? 'bg-blue-100 text-blue-600' : 'text-gray-600 hover:bg-gray-100'}`}
@@ -119,11 +106,24 @@ const Navbar = () => {
             </button>
           </div>
         </div>
+        {/* User Info, Logout */}
+        <div className="hidden sm:flex items-center space-x-4 ml-4">
+          <User className="w-5 h-5 text-gray-600" />
+          <span className="text-xs sm:text-sm text-gray-700">{user?.email}</span>
+          <span className="text-xs bg-blue-100 text-blue-600 px-2 py-1 rounded capitalize">{user?.role}</span>
+          <button
+            onClick={handleLogout}
+            className="flex items-center space-x-1 text-gray-600 hover:text-gray-900 transition-colors ml-2"
+          >
+            <LogOut className="w-4 h-4" />
+            <span className="text-xs sm:text-sm">{t("logout")}</span>
+          </button>
+        </div>
       </div>
       {/* Mobile Menu */}
       {mobileOpen && (
-        <div className="sm:hidden px-2 pb-2">
-          <div className="flex flex-col gap-1">
+        <div className="sm:hidden px-2 pb-2 flex flex-col h-[calc(100vh-64px)] bg-white z-[9999]">
+          <div className="flex-1 overflow-y-auto flex flex-col gap-1">
             {menuItems.map((item) => {
               const isActive = location.pathname === item.path
               return (
@@ -140,6 +140,21 @@ const Navbar = () => {
                 </Link>
               )
             })}
+            {/* Language Switcher as menu item */}
+            <div className="flex items-center space-x-1 px-3 py-2 rounded-lg text-sm font-medium mt-1">
+              <button
+                onClick={() => changeLanguage('en')}
+                className={`px-2 py-1 rounded ${i18n.language === 'en' ? 'bg-blue-100 text-blue-600' : 'text-gray-600 hover:bg-gray-100'}`}
+              >
+                English
+              </button>
+              <button
+                onClick={() => changeLanguage('gu')}
+                className={`px-2 py-1 rounded ${i18n.language === 'gu' ? 'bg-blue-100 text-blue-600' : 'text-gray-600 hover:bg-gray-100'}`}
+              >
+                ગુજરાતી
+              </button>
+            </div>
             <div className="flex items-center space-x-2 mt-2 border-t pt-2">
               <User className="w-5 h-5 text-gray-600" />
               <span className="text-xs text-gray-700">{user?.email}</span>

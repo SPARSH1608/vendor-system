@@ -57,7 +57,9 @@ const VendorActivities = () => {
     if (allActivities.length > 0) {
       const uniqueVendors = Array.from(
         new Map(
-          allActivities.map((a) => [a.vendor_id._id, { id: a.vendor_id._id, name: a.vendor_id.name }])
+          allActivities
+            .filter((a) => a.vendor_id && a.vendor_id._id) // <-- filter out null vendor_id
+            .map((a) => [a.vendor_id._id, { id: a.vendor_id._id, name: a.vendor_id.name }])
         ).values()
       )
       setVendors(uniqueVendors)

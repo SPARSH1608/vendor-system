@@ -28,12 +28,12 @@ const VendorProductsModal: React.FC<VendorProductsModalProps> = ({
   return (
     <div className="fixed inset-0 bg-opacity-50 backdrop-blur-md flex items-center justify-center z-50">
       <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg border-4 border-gray-300">
-        <h2 className="text-xl font-bold mb-4 text-gray-800">
-          {t("productsFor")} {vendorName}
+        <h2 className="font-bold text-lg mb-2">
+          {t("productsFor", { name: vendorName })}
         </h2>
-        {products.length === 0 ? (
-          <div className="text-center py-4 text-gray-500">
-            {t("noProductsAvailable")}
+        {(!products || products.length === 0) ? (
+          <div className="text-center text-gray-500 py-8">
+            {t("noProductsFound")}
           </div>
         ) : (
           <table className="w-full border-collapse">

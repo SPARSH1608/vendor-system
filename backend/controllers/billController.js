@@ -157,16 +157,32 @@ const getVendorBills = async (req, res) => {
     }
 
     const bills = await Bill.find(query)
-      .populate("items.product_id", "name category")
+      .populate("items.product_id", "name category description")
       .sort({ createdAt: -1 })
       .limit(limit * 1)
-      .skip((page - 1) * limit)
+      .skip((page - 1) * limit);
 
-    const total = await Bill.countDocuments(query)
+    const total = await Bill.countDocuments(query);
+
+    const billsWithDescriptions = bills.map(bill => {
+      const billObj = bill.toObject();
+      return {
+        ...billObj,
+        items: billObj.items.map(item => ({
+          _id: item._id,
+          productName: item.product_id?.name || item.productName || "",
+          productDescription: item.product_id?.description || "",
+          quantity: item.quantity,
+          price: item.price,
+          total: item.total,
+          stock_unit: item.stock_unit,
+        })),
+      };
+    });
 
     res.json({
       success: true,
-      data: bills,
+      data: billsWithDescriptions,
       pagination: {
         current: Number.parseInt(page),
         pages: Math.ceil(total / limit),

@@ -132,16 +132,8 @@ const UserManagement = () => {
         .filter((vendor) => selectedVendors.includes(vendor._id))
         .map((vendor) => ({ id: vendor._id, name: vendor.name }));
 
-      const res = await fetch("/api/vendors/products-by-vendors", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({ vendors: selectedVendorData }),
-      });
-
-      const data = await res.json();
+      // Use the API function instead of fetch
+      const data = await vendorsAPI.getVendorProductsForPDF(selectedVendorData);
       if (!data.success) throw new Error(t("failedToFetchProducts"));
 
       // Group products by vendor name
@@ -180,14 +172,15 @@ const UserManagement = () => {
     setSelectedVendorName(vendor.name);
     try {
       const data = await vendorsAPI.getVendorProductsById(vendor._id);
-      if (data.success) {
-        setSelectedVendorProducts(data.data);
-        setShowVendorProductsModal(true);
-      } else {
-        alert(t("failedToFetchVendorProducts"));
+      let products = [];
+      if (data.success && Array.isArray(data.data)) {
+        products = data.data.filter(Boolean); // Remove nulls
       }
+      setSelectedVendorProducts(products); // Always set an array
+      setShowVendorProductsModal(true);
     } catch (err) {
-      alert(t("errorFetchingVendorProducts"));
+      setSelectedVendorProducts([]); // Show empty state on error
+      setShowVendorProductsModal(true);
     }
   };
 

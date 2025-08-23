@@ -96,6 +96,7 @@ const CreateBill = () => {
           quantity: 0,
           stock_unit: product.stock_unit || "",
           total: 0,
+          image: product.image || "", // <-- Add this line
         }))
       );
     } catch (error) {

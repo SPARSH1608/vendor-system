@@ -16,6 +16,7 @@ interface Bill {
   }
   items: Array<{
     productName: string
+    productDescription?: string // <-- Add this line
     quantity: number
     price: number
     total: number
@@ -316,6 +317,9 @@ const VendorBills = () => {
                     <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg text-xs sm:text-sm">
                       <div>
                         <p className="font-medium">{item.productName}</p>
+                        {item.productDescription && (
+                          <p className="text-gray-500">{item.productDescription}</p>
+                        )}
                         <p className="text-gray-600">
                           {item.quantity} × ₹{item.price}
                         </p>
