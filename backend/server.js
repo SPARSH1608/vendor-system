@@ -20,6 +20,7 @@ const locationRoutes = require("./routes/locationRoutes")
 const vendorProductRoutes = require("./routes/vendorProductRoutes")
 const billRoutes = require("./routes/billRoutes")
 const customerRoutes = require("./routes/customerRoutes")
+const reportRoutes = require("./routes/reportRoutes");
 // const superAdminRoutes = require("./routes/superAdmin")
 // Import middleware
 const errorHandler = require("./middleware/errorHandler")
@@ -75,6 +76,7 @@ app.use("/api/invoices", invoiceRoutes)
 app.use("/api/vendors", vendorProductRoutes)
 app.use("/api", billRoutes)
 app.use("/api/customers", customerRoutes)
+app.use("/api/report", reportRoutes);
 // app.use("/api/super-admin", superAdminRoutes)
 app.get("/api/health", (req, res) => {
   res.status(200).json({

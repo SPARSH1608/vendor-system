@@ -27,6 +27,7 @@ const billValidation = [
   body("location").trim().isLength({ min: 1 }).withMessage("Location is required"),
   body("status").optional().isIn(["draft", "unpaid", "paid"]).withMessage("Invalid status"),
   body("taxRate").optional().isFloat({ min: 0, max: 100 }).withMessage("Tax rate must be between 0 and 100"),
+  body("paymentType").isIn(["cash", "card"]).withMessage("Payment type must be cash or card"),
 ]
 
 const statusValidation = [

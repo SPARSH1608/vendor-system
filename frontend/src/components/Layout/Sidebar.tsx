@@ -27,6 +27,7 @@ const Sidebar = () => {
     { icon: Activity, label: "Activities", path: "/admin/activities" },
     { icon: FileText, label: "Invoices", path: "/admin/invoices" },
     { icon: FileText, label: "Invoice List", path: "/admin/invoice-list" },
+    { icon: Globe, label: "Report", path: "/admin/report" }, // Added Report item here
   ]
 
   const vendorMenuItems = [

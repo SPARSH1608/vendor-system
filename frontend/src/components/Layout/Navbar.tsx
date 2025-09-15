@@ -32,6 +32,7 @@ const Navbar = () => {
     { icon: Activity, label: t("activities"), path: "/admin/activities" },
     { icon: FileText, label: t("invoices"), path: "/admin/invoices" },
     { icon: FileText, label: t("invoiceList"), path: "/admin/invoice-list" },
+    { icon: FileText, label: t("report"), path: "/admin/report" }, // Added report item
   ]
 
   const vendorMenuItems = [
@@ -39,6 +40,7 @@ const Navbar = () => {
     { icon: Package, label: t("products"), path: "/vendor/products" },
     { icon: Receipt, label: t("bills"), path: "/vendor/bills" },
     { icon: History, label: t("history"), path: "/vendor/history" },
+    { icon: FileText, label: "Vendor Report", path: "/vendor/report" }, // Added vendor report item
   ]
 
   const menuItems = user?.role === "admin" ? adminMenuItems : vendorMenuItems

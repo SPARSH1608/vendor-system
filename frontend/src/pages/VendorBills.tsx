@@ -306,6 +306,10 @@ const VendorBills = () => {
                   <p>
                     <strong>{t("phone")}:</strong> {selectedBill.customer.phone}
                   </p>
+                  <p>
+                    <strong>{t("paymentType")}: </strong>
+                    {selectedBill.paymentType ? t(selectedBill.paymentType) : t("notSpecified")}
+                  </p>
                 </div>
               </div>
 

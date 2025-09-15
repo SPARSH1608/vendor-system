@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "https://vendor-system.onrender.com/api"; // Change this to your backend URL
+const API_BASE_URL = "https://vendor-system.onrender.com/api"; 
 
 // Create an Axios instance
 const axiosInstance = axios.create({
@@ -274,4 +274,13 @@ export const superAdminAPI = {
     apiCall(`/super-admin/users/stats`, {
       method: "GET",
     }),
+};
+
+export const reportAPI = {
+  getVendorSales: () =>
+    apiCall(`/report/vendor-sales`, { method: "GET" }),
+  getProductSalesByPlace: () =>
+    apiCall(`/report/product-sales-by-place`, { method: "GET" }),
+  getVendorSpecificSales: (params) =>
+    apiCall(`/report/vendor-specific-sales`, { method: "GET", params }),
 };

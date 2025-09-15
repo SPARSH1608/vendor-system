@@ -24,6 +24,8 @@ import InactiveAccountPage from "./pages/InactiveAccountPage"
 import PendingApprovalPage from "./pages/PendingApprovalPage"
 import InvoiceList from "./pages/InvoiceList"
 import SuperAdminUserManagement from "./pages/SuperAdminUserManagement"
+import AdminReport from "./pages/AdminReport"
+import VendorReport from "./pages/VendorReport"
 
 // Layout
 import Layout from "./components/Layout/Layout"
@@ -134,6 +136,7 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
+      <Route path="/admin/report" element={<AdminReport />} />
 
       {/* Vendor Routes */}
       <Route
@@ -186,7 +189,14 @@ function AppRoutes() {
           </ProtectedRoute>
         }
       />
-    
+      <Route path="/vendor/report"   element={
+   <ProtectedRoute allowedRoles={["vendor"]}>
+           
+        <Layout>
+          <VendorReport />
+        </Layout>
+      </ProtectedRoute>
+      }/>
 
       {/* Catch-all: any other route, check user status */}
       <Route
